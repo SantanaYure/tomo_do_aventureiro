@@ -133,13 +133,13 @@ h2 {
 }
 
 .form-control {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 10px;
   padding: 12px 15px;
-  color: var(--color-black);
+  color: var(--color-white);
   font-size: 14px;
   transition: all 0.3s ease;
   width: 100%;
@@ -148,21 +148,21 @@ h2 {
 }
 
 .form-control::placeholder {
-  color: rgba(1, 1, 1, 0.5);
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 400;
 }
 
 .form-control:focus {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: var(--color-primary);
-  color: var(--color-black);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-primary-light);
+  color: var(--color-white);
   box-shadow: 0 0 0 0.2rem rgba(161, 141, 181, 0.25);
   outline: none;
 }
 
 .form-control.is-invalid {
   border-color: #dc3545;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Input group para senha */
@@ -179,12 +179,12 @@ h2 {
 }
 
 .input-group-text {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-left: none;
-  color: var(--color-black);
+  color: var(--color-white);
   border-radius: 0 10px 10px 0;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -196,36 +196,44 @@ h2 {
 }
 
 .input-group-text:hover {
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--color-primary-light);
 }
 
 .input-group:focus-within .input-group-text {
-  border-color: var(--color-primary);
-  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--color-primary-light);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* Checkbox */
 .form-check {
-  margin-top: 12px;
-  margin-bottom: 0;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .form-check-input {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .form-check-input:checked {
   background-color: var(--color-primary);
   border-color: var(--color-primary-dark);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
 }
 
 .form-check-input:focus {
   box-shadow: 0 0 0 0.2rem rgba(161, 141, 181, 0.25);
+  border-color: var(--color-primary-light);
+}
+
+.form-check-input:hover {
+  border-color: var(--color-primary-light);
+  transform: scale(1.05);
 }
 
 .form-check-label {
@@ -343,15 +351,11 @@ h2 {
 /* Login social */
 .social-login {
   display: flex;
-  gap: 12px;
   justify-content: center;
   margin-bottom: 15px;
 }
 
 .social-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -360,15 +364,27 @@ h2 {
   align-items: center;
   justify-content: center;
   color: var(--color-white);
-  font-size: 20px;
   transition: all 0.3s ease;
   cursor: pointer;
+  font-weight: 500;
 }
 
-.social-btn:hover {
+.google-btn {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.google-btn:hover {
   background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.google-btn i {
+  font-size: 18px;
 }
 
 /* Links */
@@ -441,13 +457,12 @@ h2 {
     font-size: 13px;
   }
 
-  .social-login {
-    gap: 8px;
+  .google-btn {
+    padding: 10px 15px;
+    font-size: 13px;
   }
 
-  .social-btn {
-    width: 45px;
-    height: 45px;
+  .google-btn i {
     font-size: 16px;
   }
 

@@ -62,7 +62,7 @@
           [(ngModel)]="rememberMe"
           name="remember"
         />
-        <label class="form-check-label" for="remember"> Lembrar-me </label>
+        <label class="form-check-label" for="remember"> Manter conectado </label>
       </div>
 
       <div class="error-message" *ngIf="errorMessage">
@@ -83,14 +83,9 @@
     </div>
 
     <div class="social-login">
-      <div class="social-btn" (click)="socialLogin('google')">
-        <i class="fab fa-google"></i>
-      </div>
-      <div class="social-btn" (click)="socialLogin('facebook')">
-        <i class="fab fa-facebook-f"></i>
-      </div>
-      <div class="social-btn" (click)="socialLogin('github')">
-        <i class="fab fa-github"></i>
+      <div class="social-btn google-btn" (click)="socialLogin('google')">
+        <i class="fab fa-google me-2"></i>
+        <span>Entrar com Google</span>
       </div>
     </div>
 
@@ -101,14 +96,6 @@
       <a href="#" (click)="navigateToRegister(); $event.preventDefault()">
         <i class="fas fa-user-plus me-1"></i>Criar nova conta
       </a>
-    </div>
-
-    <div class="demo-credentials">
-      <small>
-        <strong>Credenciais de teste:</strong><br />
-        Email: admin@rpg.com<br />
-        Senha: 123456
-      </small>
     </div>
   </div>
 </div>
