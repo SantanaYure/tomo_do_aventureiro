@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -21,27 +22,36 @@ export class LoginComponent {
   showPassword = false;
   rememberMe = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
-  onSubmit() {
+  async onSubmit() {
     if (this.validateForm()) {
       this.isLoading = true;
       this.errorMessage = '';
 
-      // Simulação de login - aqui você integraria com seu serviço de autenticação
-      setTimeout(() => {
-        if (this.loginData.email === 'admin@rpg.com' && this.loginData.password === '123456') {
+      try {
+        console.log('Tentando fazer login com:', this.loginData.email);
+
+        const success = await this.authService.login(this.loginData.email, this.loginData.password);
+
+        if (success) {
           console.log('Login realizado com sucesso!', {
             email: this.loginData.email,
             rememberMe: this.rememberMe,
           });
+
           // Redirecionar para página principal após login
           this.router.navigate(['/dashboard']);
         } else {
-          this.errorMessage = 'Email ou senha inválidos';
+          this.errorMessage = 'Falha no login. Verifique suas credenciais.';
         }
+      } catch (error: any) {
+        console.error('Erro no login:', error);
+        // Usar a mensagem de erro do Firebase se disponível
+        this.errorMessage = error.message || 'Erro interno. Tente novamente.';
+      } finally {
         this.isLoading = false;
-      }, 1500);
+      }
     }
   }
 
@@ -49,10 +59,30 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-  socialLogin(provider: string) {
+  async socialLogin(provider: string) {
     console.log('Login com:', provider);
-    // Implementar login social aqui
-    alert('Login com ' + provider.charAt(0).toUpperCase() + provider.slice(1));
+
+    try {
+      if (provider === 'google') {
+        this.isLoading = true;
+        this.errorMessage = '';
+
+        const success = await this.authService.loginWithGoogle();
+        if (success) {
+          console.log('Login com Google realizado com sucesso!');
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.errorMessage = 'Falha no login com Google. Tente novamente.';
+        }
+      } else {
+        this.errorMessage = 'Login com ' + provider + ' não implementado ainda.';
+      }
+    } catch (error) {
+      console.error('Erro no login social:', error);
+      this.errorMessage = 'Erro no login social. Tente novamente.';
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   forgotPassword(event: Event) {
