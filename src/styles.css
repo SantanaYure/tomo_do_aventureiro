@@ -1,1 +1,97 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Bootstrap CSS já está sendo importado via angular.json */
+/* Você pode adicionar customizações do Bootstrap aqui */
+
+/* ===== VARIÁVEIS DE CORES DO PROJETO ===== */
+:root {
+  /* Paleta Principal - Tons de Roxo/Lilás */
+  --color-primary-lightest: #c5b0d9; /* Lilás mais claro */
+  --color-primary-light: #b39fc7; /* Lilás claro */
+  --color-primary: #a18db5; /* Lilás médio */
+  --color-primary-dark: #8f7ca2; /* Lilás escuro */
+  --color-primary-darkest: #7d6a90; /* Lilás mais escuro */
+
+  /* Cores Neutras */
+  --color-white: #ffffff; /* Branco puro */
+  --color-ice: #f8f9fa; /* Branco gelo */
+  --color-black: #010101; /* Preto */
+
+  /* Alias para facilitar o uso */
+  --primary: var(--color-primary);
+  --primary-light: var(--color-primary-light);
+  --primary-dark: var(--color-primary-dark);
+  --background: var(--color-ice);
+  --text-primary: var(--color-black);
+  --text-secondary: var(--color-primary-darkest);
+
+  /* Gradientes */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--color-primary-light) 0%,
+    var(--color-primary-dark) 100%
+  );
+  --gradient-header: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-darkest) 100%
+  );
+
+  /* Sombras usando as cores da paleta */
+  --shadow-light: 0 2px 8px rgba(125, 106, 144, 0.1);
+  --shadow-medium: 0 4px 16px rgba(125, 106, 144, 0.15);
+  --shadow-heavy: 0 8px 32px rgba(125, 106, 144, 0.2);
+
+  /* Estados de interação */
+  --hover-opacity: 0.8;
+  --active-opacity: 0.6;
+  --disabled-opacity: 0.4;
+}
+
+/* Estilos globais para o projeto */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--text-primary);
+}
+
+/* Reset de estilos para componentes de login */
+.login-container * {
+  box-sizing: border-box;
+}
+
+/* Classes utilitárias para cores */
+.text-primary {
+  color: var(--color-primary) !important;
+}
+.text-primary-light {
+  color: var(--color-primary-light) !important;
+}
+.text-primary-dark {
+  color: var(--color-primary-dark) !important;
+}
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+.bg-primary-light {
+  background-color: var(--color-primary-light) !important;
+}
+.bg-primary-dark {
+  background-color: var(--color-primary-dark) !important;
+}
+.bg-gradient {
+  background: var(--gradient-primary) !important;
+}
+
+/* Customizações do Bootstrap podem ser adicionadas aqui */
