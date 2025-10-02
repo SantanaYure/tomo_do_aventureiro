@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FirebaseService } from '../../services/firebase.service';
 
 @Component({
   selector: 'app-register',
@@ -28,23 +29,82 @@ export class RegisterComponent {
   showConfirmPassword = false;
   acceptTerms = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private firebaseService: FirebaseService) {}
 
-  onSubmit() {
+  async onSubmit() {
     if (this.validateForm()) {
       this.isLoading = true;
       this.errorMessage = '';
 
-      // Simulação de cadastro - aqui você integraria com seu serviço de autenticação
-      setTimeout(() => {
-        console.log('Cadastro realizado com sucesso!', this.registerData);
-        alert(
-          'Cadastro realizado com sucesso!\nBem-vindo ao Tomo do Aventureiro!\n\nClique em OK para fazer login.'
+      try {
+        // Criar usuário no Firebase Authentication
+        const user = await this.firebaseService.createUserWithEmail(
+          this.registerData.email,
+          this.registerData.password
         );
+
+        if (user) {
+          // Salvar dados adicionais no Firestore
+          const userData = {
+            uid: user.uid,
+            firstName: this.registerData.firstName,
+            lastName: this.registerData.lastName,
+            nickname: this.registerData.nickname,
+            email: this.registerData.email,
+            cpf: this.registerData.cpf,
+            phone: this.registerData.phone,
+            createdAt: new Date(),
+            emailVerified: false,
+          };
+
+          await this.firebaseService.saveUserData(userData);
+
+          console.log('Cadastro realizado com sucesso!', userData);
+          alert(
+            'Cadastro realizado com sucesso!\nBem-vindo ao Tomo do Aventureiro!\n\nClique em OK para fazer login.'
+          );
+
+          this.isLoading = false;
+          this.router.navigate(['/login']);
+        }
+      } catch (error: any) {
         this.isLoading = false;
-        // Só redireciona após o usuário clicar em OK no alert
-        this.router.navigate(['/login']);
-      }, 2000);
+
+        // Log detalhado para o desenvolvedor
+        console.group('🔥 ERRO NO CADASTRO - Detalhes para Developer:');
+        console.error('Erro completo:', error);
+        console.error('Código do erro:', error.code);
+        console.error('Mensagem original:', error.message);
+        console.error('Stack trace:', error.stack);
+        console.error('Dados do formulário:', this.registerData);
+        console.groupEnd();
+
+        // Verificar se é erro do Firebase Auth ou Firestore
+        if (error.code) {
+          // Erro do Firebase com código específico
+          this.errorMessage = this.firebaseService.getErrorMessage(error.code);
+        } else if (error.message) {
+          // Erro customizado ou do Firestore
+          if (error.message.includes('network')) {
+            this.errorMessage = '❌ Erro de conexão. Verifique sua internet e tente novamente.';
+          } else if (error.message.includes('permission')) {
+            this.errorMessage = '❌ Erro de permissão. Entre em contato com o suporte.';
+          } else if (error.message.includes('quota')) {
+            this.errorMessage = '❌ Limite de uso excedido. Tente novamente em alguns minutos.';
+          } else {
+            this.errorMessage = `❌ Erro técnico: ${error.message}`;
+          }
+        } else {
+          // Erro genérico
+          this.errorMessage =
+            '❌ Erro inesperado. Verifique os dados e tente novamente. Se o problema persistir, entre em contato com o suporte.';
+        }
+
+        // Alerta adicional para erros críticos
+        if (error.message && error.message.includes('Firebase')) {
+          console.warn('⚠️  ATENÇÃO: Erro relacionado ao Firebase - Verifique a configuração!');
+        }
+      }
     }
   }
 
