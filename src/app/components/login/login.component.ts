@@ -83,7 +83,8 @@ export class LoginComponent {
 
   navigateToRegister() {
     console.log('Navegando para registro');
-    // this.router.navigate(['/register']);
-    alert('Funcionalidade de criar nova conta');
+    this.router.navigate(['/register']).then(() => {
+      console.log('Navegação para registro concluída');
+    });
   }
 }
