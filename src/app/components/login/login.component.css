@@ -4,11 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    135deg,
-    var(--color-primary-light) 0%,
-    var(--color-primary-dark) 100%
-  );
+  background: var(--color-primary-darkest);
   position: relative;
   overflow: hidden;
   padding: 20px;
