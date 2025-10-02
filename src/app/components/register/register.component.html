@@ -85,45 +85,6 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="cpf" class="form-label">CPF</label>
-          <input
-            type="text"
-            class="form-control"
-            id="cpf"
-            name="cpf"
-            [(ngModel)]="registerData.cpf"
-            #cpf="ngModel"
-            required
-            placeholder="000.000.000-00"
-            maxlength="14"
-            [class.is-invalid]="cpf.invalid && cpf.touched"
-          />
-          <div class="invalid-feedback" *ngIf="cpf.invalid && cpf.touched">
-            <div *ngIf="cpf.errors?.['required']">CPF é obrigatório</div>
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label for="phone" class="form-label">Telefone</label>
-          <input
-            type="tel"
-            class="form-control"
-            id="phone"
-            name="phone"
-            [(ngModel)]="registerData.phone"
-            #phone="ngModel"
-            required
-            placeholder="(11) 99999-9999"
-            [class.is-invalid]="phone.invalid && phone.touched"
-          />
-          <div class="invalid-feedback" *ngIf="phone.invalid && phone.touched">
-            <div *ngIf="phone.errors?.['required']">Telefone é obrigatório</div>
-          </div>
-        </div>
-      </div>
-
       <div class="mb-3">
         <label for="password" class="form-label">Senha</label>
         <div class="input-group">

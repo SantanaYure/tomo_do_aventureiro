@@ -17,8 +17,6 @@ export class RegisterComponent {
     lastName: '',
     nickname: '',
     email: '',
-    cpf: '',
-    phone: '',
     password: '',
     confirmPassword: '',
   };
@@ -51,8 +49,6 @@ export class RegisterComponent {
             lastName: this.registerData.lastName,
             nickname: this.registerData.nickname,
             email: this.registerData.email,
-            cpf: this.registerData.cpf,
-            phone: this.registerData.phone,
             createdAt: new Date(),
             emailVerified: false,
           };
@@ -136,8 +132,6 @@ export class RegisterComponent {
       !this.registerData.lastName ||
       !this.registerData.nickname ||
       !this.registerData.email ||
-      !this.registerData.cpf ||
-      !this.registerData.phone ||
       !this.registerData.password ||
       !this.registerData.confirmPassword
     ) {
@@ -148,18 +142,6 @@ export class RegisterComponent {
     // Verificar email válido
     if (!this.isValidEmail(this.registerData.email)) {
       this.errorMessage = 'Por favor, insira um email válido';
-      return false;
-    }
-
-    // Verificar CPF válido
-    if (!this.isValidCPF(this.registerData.cpf)) {
-      this.errorMessage = 'Por favor, insira um CPF válido';
-      return false;
-    }
-
-    // Verificar telefone válido
-    if (!this.isValidPhone(this.registerData.phone)) {
-      this.errorMessage = 'Por favor, insira um telefone válido';
       return false;
     }
 
@@ -198,58 +180,6 @@ export class RegisterComponent {
   private isStrongPassword(password: string): boolean {
     const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/;
     return strongRegex.test(password);
-  }
-
-  private isValidCPF(cpf: string): boolean {
-    // Remove pontos e hífens
-    cpf = cpf.replace(/[^\d]+/g, '');
-
-    if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) {
-      return false;
-    }
-
-    let sum = 0;
-    let remainder;
-
-    for (let i = 1; i <= 9; i++) {
-      sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
-    }
-
-    remainder = (sum * 10) % 11;
-
-    if (remainder === 10 || remainder === 11) {
-      remainder = 0;
-    }
-
-    if (remainder !== parseInt(cpf.substring(9, 10))) {
-      return false;
-    }
-
-    sum = 0;
-
-    for (let i = 1; i <= 10; i++) {
-      sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-    }
-
-    remainder = (sum * 10) % 11;
-
-    if (remainder === 10 || remainder === 11) {
-      remainder = 0;
-    }
-
-    if (remainder !== parseInt(cpf.substring(10, 11))) {
-      return false;
-    }
-
-    return true;
-  }
-
-  private isValidPhone(phone: string): boolean {
-    // Remove caracteres não numéricos
-    const cleanPhone = phone.replace(/\D/g, '');
-
-    // Verifica se tem 10 ou 11 dígitos (telefone fixo ou celular)
-    return cleanPhone.length === 10 || cleanPhone.length === 11;
   }
 
   showTermsModal() {
