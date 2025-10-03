@@ -28,19 +28,19 @@ export class CharacterCreationComponent implements OnInit {
         'Esta seção também pode incluir experiência, inspiração e outras informações fundamentais do personagem.',
     },
     {
+      id: 'attributes-pane',
+      title: 'Atributos',
+      icon: 'bi-graph-up',
+      description: 'Força, Destreza, Constituição, Inteligência, Sabedoria e Carisma.',
+      content: 'Visualize os valores dos atributos, modificadores e salvaguardas relacionadas.',
+    },
+    {
       id: 'combat-pane',
       title: 'Combate',
       icon: 'bi-shield-fill',
       description:
         'Detalhes de Classe de Armadura, Pontos de Vida, Dados de Vida, Iniciativa e Deslocamento.',
       content: 'Acompanhe também sucessos e falhas em testes de morte durante combate.',
-    },
-    {
-      id: 'attributes-pane',
-      title: 'Atributos',
-      icon: 'bi-graph-up',
-      description: 'Força, Destreza, Constituição, Inteligência, Sabedoria e Carisma.',
-      content: 'Visualize os valores dos atributos, modificadores e salvaguardas relacionadas.',
     },
     {
       id: 'skills-pane',
