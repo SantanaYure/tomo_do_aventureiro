@@ -11,11 +11,13 @@ interface PontosDeVida {
   maximos: number;
   atuais: number;
   temporarios: number;
+  calculoAutomatico: boolean; // Se deve calcular automaticamente baseado em classes/nível
 }
 
 interface DadosDeVida {
   maximos: number;
   gastos: number;
+  tipoDado: string; // 'd6', 'd8', 'd10', 'd12'
 }
 
 interface SalvaguardasContraMorte {
@@ -49,23 +51,29 @@ export class CombatStatusComponent implements OnInit {
       maximos: 10,
       atuais: 10,
       temporarios: 0,
+      calculoAutomatico: false,
     },
     dadosDeVida: {
       maximos: 1,
       gastos: 0,
+      tipoDado: 'd8',
     },
     salvaguardasContraMorte: {
       sucessos: 0,
       falhas: 0,
     },
     iniciativa: 0,
-    deslocamento: 30,
+    deslocamento: 9,
   };
 
   isEditMode: boolean = true;
 
+  // Opções de tipos de dados
+  tiposDado = ['d6', 'd8', 'd10', 'd12'];
+
   ngOnInit() {
     this.loadCombatStatus();
+    this.carregarDadosBasicInfo();
   }
 
   /**
@@ -122,6 +130,106 @@ export class CombatStatusComponent implements OnInit {
       this.statusDeCombate.classeDeArmadura.total +
       this.statusDeCombate.classeDeArmadura.bonusEscudo
     );
+  }
+
+  /**
+   * Carrega dados do localStorage de BasicInfo para cálculo automático
+   */
+  carregarDadosBasicInfo() {
+    const basicInfoSaved = localStorage.getItem('basicInfo');
+    const atributosSaved = localStorage.getItem('atributos');
+
+    if (basicInfoSaved && atributosSaved && this.statusDeCombate.pontosDeVida.calculoAutomatico) {
+      const basicInfo = JSON.parse(basicInfoSaved);
+      const atributos = JSON.parse(atributosSaved);
+
+      // Calcular PV automaticamente
+      this.calcularPVAutomatico(
+        basicInfo.nivel || 1,
+        basicInfo.classe,
+        atributos.constituicao?.modificador || 0
+      );
+    }
+  }
+
+  /**
+   * Calcula PV máximo automaticamente baseado nas regras do D&D 5e
+   * Fórmula: (Média do dado de vida + Mod CON) × Nível
+   * Primeiro nível: Valor máximo do dado + Mod CON
+   */
+  calcularPVAutomatico(nivel: number, classe: string, modConstituicao: number) {
+    if (!nivel || nivel < 1) {
+      nivel = 1;
+    }
+
+    // Média dos dados de vida (metade do valor máximo + 1)
+    const mediaDado = this.obterMediaDadoVida(this.statusDeCombate.dadosDeVida.tipoDado);
+    const valorMaximoDado = this.obterValorMaximoDado(this.statusDeCombate.dadosDeVida.tipoDado);
+
+    // Primeiro nível: valor máximo do dado + mod CON
+    const pvPrimeiroNivel = valorMaximoDado + modConstituicao;
+
+    // Níveis seguintes: média do dado + mod CON (por nível)
+    const pvNiveisRestantes = (nivel - 1) * (mediaDado + modConstituicao);
+
+    // PV total
+    const pvTotal = pvPrimeiroNivel + pvNiveisRestantes;
+
+    // Atualizar PV máximo
+    this.statusDeCombate.pontosDeVida.maximos = Math.max(1, pvTotal); // Mínimo 1 PV
+
+    // Se PV atual for maior que o novo máximo, ajustar
+    if (this.statusDeCombate.pontosDeVida.atuais > this.statusDeCombate.pontosDeVida.maximos) {
+      this.statusDeCombate.pontosDeVida.atuais = this.statusDeCombate.pontosDeVida.maximos;
+    }
+  }
+
+  /**
+   * Retorna a média do dado de vida (usado para calcular PV)
+   */
+  obterMediaDadoVida(tipoDado: string): number {
+    const medias: { [key: string]: number } = {
+      d6: 4, // (6 / 2) + 1
+      d8: 5, // (8 / 2) + 1
+      d10: 6, // (10 / 2) + 1
+      d12: 7, // (12 / 2) + 1
+    };
+    return medias[tipoDado] || 5;
+  }
+
+  /**
+   * Retorna o valor máximo do dado de vida
+   */
+  obterValorMaximoDado(tipoDado: string): number {
+    const valores: { [key: string]: number } = {
+      d6: 6,
+      d8: 8,
+      d10: 10,
+      d12: 12,
+    };
+    return valores[tipoDado] || 8;
+  }
+
+  /**
+   * Alterna entre cálculo automático e manual de PV
+   */
+  toggleCalculoAutomatico() {
+    this.statusDeCombate.pontosDeVida.calculoAutomatico =
+      !this.statusDeCombate.pontosDeVida.calculoAutomatico;
+
+    if (this.statusDeCombate.pontosDeVida.calculoAutomatico) {
+      this.carregarDadosBasicInfo();
+    }
+  }
+
+  /**
+   * Atualiza o cálculo quando o tipo de dado muda
+   */
+  onTipoDadoChange() {
+    // Se cálculo automático está ativo, recalcular PV
+    if (this.statusDeCombate.pontosDeVida.calculoAutomatico) {
+      this.carregarDadosBasicInfo();
+    }
   }
 
   /**
@@ -196,17 +304,19 @@ export class CombatStatusComponent implements OnInit {
           maximos: 10,
           atuais: 10,
           temporarios: 0,
+          calculoAutomatico: false,
         },
         dadosDeVida: {
           maximos: 1,
           gastos: 0,
+          tipoDado: 'd8',
         },
         salvaguardasContraMorte: {
           sucessos: 0,
           falhas: 0,
         },
         iniciativa: 0,
-        deslocamento: 30,
+        deslocamento: 9,
       };
       localStorage.removeItem('statusDeCombate');
       this.isEditMode = true;

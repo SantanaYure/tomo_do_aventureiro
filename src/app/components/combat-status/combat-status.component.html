@@ -14,14 +14,11 @@
       <div class="combat-column">
         <!-- Classe de Armadura -->
         <div class="stat-card ca-card">
-          <div class="stat-header">
-            <i class="bi bi-shield-fill"></i>
-            <h3 class="stat-name">Classe de Armadura</h3>
-          </div>
-          <div class="stat-body">
+          <div class="stat-body-centered">
             <div class="ca-display">
+              <i class="bi bi-shield-fill stat-icon-large"></i>
               <span class="ca-total">{{ calcularCATotal() }}</span>
-              <span class="ca-label">CA Total</span>
+              <span class="ca-label">Classe de Armadura</span>
             </div>
             <div class="ca-inputs">
               <div class="form-group-inline">
@@ -54,43 +51,41 @@
 
         <!-- Iniciativa -->
         <div class="stat-card">
-          <div class="stat-header">
-            <i class="bi bi-lightning-charge"></i>
-            <h3 class="stat-name">Iniciativa</h3>
-          </div>
-          <div class="stat-body">
-            <div class="form-group">
+          <div class="stat-body-centered">
+            <div class="input-with-icon-wrapper">
+              <i class="bi bi-lightning-charge input-icon-inside"></i>
               <input
                 type="number"
                 id="iniciativa"
-                class="form-control-stat"
+                class="form-control-stat with-icon-inside"
                 [(ngModel)]="statusDeCombate.iniciativa"
                 name="iniciativa"
+                placeholder="0"
                 [disabled]="!isEditMode"
               />
             </div>
+            <span class="stat-label-below">Iniciativa</span>
           </div>
         </div>
 
         <!-- Deslocamento -->
         <div class="stat-card">
-          <div class="stat-header">
-            <i class="bi bi-speedometer2"></i>
-            <h3 class="stat-name">Deslocamento</h3>
-          </div>
-          <div class="stat-body">
-            <div class="form-group">
+          <div class="stat-body-centered">
+            <div class="input-with-icon-wrapper">
+              <i class="bi bi-speedometer2 input-icon-inside"></i>
               <input
                 type="number"
                 id="deslocamento"
-                class="form-control-stat"
+                class="form-control-stat with-icon-inside with-unit"
                 [(ngModel)]="statusDeCombate.deslocamento"
                 name="deslocamento"
                 min="0"
+                placeholder="9"
                 [disabled]="!isEditMode"
               />
-              <span class="unit-label">pés</span>
+              <span class="unit-label-inside">m</span>
             </div>
+            <span class="stat-label-below">Deslocamento</span>
           </div>
         </div>
       </div>
@@ -98,19 +93,31 @@
       <!-- Coluna 2: Pontos de Vida -->
       <div class="combat-column">
         <div class="stat-card pv-card">
-          <div class="stat-header">
-            <i class="bi bi-heart-fill"></i>
-            <h3 class="stat-name">Pontos de Vida</h3>
-          </div>
-          <div class="stat-body">
+          <div class="stat-body-centered">
             <div class="pv-display">
+              <i class="bi bi-heart-fill stat-icon-large"></i>
               <div class="pv-main">
                 <span class="pv-atual">{{ statusDeCombate.pontosDeVida.atuais }}</span>
                 <span class="pv-separator">/</span>
                 <span class="pv-maximo">{{ statusDeCombate.pontosDeVida.maximos }}</span>
               </div>
+              <span class="ca-label">Pontos de Vida</span>
             </div>
             <div class="pv-inputs">
+              <!-- Toggle Cálculo Automático -->
+              <div class="form-group-toggle">
+                <label class="toggle-label">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="statusDeCombate.pontosDeVida.calculoAutomatico"
+                    (ngModelChange)="toggleCalculoAutomatico()"
+                    name="pvCalculoAuto"
+                    [disabled]="!isEditMode"
+                  />
+                  <span class="toggle-text">Calcular Automaticamente</span>
+                </label>
+              </div>
+
               <div class="form-group-inline">
                 <label for="pvMaximo" class="form-label-small">Máximo</label>
                 <input
@@ -121,7 +128,7 @@
                   (ngModelChange)="validarPontosDeVida()"
                   name="pvMaximo"
                   min="1"
-                  [disabled]="!isEditMode"
+                  [disabled]="!isEditMode || statusDeCombate.pontosDeVida.calculoAutomatico"
                 />
               </div>
               <div class="form-group-inline">
@@ -156,19 +163,34 @@
 
         <!-- Dados de Vida -->
         <div class="stat-card">
-          <div class="stat-header">
-            <i class="bi bi-dice-6-fill"></i>
-            <h3 class="stat-name">Dados de Vida</h3>
-          </div>
-          <div class="stat-body">
+          <div class="stat-body-centered">
             <div class="dv-display">
-              <span class="dv-restantes">{{
-                statusDeCombate.dadosDeVida.maximos - statusDeCombate.dadosDeVida.gastos
-              }}</span>
-              <span class="dv-separator">/</span>
-              <span class="dv-total">{{ statusDeCombate.dadosDeVida.maximos }}</span>
+              <i class="bi bi-dice-6-fill stat-icon-medium"></i>
+              <div class="dv-main">
+                <span class="dv-restantes">{{
+                  statusDeCombate.dadosDeVida.maximos - statusDeCombate.dadosDeVida.gastos
+                }}</span>
+                <span class="dv-separator">/</span>
+                <span class="dv-total">{{ statusDeCombate.dadosDeVida.maximos }}</span>
+              </div>
+              <span class="stat-label-small">Dados de Vida</span>
             </div>
             <div class="dv-inputs">
+              <!-- Seletor de Tipo de Dado -->
+              <div class="form-group-inline">
+                <label for="dvTipo" class="form-label-small">Tipo de Dado</label>
+                <select
+                  id="dvTipo"
+                  class="form-control-small"
+                  [(ngModel)]="statusDeCombate.dadosDeVida.tipoDado"
+                  (ngModelChange)="onTipoDadoChange()"
+                  name="dvTipo"
+                  [disabled]="!isEditMode"
+                >
+                  <option *ngFor="let tipo of tiposDado" [value]="tipo">{{ tipo }}</option>
+                </select>
+              </div>
+
               <div class="form-group-inline">
                 <label for="dvMaximo" class="form-label-small">Máximo</label>
                 <input
@@ -203,11 +225,10 @@
       <!-- Coluna 3: Salvaguardas contra Morte -->
       <div class="combat-column">
         <div class="stat-card death-saves-card">
-          <div class="stat-header">
-            <i class="bi bi-heart-pulse-fill"></i>
-            <h3 class="stat-name">Salvaguardas contra Morte</h3>
-          </div>
-          <div class="stat-body">
+          <div class="stat-body-centered">
+            <i class="bi bi-heart-pulse-fill stat-icon-large"></i>
+            <h3 class="stat-name-centered">Salvaguardas contra Morte</h3>
+
             <!-- Sucessos -->
             <div class="death-save-section">
               <label class="death-save-label">

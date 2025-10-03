@@ -150,6 +150,41 @@
   gap: 0.75rem;
 }
 
+/* Body Centralizado para simetria */
+.stat-body-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+/* Ícones Grandes dentro dos displays */
+.stat-icon-large {
+  font-size: 1.5rem;
+  color: rgba(186, 142, 215, 1);
+  text-shadow: 0 0 15px rgba(186, 142, 215, 0.6);
+  margin-bottom: 0.25rem;
+}
+
+.stat-icon-medium {
+  font-size: 1.25rem;
+  color: rgba(186, 142, 215, 1);
+  text-shadow: 0 0 15px rgba(186, 142, 215, 0.6);
+  margin-bottom: 0.25rem;
+}
+
+/* Nome do stat centralizado */
+.stat-name-centered {
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
 /* Classe de Armadura */
 .ca-display {
   display: flex;
@@ -160,6 +195,7 @@
   border-radius: 8px;
   padding: 0.75rem;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%;
 }
 
 .ca-total {
@@ -181,6 +217,7 @@
 .ca-inputs {
   display: flex;
   gap: 0.5rem;
+  width: 100%;
 }
 
 /* Pontos de Vida */
@@ -197,6 +234,7 @@
   border-radius: 8px;
   padding: 1rem 0.75rem;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%;
 }
 
 .pv-main {
@@ -230,19 +268,27 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%;
 }
 
 /* Dados de Vida */
 .dv-display {
   display: flex;
-  align-items: baseline;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: 0.375rem;
   background: var(--color-primary-darkest);
   border: 2px solid rgba(186, 142, 215, 0.4);
   border-radius: 8px;
   padding: 0.75rem;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%;
+}
+
+.dv-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375rem;
 }
 
 .dv-restantes {
@@ -269,6 +315,15 @@
 .dv-inputs {
   display: flex;
   gap: 0.5rem;
+  width: 100%;
+}
+
+.stat-label-small {
+  font-size: 0.625rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
 }
 
 /* Form Groups Inline */
@@ -276,6 +331,41 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+/* Toggle de Cálculo Automático */
+.form-group-toggle {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var(--color-white);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  justify-content: center;
+}
+
+.toggle-label input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-primary-light);
+}
+
+.toggle-label input[type='checkbox']:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toggle-text {
+  user-select: none;
 }
 
 .form-label-small {
@@ -301,6 +391,21 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Select customizado */
+select.form-control-small {
+  cursor: pointer;
+  text-align: center;
+  text-align-last: center;
+  padding-right: 0.5rem;
+}
+
+select.form-control-small option {
+  background: var(--color-primary-darkest);
+  color: #ffffff;
+  font-weight: 600;
+  text-align: center;
+}
+
 .form-control-small:focus {
   outline: none;
   border-color: var(--color-white);
@@ -311,11 +416,30 @@
 .form-control-small:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* Form Control Stat (para cards simples) */
 .form-group {
   position: relative;
+}
+
+/* Input com ícone dentro */
+.input-with-icon-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon-inside {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  color: rgba(186, 142, 215, 1);
+  text-shadow: 0 0 15px rgba(186, 142, 215, 0.6);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .form-control-stat {
@@ -332,6 +456,15 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.form-control-stat.with-icon-inside {
+  padding-left: 2.5rem;
+  text-align: center;
+}
+
+.form-control-stat.with-unit {
+  padding-right: 2rem;
+}
+
 .form-control-stat:focus {
   outline: none;
   border-color: var(--color-white);
@@ -342,6 +475,28 @@
 .form-control-stat:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.unit-label-inside {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: lowercase;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stat-label-below {
+  font-size: 0.625rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+  font-weight: 600;
 }
 
 .unit-label {
