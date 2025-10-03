@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { AuthService, User } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { BasicInfoComponent } from '../basic-info/basic-info.component';
+import { AttributesComponent } from '../attributes/attributes.component';
 
 @Component({
   selector: 'app-character-creation',
   standalone: true,
-  imports: [CommonModule, BasicInfoComponent],
+  imports: [CommonModule, BasicInfoComponent, AttributesComponent],
   templateUrl: './character-creation.component.html',
   styleUrl: './character-creation.component.css',
 })

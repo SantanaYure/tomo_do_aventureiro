@@ -1,0 +1,251 @@
+<div class="attributes-container">
+  <div class="section-header">
+    <i class="bi bi-lightning-charge-fill"></i>
+    <h2>Atributos do Personagem</h2>
+    <p class="section-description">
+      Defina os valores dos atributos e os modificadores serão calculados automaticamente
+    </p>
+  </div>
+
+  <form class="attributes-form">
+    <!-- Grid de Atributos -->
+    <div class="attributes-grid">
+      <!-- Força -->
+      <div class="attribute-card">
+        <div class="attribute-header">
+          <i class="bi bi-hammer"></i>
+          <h3 class="attribute-name">Força</h3>
+        </div>
+        <div class="attribute-body">
+          <div class="form-group">
+            <label for="forca" class="form-label">Valor</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="forca"
+                class="form-control attribute-input"
+                [(ngModel)]="atributos.forca.valor"
+                (ngModelChange)="onAtributoChange('forca')"
+                name="forca"
+                min="1"
+                max="30"
+                [disabled]="!isEditMode"
+              />
+            </div>
+          </div>
+          <div class="modifier-display">
+            <span class="modifier-label">Modificador</span>
+            <span
+              class="modifier-value"
+              [class.positive]="atributos.forca.modificador >= 0"
+              [class.negative]="atributos.forca.modificador < 0"
+            >
+              {{ formatarModificador(atributos.forca.modificador) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Destreza -->
+      <div class="attribute-card">
+        <div class="attribute-header">
+          <i class="bi bi-wind"></i>
+          <h3 class="attribute-name">Destreza</h3>
+        </div>
+        <div class="attribute-body">
+          <div class="form-group">
+            <label for="destreza" class="form-label">Valor</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="destreza"
+                class="form-control attribute-input"
+                [(ngModel)]="atributos.destreza.valor"
+                (ngModelChange)="onAtributoChange('destreza')"
+                name="destreza"
+                min="1"
+                max="30"
+                [disabled]="!isEditMode"
+              />
+            </div>
+          </div>
+          <div class="modifier-display">
+            <span class="modifier-label">Modificador</span>
+            <span
+              class="modifier-value"
+              [class.positive]="atributos.destreza.modificador >= 0"
+              [class.negative]="atributos.destreza.modificador < 0"
+            >
+              {{ formatarModificador(atributos.destreza.modificador) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Constituição -->
+      <div class="attribute-card">
+        <div class="attribute-header">
+          <i class="bi bi-heart-fill"></i>
+          <h3 class="attribute-name">Constituição</h3>
+        </div>
+        <div class="attribute-body">
+          <div class="form-group">
+            <label for="constituicao" class="form-label">Valor</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="constituicao"
+                class="form-control attribute-input"
+                [(ngModel)]="atributos.constituicao.valor"
+                (ngModelChange)="onAtributoChange('constituicao')"
+                name="constituicao"
+                min="1"
+                max="30"
+                [disabled]="!isEditMode"
+              />
+            </div>
+          </div>
+          <div class="modifier-display">
+            <span class="modifier-label">Modificador</span>
+            <span
+              class="modifier-value"
+              [class.positive]="atributos.constituicao.modificador >= 0"
+              [class.negative]="atributos.constituicao.modificador < 0"
+            >
+              {{ formatarModificador(atributos.constituicao.modificador) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inteligência -->
+      <div class="attribute-card">
+        <div class="attribute-header">
+          <i class="bi bi-book-fill"></i>
+          <h3 class="attribute-name">Inteligência</h3>
+        </div>
+        <div class="attribute-body">
+          <div class="form-group">
+            <label for="inteligencia" class="form-label">Valor</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="inteligencia"
+                class="form-control attribute-input"
+                [(ngModel)]="atributos.inteligencia.valor"
+                (ngModelChange)="onAtributoChange('inteligencia')"
+                name="inteligencia"
+                min="1"
+                max="30"
+                [disabled]="!isEditMode"
+              />
+            </div>
+          </div>
+          <div class="modifier-display">
+            <span class="modifier-label">Modificador</span>
+            <span
+              class="modifier-value"
+              [class.positive]="atributos.inteligencia.modificador >= 0"
+              [class.negative]="atributos.inteligencia.modificador < 0"
+            >
+              {{ formatarModificador(atributos.inteligencia.modificador) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sabedoria -->
+      <div class="attribute-card">
+        <div class="attribute-header">
+          <i class="bi bi-eye-fill"></i>
+          <h3 class="attribute-name">Sabedoria</h3>
+        </div>
+        <div class="attribute-body">
+          <div class="form-group">
+            <label for="sabedoria" class="form-label">Valor</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="sabedoria"
+                class="form-control attribute-input"
+                [(ngModel)]="atributos.sabedoria.valor"
+                (ngModelChange)="onAtributoChange('sabedoria')"
+                name="sabedoria"
+                min="1"
+                max="30"
+                [disabled]="!isEditMode"
+              />
+            </div>
+          </div>
+          <div class="modifier-display">
+            <span class="modifier-label">Modificador</span>
+            <span
+              class="modifier-value"
+              [class.positive]="atributos.sabedoria.modificador >= 0"
+              [class.negative]="atributos.sabedoria.modificador < 0"
+            >
+              {{ formatarModificador(atributos.sabedoria.modificador) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carisma -->
+      <div class="attribute-card">
+        <div class="attribute-header">
+          <i class="bi bi-chat-heart-fill"></i>
+          <h3 class="attribute-name">Carisma</h3>
+        </div>
+        <div class="attribute-body">
+          <div class="form-group">
+            <label for="carisma" class="form-label">Valor</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="carisma"
+                class="form-control attribute-input"
+                [(ngModel)]="atributos.carisma.valor"
+                (ngModelChange)="onAtributoChange('carisma')"
+                name="carisma"
+                min="1"
+                max="30"
+                [disabled]="!isEditMode"
+              />
+            </div>
+          </div>
+          <div class="modifier-display">
+            <span class="modifier-label">Modificador</span>
+            <span
+              class="modifier-value"
+              [class.positive]="atributos.carisma.modificador >= 0"
+              [class.negative]="atributos.carisma.modificador < 0"
+            >
+              {{ formatarModificador(atributos.carisma.modificador) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-save"
+        (click)="saveAttributes()"
+        [disabled]="!isEditMode"
+      >
+        <i class="bi bi-save"></i>
+        <span>Salvar</span>
+      </button>
+      <button type="button" class="btn btn-edit" (click)="editAttributes()" [disabled]="isEditMode">
+        <i class="bi bi-pencil"></i>
+        <span>Editar</span>
+      </button>
+      <button type="button" class="btn btn-reset" (click)="resetAttributes()">
+        <i class="bi bi-arrow-counterclockwise"></i>
+        <span>Resetar</span>
+      </button>
+    </div>
+  </form>
+</div>
