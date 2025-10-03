@@ -1,0 +1,368 @@
+<div class="combat-status-container">
+  <div class="section-header">
+    <i class="bi bi-shield-fill-exclamation"></i>
+    <h2>Status de Combate</h2>
+    <p class="section-description">
+      Gerencie sua Classe de Armadura, Pontos de Vida e outros valores de combate
+    </p>
+  </div>
+
+  <form class="combat-status-form">
+    <!-- Grid Principal - 3 Colunas -->
+    <div class="combat-grid">
+      <!-- Coluna 1: CA e Iniciativa -->
+      <div class="combat-column">
+        <!-- Classe de Armadura -->
+        <div class="stat-card ca-card">
+          <div class="stat-header">
+            <i class="bi bi-shield-fill"></i>
+            <h3 class="stat-name">Classe de Armadura</h3>
+          </div>
+          <div class="stat-body">
+            <div class="ca-display">
+              <span class="ca-total">{{ calcularCATotal() }}</span>
+              <span class="ca-label">CA Total</span>
+            </div>
+            <div class="ca-inputs">
+              <div class="form-group-inline">
+                <label for="caBase" class="form-label-small">Base</label>
+                <input
+                  type="number"
+                  id="caBase"
+                  class="form-control-small"
+                  [(ngModel)]="statusDeCombate.classeDeArmadura.total"
+                  name="caBase"
+                  min="0"
+                  [disabled]="!isEditMode"
+                />
+              </div>
+              <div class="form-group-inline">
+                <label for="caEscudo" class="form-label-small">Escudo</label>
+                <input
+                  type="number"
+                  id="caEscudo"
+                  class="form-control-small"
+                  [(ngModel)]="statusDeCombate.classeDeArmadura.bonusEscudo"
+                  name="caEscudo"
+                  min="0"
+                  [disabled]="!isEditMode"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Iniciativa -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <i class="bi bi-lightning-charge"></i>
+            <h3 class="stat-name">Iniciativa</h3>
+          </div>
+          <div class="stat-body">
+            <div class="form-group">
+              <input
+                type="number"
+                id="iniciativa"
+                class="form-control-stat"
+                [(ngModel)]="statusDeCombate.iniciativa"
+                name="iniciativa"
+                [disabled]="!isEditMode"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Deslocamento -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <i class="bi bi-speedometer2"></i>
+            <h3 class="stat-name">Deslocamento</h3>
+          </div>
+          <div class="stat-body">
+            <div class="form-group">
+              <input
+                type="number"
+                id="deslocamento"
+                class="form-control-stat"
+                [(ngModel)]="statusDeCombate.deslocamento"
+                name="deslocamento"
+                min="0"
+                [disabled]="!isEditMode"
+              />
+              <span class="unit-label">pés</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna 2: Pontos de Vida -->
+      <div class="combat-column">
+        <div class="stat-card pv-card">
+          <div class="stat-header">
+            <i class="bi bi-heart-fill"></i>
+            <h3 class="stat-name">Pontos de Vida</h3>
+          </div>
+          <div class="stat-body">
+            <div class="pv-display">
+              <div class="pv-main">
+                <span class="pv-atual">{{ statusDeCombate.pontosDeVida.atuais }}</span>
+                <span class="pv-separator">/</span>
+                <span class="pv-maximo">{{ statusDeCombate.pontosDeVida.maximos }}</span>
+              </div>
+            </div>
+            <div class="pv-inputs">
+              <div class="form-group-inline">
+                <label for="pvMaximo" class="form-label-small">Máximo</label>
+                <input
+                  type="number"
+                  id="pvMaximo"
+                  class="form-control-small"
+                  [(ngModel)]="statusDeCombate.pontosDeVida.maximos"
+                  (ngModelChange)="validarPontosDeVida()"
+                  name="pvMaximo"
+                  min="1"
+                  [disabled]="!isEditMode"
+                />
+              </div>
+              <div class="form-group-inline">
+                <label for="pvAtual" class="form-label-small">Atual</label>
+                <input
+                  type="number"
+                  id="pvAtual"
+                  class="form-control-small"
+                  [(ngModel)]="statusDeCombate.pontosDeVida.atuais"
+                  (ngModelChange)="validarPontosDeVida()"
+                  name="pvAtual"
+                  min="0"
+                  [disabled]="!isEditMode"
+                />
+              </div>
+              <div class="form-group-inline">
+                <label for="pvTemp" class="form-label-small">Temporário</label>
+                <input
+                  type="number"
+                  id="pvTemp"
+                  class="form-control-small"
+                  [(ngModel)]="statusDeCombate.pontosDeVida.temporarios"
+                  (ngModelChange)="validarPontosDeVida()"
+                  name="pvTemp"
+                  min="0"
+                  [disabled]="!isEditMode"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dados de Vida -->
+        <div class="stat-card">
+          <div class="stat-header">
+            <i class="bi bi-dice-6-fill"></i>
+            <h3 class="stat-name">Dados de Vida</h3>
+          </div>
+          <div class="stat-body">
+            <div class="dv-display">
+              <span class="dv-restantes">{{
+                statusDeCombate.dadosDeVida.maximos - statusDeCombate.dadosDeVida.gastos
+              }}</span>
+              <span class="dv-separator">/</span>
+              <span class="dv-total">{{ statusDeCombate.dadosDeVida.maximos }}</span>
+            </div>
+            <div class="dv-inputs">
+              <div class="form-group-inline">
+                <label for="dvMaximo" class="form-label-small">Máximo</label>
+                <input
+                  type="number"
+                  id="dvMaximo"
+                  class="form-control-small"
+                  [(ngModel)]="statusDeCombate.dadosDeVida.maximos"
+                  (ngModelChange)="validarDadosDeVida()"
+                  name="dvMaximo"
+                  min="1"
+                  [disabled]="!isEditMode"
+                />
+              </div>
+              <div class="form-group-inline">
+                <label for="dvGastos" class="form-label-small">Gastos</label>
+                <input
+                  type="number"
+                  id="dvGastos"
+                  class="form-control-small"
+                  [(ngModel)]="statusDeCombate.dadosDeVida.gastos"
+                  (ngModelChange)="validarDadosDeVida()"
+                  name="dvGastos"
+                  min="0"
+                  [disabled]="!isEditMode"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna 3: Salvaguardas contra Morte -->
+      <div class="combat-column">
+        <div class="stat-card death-saves-card">
+          <div class="stat-header">
+            <i class="bi bi-heart-pulse-fill"></i>
+            <h3 class="stat-name">Salvaguardas contra Morte</h3>
+          </div>
+          <div class="stat-body">
+            <!-- Sucessos -->
+            <div class="death-save-section">
+              <label class="death-save-label">
+                <i class="bi bi-check-circle-fill"></i>
+                Sucessos
+              </label>
+              <div class="death-save-circles">
+                <button
+                  type="button"
+                  class="death-circle"
+                  [class.filled]="statusDeCombate.salvaguardasContraMorte.sucessos >= 1"
+                  (click)="incrementarSucessos()"
+                  [disabled]="!isEditMode"
+                >
+                  <i
+                    class="bi bi-circle-fill"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.sucessos >= 1"
+                  ></i>
+                  <i
+                    class="bi bi-circle"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.sucessos < 1"
+                  ></i>
+                </button>
+                <button
+                  type="button"
+                  class="death-circle"
+                  [class.filled]="statusDeCombate.salvaguardasContraMorte.sucessos >= 2"
+                  (click)="incrementarSucessos()"
+                  [disabled]="!isEditMode"
+                >
+                  <i
+                    class="bi bi-circle-fill"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.sucessos >= 2"
+                  ></i>
+                  <i
+                    class="bi bi-circle"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.sucessos < 2"
+                  ></i>
+                </button>
+                <button
+                  type="button"
+                  class="death-circle"
+                  [class.filled]="statusDeCombate.salvaguardasContraMorte.sucessos >= 3"
+                  (click)="incrementarSucessos()"
+                  [disabled]="!isEditMode"
+                >
+                  <i
+                    class="bi bi-circle-fill"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.sucessos >= 3"
+                  ></i>
+                  <i
+                    class="bi bi-circle"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.sucessos < 3"
+                  ></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Falhas -->
+            <div class="death-save-section">
+              <label class="death-save-label">
+                <i class="bi bi-x-circle-fill"></i>
+                Falhas
+              </label>
+              <div class="death-save-circles">
+                <button
+                  type="button"
+                  class="death-circle"
+                  [class.filled]="statusDeCombate.salvaguardasContraMorte.falhas >= 1"
+                  (click)="incrementarFalhas()"
+                  [disabled]="!isEditMode"
+                >
+                  <i
+                    class="bi bi-circle-fill"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.falhas >= 1"
+                  ></i>
+                  <i
+                    class="bi bi-circle"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.falhas < 1"
+                  ></i>
+                </button>
+                <button
+                  type="button"
+                  class="death-circle"
+                  [class.filled]="statusDeCombate.salvaguardasContraMorte.falhas >= 2"
+                  (click)="incrementarFalhas()"
+                  [disabled]="!isEditMode"
+                >
+                  <i
+                    class="bi bi-circle-fill"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.falhas >= 2"
+                  ></i>
+                  <i
+                    class="bi bi-circle"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.falhas < 2"
+                  ></i>
+                </button>
+                <button
+                  type="button"
+                  class="death-circle"
+                  [class.filled]="statusDeCombate.salvaguardasContraMorte.falhas >= 3"
+                  (click)="incrementarFalhas()"
+                  [disabled]="!isEditMode"
+                >
+                  <i
+                    class="bi bi-circle-fill"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.falhas >= 3"
+                  ></i>
+                  <i
+                    class="bi bi-circle"
+                    *ngIf="statusDeCombate.salvaguardasContraMorte.falhas < 3"
+                  ></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Botão Reset Salvaguardas -->
+            <button
+              type="button"
+              class="btn-reset-death-saves"
+              (click)="resetarSalvaguardas()"
+              [disabled]="!isEditMode"
+            >
+              <i class="bi bi-arrow-counterclockwise"></i>
+              Resetar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-save"
+        (click)="saveCombatStatus()"
+        [disabled]="!isEditMode"
+      >
+        <i class="bi bi-save"></i>
+        <span>Salvar</span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-edit"
+        (click)="editCombatStatus()"
+        [disabled]="isEditMode"
+      >
+        <i class="bi bi-pencil"></i>
+        <span>Editar</span>
+      </button>
+      <button type="button" class="btn btn-reset" (click)="resetCombatStatus()">
+        <i class="bi bi-arrow-counterclockwise"></i>
+        <span>Resetar</span>
+      </button>
+    </div>
+  </form>
+</div>
