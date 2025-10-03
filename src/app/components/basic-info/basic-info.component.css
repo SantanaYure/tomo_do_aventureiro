@@ -1,0 +1,549 @@
+/* Container Principal */
+.basic-info-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fadeIn 0.6s ease-out;
+  background: var(--color-primary-darkest); /* Roxo mais escuro dos estilos globais */
+  min-height: 100vh;
+  border-radius: 15px; /* Bordas suavemente arredondadas */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header da Seção */
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(186, 142, 215, 0.4);
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(186, 142, 215, 0.9), transparent);
+}
+
+.section-header i {
+  font-size: 2.5rem;
+  color: rgba(186, 142, 215, 1);
+  display: block;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 25px rgba(186, 142, 215, 0.7);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 25px rgba(186, 142, 215, 0.7);
+  }
+  50% {
+    opacity: 0.8;
+    text-shadow: 0 0 35px rgba(186, 142, 215, 0.9);
+  }
+}
+
+.section-header h2 {
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.section-description {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Formulário */
+.info-form {
+  background: var(--color-primary-darkest); /* Fundo preto dos estilos globais */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px; /* Bordas suavemente arredondadas */
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Grupos de Formulário - UI/UX Melhorado */
+.form-group {
+  margin-bottom: 0;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.small {
+  flex: 0 1 150px;
+  min-width: 150px;
+}
+
+.form-group.full-width {
+  width: 100%;
+  flex: none;
+  margin-bottom: 2rem;
+}
+
+.form-group.featured {
+  margin-bottom: 2.5rem;
+}
+
+/* Labels - Melhor Legibilidade */
+.form-label {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 0.625rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+
+.form-label i {
+  margin-right: 0.5rem;
+  color: rgba(186, 142, 215, 1);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Inputs e Selects - Melhor Contraste e Legibilidade */
+.form-control {
+  width: 100%;
+  padding: 0.875rem 1.125rem;
+  background: var(--color-primary-darkest); /* Roxo mais forte dos estilos globais */
+  border: 2px solid #ffffff; /* Borda branca */
+  border-radius: 10px; /* Bordas suavemente arredondadas */
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  height: 48px; /* Altura padrão consistente */
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 400;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: rgba(186, 142, 215, 1);
+  background: var(--color-primary-dark); /* Roxo escuro ao focar */
+  box-shadow: 0 0 0 4px rgba(186, 142, 215, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.form-control:hover:not(:focus) {
+  border-color: rgba(186, 142, 215, 0.6);
+  background: var(--color-primary-dark); /* Roxo escuro ao hover */
+}
+
+/* Input Destaque (Nome do Personagem) - Mesma Altura dos Outros */
+.featured-input {
+  padding: 0.875rem 1.5rem; /* Mesmo padding vertical dos outros inputs */
+  font-size: 1.25rem; /* Tamanho de fonte reduzido para manter altura */
+  font-weight: 700;
+  text-align: center;
+  background: var(--color-primary-darkest); /* Roxo forte */
+  border: 3px solid #ffffff; /* Borda branca */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(186, 142, 215, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  height: 48px; /* Mesma altura dos outros inputs */
+  line-height: 1.2;
+}
+
+.featured-input:focus {
+  border-color: rgba(186, 142, 215, 1);
+  box-shadow: 0 0 0 5px rgba(186, 142, 215, 0.2), 0 6px 25px rgba(186, 142, 215, 0.5),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  background: var(--color-primary-dark); /* Roxo escuro ao focar */
+  transform: translateY(-2px);
+}
+
+.featured-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Select customizado - Melhor Visibilidade */
+.form-control option {
+  background: var(--color-primary-darkest); /* Roxo forte */
+  color: #ffffff;
+  padding: 0.75rem;
+  font-weight: 500;
+}
+
+/* Opção padrão em itálico */
+.form-control option:first-child {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+/* Linhas de Formulário - Layout Específico por Fileira */
+
+/* Fileira 1: Nome (maior) + Nível (menor) */
+.form-row.row-1 {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: end;
+}
+
+.col-name {
+  grid-column: 1;
+}
+
+.col-nivel {
+  grid-column: 2;
+}
+
+/* Fileira 2: Classe, Subclasse, Antecedente (proporcionais - 3 iguais) */
+.form-row.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: end;
+}
+
+/* Fileira 3: Espécie, Alinhamento, Tamanho (proporcionais - 3 iguais) */
+.form-row.row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: end;
+}
+
+/* Input de número centralizado - Melhor Visual */
+.text-center {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+  height: 48px; /* Mesma altura dos outros inputs */
+  padding: 0.875rem 1.125rem; /* Mesmo padding */
+  color: #ffffff; /* Texto branco */
+}
+
+/* Ações do Formulário - Melhor Espaçamento */
+.form-actions {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid rgba(186, 142, 215, 0.4);
+  position: relative;
+}
+
+.form-actions::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(186, 142, 215, 0.9), transparent);
+}
+
+/* Botões - UI/UX Profissional */
+.btn {
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 10px; /* Bordas suavemente arredondadas */
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  min-width: 200px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn i {
+  font-size: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-save {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-light) 0%,
+    var(--color-primary-dark) 100%
+  );
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(125, 106, 144, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn-save:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(125, 106, 144, 0.6), 0 3px 8px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, var(--color-primary-lightest) 0%, var(--color-primary) 100%);
+}
+
+.btn-save:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(125, 106, 144, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn-edit {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-darkest) 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(125, 106, 144, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn-edit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(125, 106, 144, 0.6), 0 3px 8px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-light) 0%,
+    var(--color-primary-dark) 100%
+  );
+}
+
+.btn-edit:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(125, 106, 144, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn-reset {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid var(--color-primary-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-reset:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-lightest);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(125, 106, 144, 0.4);
+}
+
+.btn-reset:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsividade - UI/UX Otimizada */
+@media (max-width: 992px) {
+  /* Fileira 2 e 3: 2 colunas em tablets */
+  .form-row.row-2,
+  .form-row.row-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-row.row-2 .form-group:last-child,
+  .form-row.row-3 .form-group:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .basic-info-container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .info-form {
+    padding: 2rem 1.5rem;
+  }
+
+  /* Todas as fileiras viram coluna única */
+  .form-row.row-1,
+  .form-row.row-2,
+  .form-row.row-3 {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .col-name,
+  .col-nivel {
+    grid-column: auto;
+  }
+
+  .form-row.row-2 .form-group:last-child,
+  .form-row.row-3 .form-group:last-child {
+    grid-column: auto;
+  }
+
+  .featured-input {
+    font-size: 1.25rem;
+    padding: 1rem 1.25rem;
+    letter-spacing: 1.5px;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-header i {
+    font-size: 2.25rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .btn {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .basic-info-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .info-form {
+    padding: 1.5rem 1rem;
+    border-radius: 15px;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .section-header i {
+    font-size: 2rem;
+  }
+
+  .featured-input {
+    font-size: 1.125rem;
+    padding: 0.875rem 1rem;
+    letter-spacing: 1px;
+  }
+
+  .form-label {
+    font-size: 0.8rem;
+  }
+
+  .form-control {
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+  }
+
+  .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+}
+
+/* Estados de Acessibilidade */
+.form-control:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Feedback Visual para Validação */
+.form-control:invalid:not(:placeholder-shown) {
+  border-color: rgba(255, 100, 100, 0.6);
+}
+
+.form-control:valid:not(:placeholder-shown) {
+  border-color: rgba(100, 255, 150, 0.6);
+}
+
+/* Animação de Loading (caso necessário) */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.6s linear infinite;
+}

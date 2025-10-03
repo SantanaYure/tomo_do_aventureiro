@@ -40,8 +40,8 @@ export class LoginComponent {
             rememberMe: this.rememberMe,
           });
 
-          // Redirecionar para página principal após login
-          this.router.navigate(['/dashboard']);
+          // Redirecionar para página de criação de personagem após login
+          this.router.navigate(['/character-creation']);
         } else {
           this.errorMessage = 'Falha no login. Verifique suas credenciais.';
         }
@@ -70,7 +70,7 @@ export class LoginComponent {
         const success = await this.authService.loginWithGoogle();
         if (success) {
           console.log('Login com Google realizado com sucesso!');
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/character-creation']);
         } else {
           this.errorMessage = 'Falha no login com Google. Tente novamente.';
         }

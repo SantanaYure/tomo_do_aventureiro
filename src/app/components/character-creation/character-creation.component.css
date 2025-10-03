@@ -1,5 +1,67 @@
 :root {
   --sidebar-width: 280px;
+  --scroll-track: rgba(125, 106, 144, 0.3);
+  --scroll-thumb: rgba(186, 142, 215, 0.8);
+  --scroll-thumb-hover: rgba(186, 142, 215, 1);
+  --scroll-border: rgba(255, 255, 255, 0.2);
+}
+
+/* Scrollbar customizada - Tema D&D/RPG */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+}
+
+/* Scrollbar WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+  border-radius: 10px;
+  border: 1px solid var(--scroll-border);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(186, 142, 215, 0.5);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #ba8ed7 0%, #9b6bb3 100%);
+}
+
+/* Scrollbar para sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 
 .layout-wrapper {
@@ -251,7 +313,7 @@
 
 .tab-content {
   padding: 2rem;
-  background-color: var(--color-ice);
+  background-color: var(--color-primary-darkest);
   border-radius: 12px;
   box-shadow: var(--shadow-heavy);
   min-height: 500px;
@@ -305,7 +367,7 @@
 }
 
 .placeholder-features .badge {
-  background: var(--gradient-primary);
+  background: var(--color-primary-darkest);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 20px;

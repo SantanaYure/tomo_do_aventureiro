@@ -4,7 +4,7 @@
   <!-- Sidebar -->
   <aside class="sidebar" [class.closed]="sidebarClosed">
     <div class="sidebar-header">
-      <h2>Tomo do Aventureiro</h2>
+      <h2>Criação de Personagem</h2>
       <button class="sidebar-close-btn" (click)="closeSidebar()" aria-label="Fechar menu">
         <i class="bi bi-x-lg"></i>
       </button>
@@ -48,21 +48,17 @@
 
   <!-- Main Content -->
   <main class="main-content" [class.expanded]="sidebarClosed">
-    <div class="content-header">
-      <h1>{{ getActiveTabData()?.title || 'Ficha de Personagem' }}</h1>
-      <p>{{ getActiveTabData()?.description || 'Gerencie todos os aspectos do seu personagem' }}</p>
-      <div class="user-info" *ngIf="currentUser">
-        <span class="welcome-text">Bem-vindo, {{ currentUser.nome }}!</span>
-      </div>
-    </div>
-
     <div class="tab-content">
-      <div class="tab-pane" [class.active]="activeTab === tab.id" *ngFor="let tab of tabs">
-        <div *ngIf="activeTab === tab.id">
-          <h3>{{ tab.title }}</h3>
-          <p>{{ tab.description }}</p>
-          <p>{{ tab.content }}</p>
+      <!-- Informações Básicas - Componente Real -->
+      <div class="tab-pane" [class.active]="activeTab === 'info-pane'">
+        <div *ngIf="activeTab === 'info-pane'">
+          <app-basic-info></app-basic-info>
+        </div>
+      </div>
 
+      <!-- Outros componentes - Placeholder -->
+      <div class="tab-pane" [class.active]="activeTab === tab.id" *ngFor="let tab of tabs">
+        <div *ngIf="activeTab === tab.id && tab.id !== 'info-pane'">
           <!-- Placeholder para componentes futuros -->
           <div class="component-placeholder">
             <div class="placeholder-content">

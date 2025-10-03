@@ -46,9 +46,132 @@
   --hover-opacity: 0.8;
   --active-opacity: 0.6;
   --disabled-opacity: 0.4;
+
+  /* Scrollbar customizada - Tema D&D/RPG */
+  --scroll-track: rgba(125, 106, 144, 0.3);
+  --scroll-thumb: rgba(186, 142, 215, 0.8);
+  --scroll-thumb-hover: rgba(186, 142, 215, 1);
+  --scroll-border: rgba(255, 255, 255, 0.2);
 }
 
-/* Estilos globais para o projeto */
+/* ===== SCROLLBAR CUSTOMIZADA - TEMA D&D/RPG ===== */
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+}
+
+/* WebKit (Chrome, Safari, Edge, Opera) */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+  border-radius: 10px;
+  border: 1px solid var(--scroll-border);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  /* Textura de pergaminho */
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(125, 106, 144, 0.1) 2px,
+    rgba(125, 106, 144, 0.1) 4px
+  );
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 20%,
+    transparent 80%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Detalhes decorativos no thumb (efeito de gema/cristal) */
+::-webkit-scrollbar-thumb::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(186, 142, 215, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 15px rgba(186, 142, 215, 0.5); /* Brilho mágico */
+  transform: scale(1.05);
+  animation: magical-glow 2s ease-in-out infinite;
+}
+
+/* Animação de brilho mágico */
+@keyframes magical-glow {
+  0%,
+  100% {
+    box-shadow: 0 4px 8px rgba(186, 142, 215, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 0 15px rgba(186, 142, 215, 0.5);
+  }
+  50% {
+    box-shadow: 0 4px 8px rgba(186, 142, 215, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(186, 142, 215, 0.7);
+  }
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #ba8ed7 0%, #9b6bb3 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar para áreas com fundo escuro */
+.dark-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+/* Scrollbar para inputs e textareas */
+input[type='text']::-webkit-scrollbar,
+input[type='email']::-webkit-scrollbar,
+input[type='password']::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+input[type='text']::-webkit-scrollbar-thumb,
+input[type='email']::-webkit-scrollbar-thumb,
+input[type='password']::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 6px;
+}
+
+/* ===== ESTILOS GLOBAIS ===== */
 * {
   box-sizing: border-box;
 }
