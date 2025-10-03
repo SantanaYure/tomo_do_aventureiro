@@ -160,4 +160,8 @@ export class BasicInfoComponent implements OnInit {
       this.isEditMode = false;
     }
   }
+
+  temClassePreenchida(): boolean {
+    return this.basicInfo.classes.some((classe) => classe.classe && classe.classe.trim() !== '');
+  }
 }

@@ -54,12 +54,23 @@
           [disabled]="!isEditMode"
         >
           <i class="bi" [ngClass]="mostrarMulticlasse ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
-          <span>{{ mostrarMulticlasse ? 'Classes' : 'Classe e Subclasse' }}</span>
+          <span>{{ mostrarMulticlasse ? 'Classes Detalhadas' : 'Classes' }}</span>
           <small class="badge-classes"
             >{{ basicInfo.classes.length }}
             {{ basicInfo.classes.length === 1 ? 'classe' : 'classes' }}</small
           >
         </button>
+
+        <!-- Resumo das classes quando fechado -->
+        <div class="classes-summary" *ngIf="!mostrarMulticlasse && temClassePreenchida()">
+          <div class="class-chip" *ngFor="let classeItem of basicInfo.classes; let i = index">
+            <ng-container *ngIf="classeItem.classe">
+              <i class="bi bi-shield-fill"></i>
+              <span class="class-name">{{ classeItem.classe }}</span>
+              <span class="class-level">Nv {{ classeItem.nivel }}</span>
+            </ng-container>
+          </div>
+        </div>
       </div>
 
       <!-- Modo simplificado: mostra apenas primeira classe -->
@@ -123,7 +134,10 @@
         <div class="multiclass-list">
           <div class="multiclass-item" *ngFor="let classeItem of basicInfo.classes; let i = index">
             <div class="multiclass-item-header">
-              <span class="multiclass-number">Classe {{ i + 1 }}</span>
+              <span class="multiclass-number" *ngIf="classeItem.classe">{{
+                classeItem.classe
+              }}</span>
+              <span class="multiclass-number" *ngIf="!classeItem.classe">Classe {{ i + 1 }}</span>
               <button
                 type="button"
                 class="btn-remove-class"
