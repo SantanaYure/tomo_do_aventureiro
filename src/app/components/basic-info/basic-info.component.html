@@ -9,154 +9,154 @@
     <!-- Fileira 1: Nome do Personagem (maior) e Nível (menor) -->
     <div class="form-row row-1">
       <div class="form-group col-name">
-        <label for="nomePersonagem" class="form-label">
-          <i class="bi bi-person-badge"></i>
-          Nome do Personagem
-        </label>
-        <input
-          type="text"
-          id="nomePersonagem"
-          class="form-control featured-input"
-          [(ngModel)]="basicInfo.nomeDoPersonagem"
-          name="nomePersonagem"
-          placeholder="Digite o nome do seu personagem"
-          [disabled]="!isEditMode"
-        />
+        <label for="nomePersonagem" class="form-label"> Nome do Personagem </label>
+        <div class="input-wrapper">
+          <i class="bi bi-person-badge input-icon"></i>
+          <input
+            type="text"
+            id="nomePersonagem"
+            class="form-control featured-input with-icon"
+            [(ngModel)]="basicInfo.nomeDoPersonagem"
+            name="nomePersonagem"
+            placeholder="Digite o nome do seu personagem"
+            [disabled]="!isEditMode"
+          />
+        </div>
       </div>
 
       <div class="form-group col-nivel">
-        <label for="nivel" class="form-label">
-          <i class="bi bi-arrow-up-circle"></i>
-          Nível
-        </label>
-        <input
-          type="number"
-          id="nivel"
-          class="form-control text-center"
-          [(ngModel)]="basicInfo.nivel"
-          name="nivel"
-          min="1"
-          max="20"
-          placeholder="1"
-          [disabled]="!isEditMode"
-        />
+        <label for="nivel" class="form-label"> Nível </label>
+        <div class="input-wrapper">
+          <i class="bi bi-arrow-up-circle input-icon"></i>
+          <input
+            type="number"
+            id="nivel"
+            class="form-control text-center with-icon"
+            [(ngModel)]="basicInfo.nivel"
+            name="nivel"
+            min="1"
+            max="20"
+            placeholder="1"
+            [disabled]="!isEditMode"
+          />
+        </div>
       </div>
     </div>
 
     <!-- Fileira 2: Classe, Subclasse, Antecedente (proporcionais) -->
     <div class="form-row row-2">
       <div class="form-group">
-        <label for="classe" class="form-label">
-          <i class="bi bi-shield-fill"></i>
-          Classe
-        </label>
-        <input
-          type="text"
-          id="classe"
-          class="form-control"
-          [(ngModel)]="basicInfo.classe"
-          name="classe"
-          placeholder="Ex: Guerreiro, Mago"
-          [disabled]="!isEditMode"
-        />
+        <label for="classe" class="form-label"> Classe </label>
+        <div class="input-wrapper">
+          <i class="bi bi-shield-fill input-icon"></i>
+          <input
+            type="text"
+            id="classe"
+            class="form-control with-icon"
+            [(ngModel)]="basicInfo.classe"
+            name="classe"
+            placeholder="Ex: Guerreiro, Mago"
+            [disabled]="!isEditMode"
+          />
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="subclasse" class="form-label">
-          <i class="bi bi-star-fill"></i>
-          Subclasse
-        </label>
-        <input
-          type="text"
-          id="subclasse"
-          class="form-control"
-          [(ngModel)]="basicInfo.subclasse"
-          name="subclasse"
-          placeholder="Ex: Campeão, Evocador"
-          [disabled]="!isEditMode"
-        />
+        <label for="subclasse" class="form-label"> Subclasse </label>
+        <div class="input-wrapper">
+          <i class="bi bi-star-fill input-icon"></i>
+          <input
+            type="text"
+            id="subclasse"
+            class="form-control with-icon"
+            [(ngModel)]="basicInfo.subclasse"
+            name="subclasse"
+            placeholder="Ex: Campeão, Evocador"
+            [disabled]="!isEditMode"
+          />
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="antecedente" class="form-label">
-          <i class="bi bi-book"></i>
-          Antecedente
-        </label>
-        <input
-          type="text"
-          id="antecedente"
-          class="form-control"
-          [(ngModel)]="basicInfo.antecedente"
-          name="antecedente"
-          placeholder="Ex: Soldado, Sábio"
-          [disabled]="!isEditMode"
-        />
+        <label for="antecedente" class="form-label"> Antecedente </label>
+        <div class="input-wrapper">
+          <i class="bi bi-book input-icon"></i>
+          <input
+            type="text"
+            id="antecedente"
+            class="form-control with-icon"
+            [(ngModel)]="basicInfo.antecedente"
+            name="antecedente"
+            placeholder="Ex: Soldado, Sábio"
+            [disabled]="!isEditMode"
+          />
+        </div>
       </div>
     </div>
 
     <!-- Fileira 3: Espécie, Alinhamento, Tamanho -->
     <div class="form-row row-3">
       <div class="form-group">
-        <label for="especie" class="form-label">
-          <i class="bi bi-gem"></i>
-          Espécie
-        </label>
-        <input
-          type="text"
-          id="especie"
-          class="form-control"
-          [(ngModel)]="basicInfo.especie"
-          name="especie"
-          placeholder="Ex: Humano, Elfo, Anão"
-          [disabled]="!isEditMode"
-        />
+        <label for="especie" class="form-label"> Espécie </label>
+        <div class="input-wrapper">
+          <i class="bi bi-gem input-icon"></i>
+          <input
+            type="text"
+            id="especie"
+            class="form-control with-icon"
+            [(ngModel)]="basicInfo.especie"
+            name="especie"
+            placeholder="Ex: Humano, Elfo, Anão"
+            [disabled]="!isEditMode"
+          />
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="alinhamento" class="form-label">
-          <i class="bi bi-compass"></i>
-          Alinhamento
-        </label>
-        <select
-          id="alinhamento"
-          class="form-control"
-          [(ngModel)]="basicInfo.alinhamento"
-          name="alinhamento"
-          [disabled]="!isEditMode"
-        >
-          <option value="">Selecione o alinhamento</option>
-          <option value="LB">Leal e Bom</option>
-          <option value="NB">Neutro e Bom</option>
-          <option value="CB">Caótico e Bom</option>
-          <option value="LN">Leal e Neutro</option>
-          <option value="N">Neutro</option>
-          <option value="CN">Caótico e Neutro</option>
-          <option value="LM">Leal e Mau</option>
-          <option value="NM">Neutro e Mau</option>
-          <option value="CM">Caótico e Mau</option>
-        </select>
+        <label for="alinhamento" class="form-label"> Alinhamento </label>
+        <div class="input-wrapper">
+          <i class="bi bi-compass input-icon"></i>
+          <select
+            id="alinhamento"
+            class="form-control with-icon"
+            [(ngModel)]="basicInfo.alinhamento"
+            name="alinhamento"
+            [disabled]="!isEditMode"
+          >
+            <option value="">Selecione o alinhamento</option>
+            <option value="LB">Leal e Bom</option>
+            <option value="NB">Neutro e Bom</option>
+            <option value="CB">Caótico e Bom</option>
+            <option value="LN">Leal e Neutro</option>
+            <option value="N">Neutro</option>
+            <option value="CN">Caótico e Neutro</option>
+            <option value="LM">Leal e Mau</option>
+            <option value="NM">Neutro e Mau</option>
+            <option value="CM">Caótico e Mau</option>
+          </select>
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="tamanho" class="form-label">
-          <i class="bi bi-arrows-fullscreen"></i>
-          Tamanho
-        </label>
-        <select
-          id="tamanho"
-          class="form-control"
-          [(ngModel)]="basicInfo.tamanho"
-          name="tamanho"
-          [disabled]="!isEditMode"
-        >
-          <option value="">Selecione</option>
-          <option value="Minúsculo">Minúsculo</option>
-          <option value="Pequeno">Pequeno</option>
-          <option value="Médio">Médio</option>
-          <option value="Grande">Grande</option>
-          <option value="Enorme">Enorme</option>
-          <option value="Imenso">Imenso</option>
-        </select>
+        <label for="tamanho" class="form-label"> Tamanho </label>
+        <div class="input-wrapper">
+          <i class="bi bi-arrows-fullscreen input-icon"></i>
+          <select
+            id="tamanho"
+            class="form-control with-icon"
+            [(ngModel)]="basicInfo.tamanho"
+            name="tamanho"
+            [disabled]="!isEditMode"
+          >
+            <option value="">Selecione</option>
+            <option value="Minúsculo">Minúsculo</option>
+            <option value="Pequeno">Pequeno</option>
+            <option value="Médio">Médio</option>
+            <option value="Grande">Grande</option>
+            <option value="Enorme">Enorme</option>
+            <option value="Imenso">Imenso</option>
+          </select>
+        </div>
       </div>
     </div>
 

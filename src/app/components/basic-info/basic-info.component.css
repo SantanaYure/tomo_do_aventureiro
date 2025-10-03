@@ -116,7 +116,7 @@
 .form-label {
   display: flex;
   align-items: center;
-  color: #ffffff;
+  color: var(--color-white);
   font-weight: 600;
   margin-bottom: 0.625rem;
   font-size: 0.875rem;
@@ -126,21 +126,41 @@
   white-space: nowrap;
 }
 
-.form-label i {
-  margin-right: 0.5rem;
-  color: rgba(186, 142, 215, 1);
-  font-size: 1rem;
-  flex-shrink: 0;
+/* Wrapper para inputs com ícone */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-white);
+  font-size: 1.125rem;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+/* Inputs com ícone - adicionar padding à esquerda */
+.form-control.with-icon {
+  padding-left: 2.75rem;
+}
+
+.featured-input.with-icon {
+  padding-left: 3rem;
 }
 
 /* Inputs e Selects - Melhor Contraste e Legibilidade */
 .form-control {
   width: 100%;
   padding: 0.875rem 1.125rem;
-  background: var(--color-primary-darkest); /* Roxo mais forte dos estilos globais */
-  border: 2px solid #ffffff; /* Borda branca */
-  border-radius: 10px; /* Bordas suavemente arredondadas */
-  color: #ffffff;
+  background: var(--color-primary-darkest);
+  border: 2px solid var(--color-white);
+  border-radius: 10px;
+  color: var(--color-white);
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.5;
@@ -148,7 +168,7 @@
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-  height: 48px; /* Altura padrão consistente */
+  height: 48px;
 }
 
 .form-control::placeholder {
@@ -158,38 +178,40 @@
 
 .form-control:focus {
   outline: none;
-  border-color: rgba(186, 142, 215, 1);
-  background: var(--color-primary-dark); /* Roxo escuro ao focar */
+  border-color: var(--color-white);
+  background: var(--color-primary-dark);
   box-shadow: 0 0 0 4px rgba(186, 142, 215, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
 }
 
 .form-control:hover:not(:focus) {
-  border-color: rgba(186, 142, 215, 0.6);
-  background: var(--color-primary-dark); /* Roxo escuro ao hover */
+  border-color: var(--color-white);
+  background: var(--color-primary-dark);
 }
 
 /* Input Destaque (Nome do Personagem) - Mesma Altura dos Outros */
 .featured-input {
-  padding: 0.875rem 1.5rem; /* Mesmo padding vertical dos outros inputs */
-  font-size: 1.25rem; /* Tamanho de fonte reduzido para manter altura */
+  padding: 0.875rem 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   text-align: center;
-  background: var(--color-primary-darkest); /* Roxo forte */
-  border: 3px solid #ffffff; /* Borda branca */
+  background: var(--color-primary-darkest);
+  border: 3px solid var(--color-white);
+  border-radius: 10px;
   letter-spacing: 2px;
   text-transform: uppercase;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0 4px 15px rgba(186, 142, 215, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.2);
-  height: 48px; /* Mesma altura dos outros inputs */
+  height: 48px;
   line-height: 1.2;
+  color: var(--color-white);
 }
 
 .featured-input:focus {
-  border-color: rgba(186, 142, 215, 1);
+  border-color: var(--color-white);
   box-shadow: 0 0 0 5px rgba(186, 142, 215, 0.2), 0 6px 25px rgba(186, 142, 215, 0.5),
     inset 0 2px 4px rgba(0, 0, 0, 0.2);
-  background: var(--color-primary-dark); /* Roxo escuro ao focar */
+  background: var(--color-primary-dark);
   transform: translateY(-2px);
 }
 
@@ -254,11 +276,12 @@
 .text-center {
   text-align: center;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1rem;
   letter-spacing: 1px;
-  height: 48px; /* Mesma altura dos outros inputs */
-  padding: 0.875rem 1.125rem; /* Mesmo padding */
-  color: #ffffff; /* Texto branco */
+  height: 48px;
+  padding: 0.875rem 1.125rem;
+  color: var(--color-white);
+  line-height: 1.5;
 }
 
 /* Ações do Formulário - Melhor Espaçamento */
@@ -515,15 +538,6 @@
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
-}
-
-/* Feedback Visual para Validação */
-.form-control:invalid:not(:placeholder-shown) {
-  border-color: rgba(255, 100, 100, 0.6);
-}
-
-.form-control:valid:not(:placeholder-shown) {
-  border-color: rgba(100, 255, 150, 0.6);
 }
 
 /* Animação de Loading (caso necessário) */
