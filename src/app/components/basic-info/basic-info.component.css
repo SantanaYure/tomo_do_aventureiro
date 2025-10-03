@@ -149,6 +149,11 @@
   padding-left: 2.75rem;
 }
 
+select.form-control.with-icon {
+  padding-left: 2.75rem;
+  line-height: 1.5;
+}
+
 .featured-input.with-icon {
   padding-left: 3rem;
 }
@@ -156,7 +161,7 @@
 /* Inputs e Selects - Melhor Contraste e Legibilidade */
 .form-control {
   width: 100%;
-  padding: 0.875rem 1.125rem;
+  padding: 0.75rem 1.125rem;
   background: var(--color-primary-darkest);
   border: 2px solid var(--color-white);
   border-radius: 10px;
@@ -168,7 +173,17 @@
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  min-height: 48px;
+  height: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Garantir que selects tenham altura suficiente */
+select.form-control {
   height: 48px;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
 }
 
 .form-control::placeholder {
@@ -279,9 +294,14 @@
   font-size: 1rem;
   letter-spacing: 1px;
   height: 48px;
-  padding: 0.875rem 1.125rem;
+  padding: 0.75rem 1.125rem;
   color: var(--color-white);
   line-height: 1.5;
+}
+
+input[type='number'].text-center {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
 }
 
 /* Ações do Formulário - Melhor Espaçamento */
