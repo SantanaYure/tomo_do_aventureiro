@@ -1,0 +1,350 @@
+<div class="skills-container">
+  <div class="section-header">
+    <i class="bi bi-star-fill"></i>
+    <h2>Competências e Perícias</h2>
+    <p class="section-description">
+      Gerencie bônus de proficiência, perícias, salvaguardas e outras proficiências
+    </p>
+  </div>
+
+  <form class="skills-form">
+    <!-- Grid Principal -->
+    <div class="skills-grid">
+      <!-- Coluna 1: Informações Principais -->
+      <div class="skills-column">
+        <!-- Bônus de Proficiência -->
+        <div class="stat-card bonus-card">
+          <div class="stat-body-centered">
+            <div class="bonus-display">
+              <i class="bi bi-award-fill stat-icon-large"></i>
+              <span class="bonus-total">{{ formatarBonus(competencias.bonusDeProficiencia) }}</span>
+              <span class="bonus-label">Bônus de Proficiência</span>
+            </div>
+            <div class="form-group-single">
+              <input
+                type="number"
+                id="bonusProficiencia"
+                class="form-control-small"
+                [(ngModel)]="competencias.bonusDeProficiencia"
+                name="bonusProficiencia"
+                min="2"
+                max="6"
+                [disabled]="!isEditMode"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Percepção Passiva -->
+        <div class="stat-card">
+          <div class="stat-body-centered">
+            <div class="input-with-icon-wrapper">
+              <i class="bi bi-eye-fill input-icon-inside"></i>
+              <input
+                type="number"
+                id="percepcaoPassiva"
+                class="form-control-stat with-icon-inside"
+                [(ngModel)]="competencias.percepcaoPassiva"
+                name="percepcaoPassiva"
+                min="0"
+                placeholder="10"
+                [disabled]="!isEditMode"
+              />
+            </div>
+            <span class="stat-label-below">Percepção Passiva</span>
+          </div>
+        </div>
+
+        <!-- Inspiração Heroica -->
+        <div class="stat-card inspiration-card">
+          <div class="stat-body-centered">
+            <i
+              class="bi stat-icon-large"
+              [class.bi-lightbulb-fill]="competencias.inspiracaoHeroica"
+              [class.bi-lightbulb]="!competencias.inspiracaoHeroica"
+            ></i>
+            <h3 class="stat-name-centered">Inspiração Heroica</h3>
+            <button
+              type="button"
+              class="inspiration-toggle"
+              [class.active]="competencias.inspiracaoHeroica"
+              (click)="competencias.inspiracaoHeroica = !competencias.inspiracaoHeroica"
+              [disabled]="!isEditMode"
+            >
+              <i
+                class="bi"
+                [class.bi-check-circle-fill]="competencias.inspiracaoHeroica"
+                [class.bi-circle]="!competencias.inspiracaoHeroica"
+              ></i>
+              <span>{{ competencias.inspiracaoHeroica ? 'Ativo' : 'Inativo' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna 2: Salvaguardas -->
+      <div class="skills-column">
+        <div class="stat-card salvaguardas-card">
+          <div class="stat-body-full">
+            <h3 class="stat-name-centered-top">
+              <i class="bi bi-shield-fill-check"></i>
+              Salvaguardas
+            </h3>
+            <div class="salvaguardas-list">
+              <div
+                class="salvaguarda-item"
+                *ngFor="let atributo of getSalvaguardasKeys()"
+                [class.proficiente]="competencias.salvaguardas[atributo].proficiente"
+              >
+                <button
+                  type="button"
+                  class="proficiency-check"
+                  [class.active]="competencias.salvaguardas[atributo].proficiente"
+                  (click)="toggleProficienciaSalvaguarda(atributo)"
+                  [disabled]="!isEditMode"
+                >
+                  <i
+                    class="bi"
+                    [class.bi-circle-fill]="competencias.salvaguardas[atributo].proficiente"
+                    [class.bi-circle]="!competencias.salvaguardas[atributo].proficiente"
+                  ></i>
+                </button>
+                <div class="salvaguarda-info">
+                  <span class="salvaguarda-nome">{{ atributo }}</span>
+                  <input
+                    type="number"
+                    class="form-control-mini"
+                    [(ngModel)]="competencias.salvaguardas[atributo].valor"
+                    [name]="'salv_' + atributo"
+                    [disabled]="!isEditMode"
+                  />
+                </div>
+                <span class="salvaguarda-total">{{
+                  formatarBonus(calcularBonusSalvaguarda(atributo))
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna 3: Perícias -->
+      <div class="skills-column pericias-column">
+        <div class="stat-card pericias-card">
+          <div class="stat-body-full">
+            <h3 class="stat-name-centered-top">
+              <i class="bi bi-list-stars"></i>
+              Perícias
+            </h3>
+            <div class="pericias-list">
+              <div
+                class="pericia-item"
+                *ngFor="let pericia of periciasList"
+                [class.proficiente]="competencias.pericias[pericia.nome].proficiente"
+              >
+                <button
+                  type="button"
+                  class="proficiency-check"
+                  [class.active]="competencias.pericias[pericia.nome].proficiente"
+                  (click)="toggleProficienciaPericia(pericia.nome)"
+                  [disabled]="!isEditMode"
+                >
+                  <i
+                    class="bi"
+                    [class.bi-circle-fill]="competencias.pericias[pericia.nome].proficiente"
+                    [class.bi-circle]="!competencias.pericias[pericia.nome].proficiente"
+                  ></i>
+                </button>
+                <div class="pericia-info">
+                  <span class="pericia-nome">{{ pericia.nome }}</span>
+                  <span class="pericia-atributo">({{ pericia.atributo }})</span>
+                  <input
+                    type="number"
+                    class="form-control-mini"
+                    [(ngModel)]="competencias.pericias[pericia.nome].valor"
+                    [name]="'pericia_' + pericia.nome"
+                    [disabled]="!isEditMode"
+                  />
+                </div>
+                <span class="pericia-total">{{
+                  formatarBonus(calcularBonusTotal(pericia.nome))
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção de Proficiências -->
+    <div class="proficiencias-section">
+      <h3 class="section-title">
+        <i class="bi bi-bookmark-star-fill"></i>
+        Proficiências
+      </h3>
+
+      <div class="proficiencias-grid">
+        <!-- Armaduras -->
+        <div class="stat-card proficiencia-card">
+          <h4 class="proficiencia-title">
+            <i class="bi bi-shield-shaded"></i>
+            Armaduras
+          </h4>
+          <div class="armaduras-checkboxes">
+            <label
+              class="checkbox-label"
+              *ngFor="let armadura of armadurasOpcoes"
+              [class.selected]="isArmaduraSelecionada(armadura)"
+            >
+              <input
+                type="checkbox"
+                [checked]="isArmaduraSelecionada(armadura)"
+                (change)="toggleArmadura(armadura)"
+                [disabled]="!isEditMode"
+              />
+              <span>{{ armadura }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Armas -->
+        <div class="stat-card proficiencia-card">
+          <h4 class="proficiencia-title">
+            <i class="bi bi-crosshair"></i>
+            Armas
+          </h4>
+          <div class="proficiencia-inputs">
+            <input
+              type="text"
+              class="form-control-text"
+              *ngFor="let arma of competencias.proficiencias.armas; let i = index"
+              [(ngModel)]="competencias.proficiencias.armas[i]"
+              [name]="'arma_' + i"
+              placeholder="Nome da arma"
+              [disabled]="!isEditMode"
+            />
+            <div class="add-item-container" *ngIf="isEditMode">
+              <input
+                type="text"
+                class="form-control-text"
+                *ngFor="let nova of novasArmas; let i = index"
+                [(ngModel)]="novasArmas[i]"
+                (ngModelChange)="
+                  competencias.proficiencias.armas[competencias.proficiencias.armas.length] =
+                    novasArmas[i]
+                "
+                [name]="'nova_arma_' + i"
+                placeholder="Nova arma"
+              />
+              <button type="button" class="btn-add-item" (click)="adicionarArma()">
+                <i class="bi bi-plus-circle"></i>
+                Adicionar Arma
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ferramentas -->
+        <div class="stat-card proficiencia-card">
+          <h4 class="proficiencia-title">
+            <i class="bi bi-tools"></i>
+            Ferramentas
+          </h4>
+          <div class="proficiencia-inputs">
+            <input
+              type="text"
+              class="form-control-text"
+              *ngFor="let ferramenta of competencias.proficiencias.ferramentas; let i = index"
+              [(ngModel)]="competencias.proficiencias.ferramentas[i]"
+              [name]="'ferramenta_' + i"
+              placeholder="Nome da ferramenta"
+              [disabled]="!isEditMode"
+            />
+            <div class="add-item-container" *ngIf="isEditMode">
+              <input
+                type="text"
+                class="form-control-text"
+                *ngFor="let nova of novasFerramentas; let i = index"
+                [(ngModel)]="novasFerramentas[i]"
+                (ngModelChange)="
+                  competencias.proficiencias.ferramentas[
+                    competencias.proficiencias.ferramentas.length
+                  ] = novasFerramentas[i]
+                "
+                [name]="'nova_ferramenta_' + i"
+                placeholder="Nova ferramenta"
+              />
+              <button type="button" class="btn-add-item" (click)="adicionarFerramenta()">
+                <i class="bi bi-plus-circle"></i>
+                Adicionar Ferramenta
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Idiomas -->
+        <div class="stat-card proficiencia-card">
+          <h4 class="proficiencia-title">
+            <i class="bi bi-translate"></i>
+            Idiomas
+          </h4>
+          <div class="proficiencia-inputs">
+            <input
+              type="text"
+              class="form-control-text"
+              *ngFor="let idioma of competencias.proficiencias.idiomas; let i = index"
+              [(ngModel)]="competencias.proficiencias.idiomas[i]"
+              [name]="'idioma_' + i"
+              placeholder="Nome do idioma"
+              [disabled]="!isEditMode"
+            />
+            <div class="add-item-container" *ngIf="isEditMode">
+              <input
+                type="text"
+                class="form-control-text"
+                *ngFor="let novo of novosIdiomas; let i = index"
+                [(ngModel)]="novosIdiomas[i]"
+                (ngModelChange)="
+                  competencias.proficiencias.idiomas[competencias.proficiencias.idiomas.length] =
+                    novosIdiomas[i]
+                "
+                [name]="'novo_idioma_' + i"
+                placeholder="Novo idioma"
+              />
+              <button type="button" class="btn-add-item" (click)="adicionarIdioma()">
+                <i class="bi bi-plus-circle"></i>
+                Adicionar Idioma
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-save"
+        (click)="saveCompetencias()"
+        [disabled]="!isEditMode"
+      >
+        <i class="bi bi-save"></i>
+        <span>Salvar</span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-edit"
+        (click)="editCompetencias()"
+        [disabled]="isEditMode"
+      >
+        <i class="bi bi-pencil"></i>
+        <span>Editar</span>
+      </button>
+      <button type="button" class="btn btn-reset" (click)="resetCompetencias()">
+        <i class="bi bi-arrow-counterclockwise"></i>
+        <span>Resetar</span>
+      </button>
+    </div>
+  </form>
+</div>

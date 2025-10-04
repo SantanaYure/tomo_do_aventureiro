@@ -5,11 +5,18 @@ import { Router } from '@angular/router';
 import { BasicInfoComponent } from '../basic-info/basic-info.component';
 import { AttributesComponent } from '../attributes/attributes.component';
 import { CombatStatusComponent } from '../combat-status/combat-status.component';
+import { SkillsComponent } from '../skills/skills.component';
 
 @Component({
   selector: 'app-character-creation',
   standalone: true,
-  imports: [CommonModule, BasicInfoComponent, AttributesComponent, CombatStatusComponent],
+  imports: [
+    CommonModule,
+    BasicInfoComponent,
+    AttributesComponent,
+    CombatStatusComponent,
+    SkillsComponent,
+  ],
   templateUrl: './character-creation.component.html',
   styleUrl: './character-creation.component.css',
 })

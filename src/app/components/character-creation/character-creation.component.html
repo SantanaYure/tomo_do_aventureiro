@@ -70,6 +70,13 @@
         </div>
       </div>
 
+      <!-- Competências - Componente Real -->
+      <div class="tab-pane" [class.active]="activeTab === 'skills-pane'">
+        <div *ngIf="activeTab === 'skills-pane'">
+          <app-skills></app-skills>
+        </div>
+      </div>
+
       <!-- Outros componentes - Placeholder -->
       <div class="tab-pane" [class.active]="activeTab === tab.id" *ngFor="let tab of tabs">
         <div
@@ -77,7 +84,8 @@
             activeTab === tab.id &&
             tab.id !== 'info-pane' &&
             tab.id !== 'attributes-pane' &&
-            tab.id !== 'combat-pane'
+            tab.id !== 'combat-pane' &&
+            tab.id !== 'skills-pane'
           "
         >
           <!-- Placeholder para componentes futuros -->
