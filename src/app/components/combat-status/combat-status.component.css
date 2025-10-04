@@ -102,6 +102,27 @@
   gap: 1rem;
 }
 
+/* Grid Customizado - 2 Colunas */
+.combat-grid-custom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.right-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-content: start;
+}
+
 /* Cards de Status */
 .stat-card {
   background: var(--color-primary-dark);
@@ -116,6 +137,16 @@
   border-color: rgba(186, 142, 215, 0.6);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(186, 142, 215, 0.4);
+}
+
+/* Cards Grandes (Coluna Esquerda) */
+.large-card {
+  min-height: 280px;
+}
+
+/* Cards Pequenos (Coluna Direita) */
+.small-card {
+  min-height: 180px;
 }
 
 /* Header do Card */
@@ -751,6 +782,14 @@ select.form-control-small option {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
+  .combat-grid-custom {
+    grid-template-columns: 1fr;
+  }
+
+  .right-column {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 768px) {
@@ -790,6 +829,10 @@ select.form-control-small option {
   .ca-total,
   .pv-atual {
     font-size: 1.75rem;
+  }
+
+  .right-column {
+    grid-template-columns: 1fr;
   }
 
   .form-actions {
