@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 interface Atributo {
   valor: number;
   modificador: number;
+  proficiente: boolean;
 }
 
 interface Atributos {
@@ -25,12 +26,12 @@ interface Atributos {
 })
 export class AttributesComponent implements OnInit {
   atributos: Atributos = {
-    forca: { valor: 10, modificador: 0 },
-    destreza: { valor: 10, modificador: 0 },
-    constituicao: { valor: 10, modificador: 0 },
-    inteligencia: { valor: 10, modificador: 0 },
-    sabedoria: { valor: 10, modificador: 0 },
-    carisma: { valor: 10, modificador: 0 },
+    forca: { valor: 10, modificador: 0, proficiente: false },
+    destreza: { valor: 10, modificador: 0, proficiente: false },
+    constituicao: { valor: 10, modificador: 0, proficiente: false },
+    inteligencia: { valor: 10, modificador: 0, proficiente: false },
+    sabedoria: { valor: 10, modificador: 0, proficiente: false },
+    carisma: { valor: 10, modificador: 0, proficiente: false },
   };
 
   isEditMode: boolean = true;
@@ -71,6 +72,12 @@ export class AttributesComponent implements OnInit {
     return modificador >= 0 ? `+${modificador}` : `${modificador}`;
   }
 
+  toggleProficiencia(atributo: keyof Atributos) {
+    if (this.isEditMode) {
+      this.atributos[atributo].proficiente = !this.atributos[atributo].proficiente;
+    }
+  }
+
   saveAttributes() {
     // Salvar no localStorage
     localStorage.setItem('atributos', JSON.stringify(this.atributos));
@@ -92,12 +99,12 @@ export class AttributesComponent implements OnInit {
   resetAttributes() {
     if (confirm('Tem certeza que deseja resetar todos os atributos?')) {
       this.atributos = {
-        forca: { valor: 10, modificador: 0 },
-        destreza: { valor: 10, modificador: 0 },
-        constituicao: { valor: 10, modificador: 0 },
-        inteligencia: { valor: 10, modificador: 0 },
-        sabedoria: { valor: 10, modificador: 0 },
-        carisma: { valor: 10, modificador: 0 },
+        forca: { valor: 10, modificador: 0, proficiente: false },
+        destreza: { valor: 10, modificador: 0, proficiente: false },
+        constituicao: { valor: 10, modificador: 0, proficiente: false },
+        inteligencia: { valor: 10, modificador: 0, proficiente: false },
+        sabedoria: { valor: 10, modificador: 0, proficiente: false },
+        carisma: { valor: 10, modificador: 0, proficiente: false },
       };
       localStorage.removeItem('atributos');
       this.isEditMode = true;

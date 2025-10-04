@@ -214,28 +214,50 @@
             Armas
           </h4>
           <div class="proficiencia-inputs">
-            <input
-              type="text"
-              class="form-control-text"
+            <div
+              class="input-with-delete"
               *ngFor="let arma of competencias.proficiencias.armas; let i = index"
-              [(ngModel)]="competencias.proficiencias.armas[i]"
-              [name]="'arma_' + i"
-              placeholder="Nome da arma"
-              [disabled]="!isEditMode"
-            />
-            <div class="add-item-container" *ngIf="isEditMode">
+            >
               <input
                 type="text"
                 class="form-control-text"
-                *ngFor="let nova of novasArmas; let i = index"
-                [(ngModel)]="novasArmas[i]"
-                (ngModelChange)="
-                  competencias.proficiencias.armas[competencias.proficiencias.armas.length] =
-                    novasArmas[i]
-                "
-                [name]="'nova_arma_' + i"
-                placeholder="Nova arma"
+                [(ngModel)]="competencias.proficiencias.armas[i]"
+                [name]="'arma_' + i"
+                placeholder="Nome da arma"
+                [disabled]="!isEditMode"
               />
+              <button
+                type="button"
+                class="btn-delete-item"
+                (click)="removerArma(i)"
+                *ngIf="isEditMode"
+                title="Remover arma"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+            <div class="add-item-container" *ngIf="isEditMode">
+              <div class="input-with-delete" *ngFor="let nova of novasArmas; let i = index">
+                <input
+                  type="text"
+                  class="form-control-text"
+                  [(ngModel)]="novasArmas[i]"
+                  (ngModelChange)="
+                    competencias.proficiencias.armas[competencias.proficiencias.armas.length] =
+                      novasArmas[i]
+                  "
+                  [name]="'nova_arma_' + i"
+                  placeholder="Nova arma"
+                />
+                <button
+                  type="button"
+                  class="btn-delete-item"
+                  (click)="removerNovaArma(i)"
+                  title="Remover input"
+                >
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
               <button type="button" class="btn-add-item" (click)="adicionarArma()">
                 <i class="bi bi-plus-circle"></i>
                 Adicionar Arma
@@ -251,29 +273,51 @@
             Ferramentas
           </h4>
           <div class="proficiencia-inputs">
-            <input
-              type="text"
-              class="form-control-text"
+            <div
+              class="input-with-delete"
               *ngFor="let ferramenta of competencias.proficiencias.ferramentas; let i = index"
-              [(ngModel)]="competencias.proficiencias.ferramentas[i]"
-              [name]="'ferramenta_' + i"
-              placeholder="Nome da ferramenta"
-              [disabled]="!isEditMode"
-            />
-            <div class="add-item-container" *ngIf="isEditMode">
+            >
               <input
                 type="text"
                 class="form-control-text"
-                *ngFor="let nova of novasFerramentas; let i = index"
-                [(ngModel)]="novasFerramentas[i]"
-                (ngModelChange)="
-                  competencias.proficiencias.ferramentas[
-                    competencias.proficiencias.ferramentas.length
-                  ] = novasFerramentas[i]
-                "
-                [name]="'nova_ferramenta_' + i"
-                placeholder="Nova ferramenta"
+                [(ngModel)]="competencias.proficiencias.ferramentas[i]"
+                [name]="'ferramenta_' + i"
+                placeholder="Nome da ferramenta"
+                [disabled]="!isEditMode"
               />
+              <button
+                type="button"
+                class="btn-delete-item"
+                (click)="removerFerramenta(i)"
+                *ngIf="isEditMode"
+                title="Remover ferramenta"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+            <div class="add-item-container" *ngIf="isEditMode">
+              <div class="input-with-delete" *ngFor="let nova of novasFerramentas; let i = index">
+                <input
+                  type="text"
+                  class="form-control-text"
+                  [(ngModel)]="novasFerramentas[i]"
+                  (ngModelChange)="
+                    competencias.proficiencias.ferramentas[
+                      competencias.proficiencias.ferramentas.length
+                    ] = novasFerramentas[i]
+                  "
+                  [name]="'nova_ferramenta_' + i"
+                  placeholder="Nova ferramenta"
+                />
+                <button
+                  type="button"
+                  class="btn-delete-item"
+                  (click)="removerNovaFerramenta(i)"
+                  title="Remover input"
+                >
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
               <button type="button" class="btn-add-item" (click)="adicionarFerramenta()">
                 <i class="bi bi-plus-circle"></i>
                 Adicionar Ferramenta
@@ -289,28 +333,50 @@
             Idiomas
           </h4>
           <div class="proficiencia-inputs">
-            <input
-              type="text"
-              class="form-control-text"
+            <div
+              class="input-with-delete"
               *ngFor="let idioma of competencias.proficiencias.idiomas; let i = index"
-              [(ngModel)]="competencias.proficiencias.idiomas[i]"
-              [name]="'idioma_' + i"
-              placeholder="Nome do idioma"
-              [disabled]="!isEditMode"
-            />
-            <div class="add-item-container" *ngIf="isEditMode">
+            >
               <input
                 type="text"
                 class="form-control-text"
-                *ngFor="let novo of novosIdiomas; let i = index"
-                [(ngModel)]="novosIdiomas[i]"
-                (ngModelChange)="
-                  competencias.proficiencias.idiomas[competencias.proficiencias.idiomas.length] =
-                    novosIdiomas[i]
-                "
-                [name]="'novo_idioma_' + i"
-                placeholder="Novo idioma"
+                [(ngModel)]="competencias.proficiencias.idiomas[i]"
+                [name]="'idioma_' + i"
+                placeholder="Nome do idioma"
+                [disabled]="!isEditMode"
               />
+              <button
+                type="button"
+                class="btn-delete-item"
+                (click)="removerIdioma(i)"
+                *ngIf="isEditMode"
+                title="Remover idioma"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+            <div class="add-item-container" *ngIf="isEditMode">
+              <div class="input-with-delete" *ngFor="let novo of novosIdiomas; let i = index">
+                <input
+                  type="text"
+                  class="form-control-text"
+                  [(ngModel)]="novosIdiomas[i]"
+                  (ngModelChange)="
+                    competencias.proficiencias.idiomas[competencias.proficiencias.idiomas.length] =
+                      novosIdiomas[i]
+                  "
+                  [name]="'novo_idioma_' + i"
+                  placeholder="Novo idioma"
+                />
+                <button
+                  type="button"
+                  class="btn-delete-item"
+                  (click)="removerNovoIdioma(i)"
+                  title="Remover input"
+                >
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
               <button type="button" class="btn-add-item" (click)="adicionarIdioma()">
                 <i class="bi bi-plus-circle"></i>
                 Adicionar Idioma

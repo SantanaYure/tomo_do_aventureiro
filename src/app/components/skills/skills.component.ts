@@ -87,6 +87,7 @@ export class SkillsComponent implements OnInit {
   ngOnInit() {
     this.inicializarPericias();
     this.carregarCompetencias();
+    this.carregarAtributos();
   }
 
   inicializarPericias() {
@@ -97,6 +98,50 @@ export class SkillsComponent implements OnInit {
         atributo: pericia.atributo,
       };
     });
+  }
+
+  carregarAtributos() {
+    const savedAtributos = localStorage.getItem('atributos');
+    if (savedAtributos) {
+      const atributos = JSON.parse(savedAtributos);
+
+      // Mapeamento de nomes de atributos
+      const mapeamento: { [key: string]: string } = {
+        FORÇA: 'forca',
+        DESTREZA: 'destreza',
+        CONSTITUIÇÃO: 'constituicao',
+        INTELIGÊNCIA: 'inteligencia',
+        SABEDORIA: 'sabedoria',
+        CARISMA: 'carisma',
+      };
+
+      // Atualizar salvaguardas com valores dos atributos
+      Object.keys(this.competencias.salvaguardas).forEach((atributo) => {
+        const nomeAtributo = mapeamento[atributo];
+        if (nomeAtributo && atributos[nomeAtributo]) {
+          this.competencias.salvaguardas[atributo].valor = atributos[nomeAtributo].modificador;
+          this.competencias.salvaguardas[atributo].proficiente =
+            atributos[nomeAtributo].proficiente || false;
+        }
+      });
+
+      // Atualizar perícias com modificadores dos atributos
+      this.periciasList.forEach((pericia) => {
+        const abreviacoes: { [key: string]: string } = {
+          FOR: 'forca',
+          DES: 'destreza',
+          CON: 'constituicao',
+          INT: 'inteligencia',
+          SAB: 'sabedoria',
+          CAR: 'carisma',
+        };
+
+        const nomeAtributo = abreviacoes[pericia.atributo];
+        if (nomeAtributo && atributos[nomeAtributo]) {
+          this.competencias.pericias[pericia.nome].valor = atributos[nomeAtributo].modificador;
+        }
+      });
+    }
   }
 
   carregarCompetencias() {
@@ -192,8 +237,11 @@ export class SkillsComponent implements OnInit {
   }
 
   removerArma(index: number) {
-    this.novasArmas.splice(index, 1);
     this.competencias.proficiencias.armas.splice(index, 1);
+  }
+
+  removerNovaArma(index: number) {
+    this.novasArmas.splice(index, 1);
   }
 
   adicionarFerramenta() {
@@ -203,8 +251,11 @@ export class SkillsComponent implements OnInit {
   }
 
   removerFerramenta(index: number) {
-    this.novasFerramentas.splice(index, 1);
     this.competencias.proficiencias.ferramentas.splice(index, 1);
+  }
+
+  removerNovaFerramenta(index: number) {
+    this.novasFerramentas.splice(index, 1);
   }
 
   adicionarIdioma() {
@@ -214,8 +265,11 @@ export class SkillsComponent implements OnInit {
   }
 
   removerIdioma(index: number) {
-    this.novosIdiomas.splice(index, 1);
     this.competencias.proficiencias.idiomas.splice(index, 1);
+  }
+
+  removerNovoIdioma(index: number) {
+    this.novosIdiomas.splice(index, 1);
   }
 
   calcularBonusTotal(pericia: string): number {
