@@ -46,13 +46,16 @@
             </label>
           </div>
           <div class="modifier-display">
-            <span class="modifier-label">Modificador</span>
+            <span class="modifier-label">
+              {{ atributos.forca.proficiente ? 'Salvaguarda' : 'Modificador' }}
+            </span>
             <span
               class="modifier-value"
-              [class.positive]="atributos.forca.modificador >= 0"
-              [class.negative]="atributos.forca.modificador < 0"
+              [class.positive]="getValorExibicao('forca') >= 0"
+              [class.negative]="getValorExibicao('forca') < 0"
+              [class.proficiente]="atributos.forca.proficiente"
             >
-              {{ formatarModificador(atributos.forca.modificador) }}
+              {{ formatarModificador(getValorExibicao('forca')) }}
             </span>
           </div>
         </div>
@@ -94,13 +97,16 @@
             </label>
           </div>
           <div class="modifier-display">
-            <span class="modifier-label">Modificador</span>
+            <span class="modifier-label">
+              {{ atributos.destreza.proficiente ? 'Salvaguarda' : 'Modificador' }}
+            </span>
             <span
               class="modifier-value"
-              [class.positive]="atributos.destreza.modificador >= 0"
-              [class.negative]="atributos.destreza.modificador < 0"
+              [class.positive]="getValorExibicao('destreza') >= 0"
+              [class.negative]="getValorExibicao('destreza') < 0"
+              [class.proficiente]="atributos.destreza.proficiente"
             >
-              {{ formatarModificador(atributos.destreza.modificador) }}
+              {{ formatarModificador(getValorExibicao('destreza')) }}
             </span>
           </div>
         </div>
@@ -142,13 +148,16 @@
             </label>
           </div>
           <div class="modifier-display">
-            <span class="modifier-label">Modificador</span>
+            <span class="modifier-label">
+              {{ atributos.constituicao.proficiente ? 'Salvaguarda' : 'Modificador' }}
+            </span>
             <span
               class="modifier-value"
-              [class.positive]="atributos.constituicao.modificador >= 0"
-              [class.negative]="atributos.constituicao.modificador < 0"
+              [class.positive]="getValorExibicao('constituicao') >= 0"
+              [class.negative]="getValorExibicao('constituicao') < 0"
+              [class.proficiente]="atributos.constituicao.proficiente"
             >
-              {{ formatarModificador(atributos.constituicao.modificador) }}
+              {{ formatarModificador(getValorExibicao('constituicao')) }}
             </span>
           </div>
         </div>
@@ -190,13 +199,16 @@
             </label>
           </div>
           <div class="modifier-display">
-            <span class="modifier-label">Modificador</span>
+            <span class="modifier-label">
+              {{ atributos.inteligencia.proficiente ? 'Salvaguarda' : 'Modificador' }}
+            </span>
             <span
               class="modifier-value"
-              [class.positive]="atributos.inteligencia.modificador >= 0"
-              [class.negative]="atributos.inteligencia.modificador < 0"
+              [class.positive]="getValorExibicao('inteligencia') >= 0"
+              [class.negative]="getValorExibicao('inteligencia') < 0"
+              [class.proficiente]="atributos.inteligencia.proficiente"
             >
-              {{ formatarModificador(atributos.inteligencia.modificador) }}
+              {{ formatarModificador(getValorExibicao('inteligencia')) }}
             </span>
           </div>
         </div>
@@ -238,13 +250,16 @@
             </label>
           </div>
           <div class="modifier-display">
-            <span class="modifier-label">Modificador</span>
+            <span class="modifier-label">
+              {{ atributos.sabedoria.proficiente ? 'Salvaguarda' : 'Modificador' }}
+            </span>
             <span
               class="modifier-value"
-              [class.positive]="atributos.sabedoria.modificador >= 0"
-              [class.negative]="atributos.sabedoria.modificador < 0"
+              [class.positive]="getValorExibicao('sabedoria') >= 0"
+              [class.negative]="getValorExibicao('sabedoria') < 0"
+              [class.proficiente]="atributos.sabedoria.proficiente"
             >
-              {{ formatarModificador(atributos.sabedoria.modificador) }}
+              {{ formatarModificador(getValorExibicao('sabedoria')) }}
             </span>
           </div>
         </div>
@@ -286,13 +301,16 @@
             </label>
           </div>
           <div class="modifier-display">
-            <span class="modifier-label">Modificador</span>
+            <span class="modifier-label">
+              {{ atributos.carisma.proficiente ? 'Salvaguarda' : 'Modificador' }}
+            </span>
             <span
               class="modifier-value"
-              [class.positive]="atributos.carisma.modificador >= 0"
-              [class.negative]="atributos.carisma.modificador < 0"
+              [class.positive]="getValorExibicao('carisma') >= 0"
+              [class.negative]="getValorExibicao('carisma') < 0"
+              [class.proficiente]="atributos.carisma.proficiente"
             >
-              {{ formatarModificador(atributos.carisma.modificador) }}
+              {{ formatarModificador(getValorExibicao('carisma')) }}
             </span>
           </div>
         </div>

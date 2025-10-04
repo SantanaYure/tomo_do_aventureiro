@@ -48,10 +48,12 @@
                 name="percepcaoPassiva"
                 min="0"
                 placeholder="10"
-                [disabled]="!isEditMode"
+                [disabled]="true"
+                readonly
+                title="Calculado automaticamente: 10 + Mod. Sabedoria + Bônus (se proficiente em Percepção)"
               />
             </div>
-            <span class="stat-label-below">Percepção Passiva</span>
+            <span class="stat-label-below">Percepção Passiva (Auto)</span>
           </div>
         </div>
 
@@ -88,40 +90,29 @@
           <div class="stat-body-full">
             <h3 class="stat-name-centered-top">
               <i class="bi bi-shield-fill-check"></i>
-              Salvaguardas
+              Salvaguardas Proficientes
             </h3>
             <div class="salvaguardas-list">
               <div
-                class="salvaguarda-item"
-                *ngFor="let atributo of getSalvaguardasKeys()"
-                [class.proficiente]="competencias.salvaguardas[atributo].proficiente"
+                class="salvaguarda-item proficiente"
+                *ngFor="let atributo of getSalvaguardasProficientes()"
               >
-                <button
-                  type="button"
-                  class="proficiency-check"
-                  [class.active]="competencias.salvaguardas[atributo].proficiente"
-                  (click)="toggleProficienciaSalvaguarda(atributo)"
-                  [disabled]="!isEditMode"
-                >
-                  <i
-                    class="bi"
-                    [class.bi-circle-fill]="competencias.salvaguardas[atributo].proficiente"
-                    [class.bi-circle]="!competencias.salvaguardas[atributo].proficiente"
-                  ></i>
-                </button>
+                <div class="proficiency-indicator">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
                 <div class="salvaguarda-info">
                   <span class="salvaguarda-nome">{{ atributo }}</span>
-                  <input
-                    type="number"
-                    class="form-control-mini"
-                    [(ngModel)]="competencias.salvaguardas[atributo].valor"
-                    [name]="'salv_' + atributo"
-                    [disabled]="!isEditMode"
-                  />
+                  <span class="salvaguarda-valor">{{
+                    formatarBonus(competencias.salvaguardas[atributo].valor)
+                  }}</span>
                 </div>
                 <span class="salvaguarda-total">{{
                   formatarBonus(calcularBonusSalvaguarda(atributo))
                 }}</span>
+              </div>
+              <div class="empty-message" *ngIf="getSalvaguardasProficientes().length === 0">
+                <i class="bi bi-info-circle"></i>
+                <p>Nenhuma salvaguarda proficiente. Marque as proficiências na aba de Atributos.</p>
               </div>
             </div>
           </div>
@@ -158,13 +149,9 @@
                 <div class="pericia-info">
                   <span class="pericia-nome">{{ pericia.nome }}</span>
                   <span class="pericia-atributo">({{ pericia.atributo }})</span>
-                  <input
-                    type="number"
-                    class="form-control-mini"
-                    [(ngModel)]="competencias.pericias[pericia.nome].valor"
-                    [name]="'pericia_' + pericia.nome"
-                    [disabled]="!isEditMode"
-                  />
+                  <span class="pericia-valor">{{
+                    formatarBonus(competencias.pericias[pericia.nome].valor)
+                  }}</span>
                 </div>
                 <span class="pericia-total">{{
                   formatarBonus(calcularBonusTotal(pericia.nome))

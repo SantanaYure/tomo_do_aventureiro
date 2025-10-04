@@ -63,6 +63,16 @@ export class AttributesComponent implements OnInit {
 
     // Calcular o modificador
     this.atributos[atributo].modificador = this.calcularModificador(this.atributos[atributo].valor);
+
+    // Salvar automaticamente no localStorage para sincronização imediata
+    localStorage.setItem('atributos', JSON.stringify(this.atributos));
+
+    // Disparar evento para outros componentes saberem da mudança imediatamente
+    window.dispatchEvent(
+      new CustomEvent('atributos-atualizados', {
+        detail: this.atributos,
+      })
+    );
   }
 
   /**
@@ -72,9 +82,65 @@ export class AttributesComponent implements OnInit {
     return modificador >= 0 ? `+${modificador}` : `${modificador}`;
   }
 
+  /**
+   * Retorna o valor a ser exibido (modificador ou salvaguarda se proficiente)
+   */
+  getValorExibicao(atributo: keyof Atributos): number {
+    const modificador = this.atributos[atributo].modificador;
+    const proficiente = this.atributos[atributo].proficiente;
+
+    if (proficiente) {
+      const bonusProficiencia = this.getBonusProficiencia();
+      return modificador + bonusProficiencia;
+    }
+
+    return modificador;
+  }
+
+  /**
+   * Calcula o bônus de salvaguarda (modificador + bônus de proficiência se proficiente)
+   */
+  calcularBonusSalvaguarda(atributo: keyof Atributos): number {
+    const bonusProficiencia = this.getBonusProficiencia();
+    const modificador = this.atributos[atributo].modificador;
+    const proficiente = this.atributos[atributo].proficiente;
+
+    return proficiente ? modificador + bonusProficiencia : modificador;
+  }
+
+  /**
+   * Obtém o bônus de proficiência do localStorage de competências
+   */
+  getBonusProficiencia(): number {
+    const savedCompetencias = localStorage.getItem('competencias');
+    if (savedCompetencias) {
+      const competencias = JSON.parse(savedCompetencias);
+      return competencias.bonusDeProficiencia || 2;
+    }
+    return 2; // Valor padrão
+  }
+
+  /**
+   * Formata o bônus de salvaguarda com sinal + ou -
+   */
+  formatarBonusSalvaguarda(atributo: keyof Atributos): string {
+    const bonus = this.calcularBonusSalvaguarda(atributo);
+    return bonus >= 0 ? `+${bonus}` : `${bonus}`;
+  }
+
   toggleProficiencia(atributo: keyof Atributos) {
     if (this.isEditMode) {
       this.atributos[atributo].proficiente = !this.atributos[atributo].proficiente;
+
+      // Salvar automaticamente no localStorage para sincronização imediata
+      localStorage.setItem('atributos', JSON.stringify(this.atributos));
+
+      // Disparar evento para outros componentes saberem da mudança imediatamente
+      window.dispatchEvent(
+        new CustomEvent('atributos-atualizados', {
+          detail: this.atributos,
+        })
+      );
     }
   }
 
@@ -86,8 +152,12 @@ export class AttributesComponent implements OnInit {
     // Desabilitar modo de edição após salvar
     this.isEditMode = false;
 
-    // Feedback visual
-    alert('Atributos salvos com sucesso!');
+    // Disparar evento de atualização (para outros componentes saberem)
+    window.dispatchEvent(
+      new CustomEvent('atributos-atualizados', {
+        detail: this.atributos,
+      })
+    );
   }
 
   editAttributes() {

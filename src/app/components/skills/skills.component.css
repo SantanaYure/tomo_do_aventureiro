@@ -388,6 +388,59 @@
   background: rgba(186, 142, 215, 0.1);
 }
 
+/* Indicador de proficiência (ícone fixo) */
+.proficiency-indicator {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-lightest);
+  text-shadow: 0 0 15px rgba(197, 176, 217, 0.8);
+  animation: proficiencyPulse 2s ease-in-out infinite;
+}
+
+.proficiency-indicator i {
+  font-size: 1.25rem;
+}
+
+@keyframes proficiencyPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Mensagem de lista vazia */
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.empty-message i {
+  font-size: 2.5rem;
+  color: rgba(186, 142, 215, 0.5);
+  text-shadow: 0 0 20px rgba(186, 142, 215, 0.3);
+}
+
+.empty-message p {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 280px;
+}
+
 .proficiency-check {
   width: 28px;
   height: 28px;
@@ -434,6 +487,18 @@
   text-transform: uppercase;
   flex: 1;
   min-width: 80px;
+}
+
+.salvaguarda-valor {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-primary-darkest);
+  border: 1px solid rgba(186, 142, 215, 0.3);
+  border-radius: 4px;
 }
 
 .form-control-mini {
@@ -523,6 +588,18 @@
   font-size: 0.625rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.pericia-valor {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 35px;
+  text-align: center;
+  padding: 0.2rem 0.4rem;
+  background: var(--color-primary-darkest);
+  border: 1px solid rgba(186, 142, 215, 0.3);
+  border-radius: 4px;
 }
 
 .pericia-total {

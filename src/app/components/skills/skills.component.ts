@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -27,8 +27,10 @@ interface Competencias {
   templateUrl: './skills.component.html',
   styleUrl: './skills.component.css',
 })
-export class SkillsComponent implements OnInit {
+export class SkillsComponent implements OnInit, OnDestroy {
   isEditMode = false;
+
+  private atributosListener: any;
 
   // Atributos padrão para referência
   atributos = ['FORÇA', 'DESTREZA', 'CONSTITUIÇÃO', 'INTELIGÊNCIA', 'SABEDORIA', 'CARISMA'];
@@ -86,8 +88,21 @@ export class SkillsComponent implements OnInit {
 
   ngOnInit() {
     this.inicializarPericias();
-    this.carregarCompetencias();
-    this.carregarAtributos();
+    this.carregarCompetencias(); // Carrega primeiro as competências salvas
+    this.carregarAtributos(); // Depois atualiza apenas os valores dos atributos, preservando proficiências
+
+    // Listener para atualizar quando atributos mudarem
+    this.atributosListener = () => {
+      this.carregarAtributos();
+    };
+    window.addEventListener('atributos-atualizados', this.atributosListener);
+  }
+
+  ngOnDestroy() {
+    // Remover listener ao destruir componente
+    if (this.atributosListener) {
+      window.removeEventListener('atributos-atualizados', this.atributosListener);
+    }
   }
 
   inicializarPericias() {
@@ -115,17 +130,21 @@ export class SkillsComponent implements OnInit {
         CARISMA: 'carisma',
       };
 
-      // Atualizar salvaguardas com valores dos atributos
+      // Atualizar APENAS os valores (modificadores) das salvaguardas, preservando proficiências
       Object.keys(this.competencias.salvaguardas).forEach((atributo) => {
         const nomeAtributo = mapeamento[atributo];
         if (nomeAtributo && atributos[nomeAtributo]) {
           this.competencias.salvaguardas[atributo].valor = atributos[nomeAtributo].modificador;
-          this.competencias.salvaguardas[atributo].proficiente =
-            atributos[nomeAtributo].proficiente || false;
+          // Só atualiza proficiência se não houver dados salvos de competências
+          const savedCompetencias = localStorage.getItem('competencias');
+          if (!savedCompetencias) {
+            this.competencias.salvaguardas[atributo].proficiente =
+              atributos[nomeAtributo].proficiente || false;
+          }
         }
       });
 
-      // Atualizar perícias com modificadores dos atributos
+      // Atualizar APENAS os modificadores das perícias, preservando proficiências
       this.periciasList.forEach((pericia) => {
         const abreviacoes: { [key: string]: string } = {
           FOR: 'forca',
@@ -141,7 +160,18 @@ export class SkillsComponent implements OnInit {
           this.competencias.pericias[pericia.nome].valor = atributos[nomeAtributo].modificador;
         }
       });
+
+      // Calcular percepção passiva automaticamente
+      this.calcularPercepcaoPassiva(atributos);
     }
+  }
+
+  calcularPercepcaoPassiva(atributos: any) {
+    // Percepção Passiva = 10 + Modificador de Sabedoria + Bônus de Proficiência (se proficiente)
+    const modSabedoria = atributos.sabedoria?.modificador || 0;
+    const proficientePercepcao = this.competencias.pericias['Percepção']?.proficiente || false;
+    const bonus = proficientePercepcao ? this.competencias.bonusDeProficiencia : 0;
+    this.competencias.percepcaoPassiva = 10 + modSabedoria + bonus;
   }
 
   carregarCompetencias() {
@@ -162,6 +192,40 @@ export class SkillsComponent implements OnInit {
   }
 
   saveCompetencias() {
+    // Limpar arrays de strings vazias antes de salvar
+    this.competencias.proficiencias.armas = this.competencias.proficiencias.armas.filter(
+      (arma) => arma && arma.trim() !== ''
+    );
+    this.competencias.proficiencias.ferramentas =
+      this.competencias.proficiencias.ferramentas.filter(
+        (ferramenta) => ferramenta && ferramenta.trim() !== ''
+      );
+    this.competencias.proficiencias.idiomas = this.competencias.proficiencias.idiomas.filter(
+      (idioma) => idioma && idioma.trim() !== ''
+    );
+
+    // Adicionar novos items dos arrays temporários
+    this.novasArmas.forEach((arma) => {
+      if (arma && arma.trim() !== '') {
+        this.competencias.proficiencias.armas.push(arma.trim());
+      }
+    });
+    this.novasFerramentas.forEach((ferramenta) => {
+      if (ferramenta && ferramenta.trim() !== '') {
+        this.competencias.proficiencias.ferramentas.push(ferramenta.trim());
+      }
+    });
+    this.novosIdiomas.forEach((idioma) => {
+      if (idioma && idioma.trim() !== '') {
+        this.competencias.proficiencias.idiomas.push(idioma.trim());
+      }
+    });
+
+    // Limpar arrays temporários
+    this.novasArmas = [];
+    this.novasFerramentas = [];
+    this.novosIdiomas = [];
+
     localStorage.setItem('competencias', JSON.stringify(this.competencias));
     this.isEditMode = false;
     console.log('Competências salvas:', this.competencias);
@@ -198,13 +262,6 @@ export class SkillsComponent implements OnInit {
       this.novasFerramentas = [];
       this.novosIdiomas = [];
       localStorage.removeItem('competencias');
-    }
-  }
-
-  toggleProficienciaSalvaguarda(atributo: string) {
-    if (this.isEditMode) {
-      this.competencias.salvaguardas[atributo].proficiente =
-        !this.competencias.salvaguardas[atributo].proficiente;
     }
   }
 
@@ -281,8 +338,13 @@ export class SkillsComponent implements OnInit {
   }
 
   calcularBonusSalvaguarda(atributo: string): number {
+    // Buscar o estado de proficiência dos atributos (não das salvaguardas)
+    const atributosData = JSON.parse(localStorage.getItem('atributos') || '{}');
+    const atributoNormalizado = atributo.toLowerCase();
+    const isProficiente = atributosData[atributoNormalizado]?.proficiente || false;
+
     const salvaguarda = this.competencias.salvaguardas[atributo];
-    const bonus = salvaguarda.proficiente
+    const bonus = isProficiente
       ? salvaguarda.valor + this.competencias.bonusDeProficiencia
       : salvaguarda.valor;
     return bonus;
@@ -294,6 +356,25 @@ export class SkillsComponent implements OnInit {
 
   getSalvaguardasKeys(): string[] {
     return Object.keys(this.competencias.salvaguardas);
+  }
+
+  getSalvaguardasProficientes(): string[] {
+    // Buscar proficiências dos atributos do localStorage
+    const atributosData = JSON.parse(localStorage.getItem('atributos') || '{}');
+    const mapeamento: { [key: string]: string } = {
+      forca: 'FORÇA',
+      destreza: 'DESTREZA',
+      constituicao: 'CONSTITUIÇÃO',
+      inteligencia: 'INTELIGÊNCIA',
+      sabedoria: 'SABEDORIA',
+      carisma: 'CARISMA',
+    };
+
+    // Retornar apenas as salvaguardas cujos atributos são proficientes
+    return Object.keys(atributosData)
+      .filter((atributo) => atributosData[atributo].proficiente === true)
+      .map((atributo) => mapeamento[atributo])
+      .filter((nome) => nome !== undefined);
   }
 
   getPericiasKeys(): string[] {
