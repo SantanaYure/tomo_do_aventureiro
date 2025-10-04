@@ -95,7 +95,7 @@
             <div class="salvaguardas-list">
               <div
                 class="salvaguarda-item proficiente"
-                *ngFor="let atributo of getSalvaguardasProficientes()"
+                *ngFor="let atributo of salvaguardasProficientes"
               >
                 <div class="proficiency-indicator">
                   <i class="bi bi-check-circle-fill"></i>
@@ -110,7 +110,7 @@
                   formatarBonus(calcularBonusSalvaguarda(atributo))
                 }}</span>
               </div>
-              <div class="empty-message" *ngIf="getSalvaguardasProficientes().length === 0">
+              <div class="empty-message" *ngIf="salvaguardasProficientes.length === 0">
                 <i class="bi bi-info-circle"></i>
                 <p>Nenhuma salvaguarda proficiente. Marque as proficiências na aba de Atributos.</p>
               </div>

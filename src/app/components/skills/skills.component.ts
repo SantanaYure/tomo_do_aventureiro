@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -31,6 +31,10 @@ export class SkillsComponent implements OnInit, OnDestroy {
   isEditMode = false;
 
   private atributosListener: any;
+  private storageListener: any;
+
+  // Cache de salvaguardas proficientes para atualização dinâmica
+  salvaguardasProficientes: string[] = [];
 
   // Atributos padrão para referência
   atributos = ['FORÇA', 'DESTREZA', 'CONSTITUIÇÃO', 'INTELIGÊNCIA', 'SABEDORIA', 'CARISMA'];
@@ -86,22 +90,45 @@ export class SkillsComponent implements OnInit, OnDestroy {
   novasFerramentas: string[] = [];
   novosIdiomas: string[] = [];
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   ngOnInit() {
+    console.log('🔵 Skills Component - ngOnInit chamado');
     this.inicializarPericias();
     this.carregarCompetencias(); // Carrega primeiro as competências salvas
-    this.carregarAtributos(); // Depois atualiza apenas os valores dos atributos, preservando proficiências
+    this.carregarAtributos(); // Depois atualiza apenas os valores dos atributos E atualiza salvaguardas proficientes
 
-    // Listener para atualizar quando atributos mudarem
+    // Listener para atualizar quando atributos mudarem via evento customizado
     this.atributosListener = () => {
+      console.log('🟢 Evento atributos-atualizados capturado!');
       this.carregarAtributos();
+      this.cdr.detectChanges(); // Força detecção de mudanças
     };
     window.addEventListener('atributos-atualizados', this.atributosListener);
+    console.log('👂 Listener de atributos registrado');
+
+    // Listener adicional para mudanças no localStorage (fallback)
+    this.storageListener = (e: StorageEvent) => {
+      if (e.key === 'atributos' && e.newValue) {
+        console.log('💾 Storage event capturado para atributos!');
+        this.carregarAtributos();
+        this.cdr.detectChanges();
+      }
+    };
+    window.addEventListener('storage', this.storageListener);
+    console.log('👂 Listener de storage registrado');
   }
 
   ngOnDestroy() {
+    console.log('🔴 Skills Component - ngOnDestroy chamado');
     // Remover listener ao destruir componente
     if (this.atributosListener) {
       window.removeEventListener('atributos-atualizados', this.atributosListener);
+      console.log('👋 Listener de atributos removido');
+    }
+    if (this.storageListener) {
+      window.removeEventListener('storage', this.storageListener);
+      console.log('👋 Listener de storage removido');
     }
   }
 
@@ -119,6 +146,7 @@ export class SkillsComponent implements OnInit, OnDestroy {
     const savedAtributos = localStorage.getItem('atributos');
     if (savedAtributos) {
       const atributos = JSON.parse(savedAtributos);
+      console.log('Atributos carregados:', atributos);
 
       // Mapeamento de nomes de atributos
       const mapeamento: { [key: string]: string } = {
@@ -144,6 +172,9 @@ export class SkillsComponent implements OnInit, OnDestroy {
         }
       });
 
+      // Atualizar lista de salvaguardas proficientes para exibição dinâmica
+      this.atualizarSalvaguardasProficientes();
+
       // Atualizar APENAS os modificadores das perícias, preservando proficiências
       this.periciasList.forEach((pericia) => {
         const abreviacoes: { [key: string]: string } = {
@@ -163,6 +194,10 @@ export class SkillsComponent implements OnInit, OnDestroy {
 
       // Calcular percepção passiva automaticamente
       this.calcularPercepcaoPassiva(atributos);
+    } else {
+      console.log('⚠️ Nenhum atributo salvo no localStorage');
+      // Limpar salvaguardas proficientes se não houver atributos salvos
+      this.salvaguardasProficientes = [];
     }
   }
 
@@ -358,9 +393,14 @@ export class SkillsComponent implements OnInit, OnDestroy {
     return Object.keys(this.competencias.salvaguardas);
   }
 
-  getSalvaguardasProficientes(): string[] {
-    // Buscar proficiências dos atributos do localStorage
+  /**
+   * Atualiza a lista de salvaguardas proficientes baseado nos atributos
+   */
+  atualizarSalvaguardasProficientes(): void {
     const atributosData = JSON.parse(localStorage.getItem('atributos') || '{}');
+    console.log('=== ATUALIZANDO SALVAGUARDAS PROFICIENTES ===');
+    console.log('Dados dos atributos do localStorage:', atributosData);
+
     const mapeamento: { [key: string]: string } = {
       forca: 'FORÇA',
       destreza: 'DESTREZA',
@@ -370,11 +410,31 @@ export class SkillsComponent implements OnInit, OnDestroy {
       carisma: 'CARISMA',
     };
 
-    // Retornar apenas as salvaguardas cujos atributos são proficientes
-    return Object.keys(atributosData)
-      .filter((atributo) => atributosData[atributo].proficiente === true)
+    // Criar um NOVO array para forçar detecção de mudança do Angular
+    const novaLista = Object.keys(atributosData)
+      .filter((atributo) => {
+        const isProficiente = atributosData[atributo].proficiente === true;
+        console.log(
+          `${atributo}: proficiente = ${isProficiente}, valor = ${atributosData[atributo].valor}, modificador = ${atributosData[atributo].modificador}`
+        );
+        return isProficiente;
+      })
       .map((atributo) => mapeamento[atributo])
       .filter((nome) => nome !== undefined);
+
+    console.log('Nova lista de salvaguardas proficientes:', novaLista);
+
+    // Atualizar apenas se houver mudança
+    if (JSON.stringify(this.salvaguardasProficientes) !== JSON.stringify(novaLista)) {
+      this.salvaguardasProficientes = [...novaLista]; // Spread operator para criar novo array
+      console.log('✅ Salvaguardas proficientes ATUALIZADAS:', this.salvaguardasProficientes);
+    } else {
+      console.log('⚠️ Nenhuma mudança detectada nas salvaguardas proficientes');
+    }
+  }
+  getSalvaguardasProficientes(): string[] {
+    // Retornar a lista cached para atualização dinâmica
+    return this.salvaguardasProficientes;
   }
 
   getPericiasKeys(): string[] {
