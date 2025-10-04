@@ -1,0 +1,60 @@
+<div class="home-container">
+  <!-- Header -->
+  <header class="home-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <img src="assets/logo_rpg.png" alt="Logo" class="logo" />
+        <h1 class="app-title">Tomo do Aventureiro</h1>
+      </div>
+      <div class="user-section">
+        <div class="user-info">
+          <i class="bi bi-person-circle user-icon"></i>
+          <div class="user-details">
+            <span class="user-name">{{ userName }}</span>
+            <span class="user-email">{{ userEmail }}</span>
+          </div>
+        </div>
+        <button class="btn-logout" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i>
+          Sair
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="home-main">
+    <div class="welcome-section">
+      <h2 class="welcome-title">Bem-vindo, {{ userName }}!</h2>
+      <p class="welcome-text">
+        Esta é sua área principal. Aqui você poderá acessar todas as funcionalidades do sistema.
+      </p>
+    </div>
+
+    <!-- Cards de Funcionalidades -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="bi bi-person-plus-fill"></i>
+        </div>
+        <h3 class="feature-title">Criar Personagem</h3>
+        <p class="feature-description">Crie novos personagens para suas aventuras de RPG</p>
+        <button class="btn-feature" disabled>Em breve</button>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="bi bi-list-ul"></i>
+        </div>
+        <h3 class="feature-title">Meus Personagens</h3>
+        <p class="feature-description">Visualize e gerencie todos os seus personagens</p>
+        <button class="btn-feature" disabled>Em breve</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="home-footer">
+    <p>&copy; 2025 Tomo do Aventureiro - Sistema de Gerenciamento de Personagens D&D 5e</p>
+  </footer>
+</div>
