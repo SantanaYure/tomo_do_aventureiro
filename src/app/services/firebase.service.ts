@@ -196,4 +196,9 @@ export class FirebaseService {
         return `❌ Erro técnico (${errorCode}). Se o problema persistir, entre em contato com o suporte.`;
     }
   }
+
+  // Retorna a instância do Firestore para uso externo
+  getFirestore() {
+    return this.firestore;
+  }
 }
