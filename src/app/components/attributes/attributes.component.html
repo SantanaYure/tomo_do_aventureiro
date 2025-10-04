@@ -37,7 +37,7 @@
             <label class="proficiency-label">
               <input
                 type="checkbox"
-                [(ngModel)]="atributos.forca.proficiente"
+                [checked]="atributos.forca.proficiente"
                 (change)="toggleProficiencia('forca')"
                 name="forca_prof"
                 [disabled]="!isEditMode"
@@ -88,7 +88,7 @@
             <label class="proficiency-label">
               <input
                 type="checkbox"
-                [(ngModel)]="atributos.destreza.proficiente"
+                [checked]="atributos.destreza.proficiente"
                 (change)="toggleProficiencia('destreza')"
                 name="destreza_prof"
                 [disabled]="!isEditMode"
@@ -139,7 +139,7 @@
             <label class="proficiency-label">
               <input
                 type="checkbox"
-                [(ngModel)]="atributos.constituicao.proficiente"
+                [checked]="atributos.constituicao.proficiente"
                 (change)="toggleProficiencia('constituicao')"
                 name="constituicao_prof"
                 [disabled]="!isEditMode"
@@ -190,7 +190,7 @@
             <label class="proficiency-label">
               <input
                 type="checkbox"
-                [(ngModel)]="atributos.inteligencia.proficiente"
+                [checked]="atributos.inteligencia.proficiente"
                 (change)="toggleProficiencia('inteligencia')"
                 name="inteligencia_prof"
                 [disabled]="!isEditMode"
@@ -241,7 +241,7 @@
             <label class="proficiency-label">
               <input
                 type="checkbox"
-                [(ngModel)]="atributos.sabedoria.proficiente"
+                [checked]="atributos.sabedoria.proficiente"
                 (change)="toggleProficiencia('sabedoria')"
                 name="sabedoria_prof"
                 [disabled]="!isEditMode"
@@ -292,7 +292,7 @@
             <label class="proficiency-label">
               <input
                 type="checkbox"
-                [(ngModel)]="atributos.carisma.proficiente"
+                [checked]="atributos.carisma.proficiente"
                 (change)="toggleProficiencia('carisma')"
                 name="carisma_prof"
                 [disabled]="!isEditMode"
