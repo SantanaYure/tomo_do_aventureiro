@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { FirestoreImportService } from '../../services/firestore-import.service';
 
 @Component({
   selector: 'app-home',
@@ -14,14 +13,8 @@ import { FirestoreImportService } from '../../services/firestore-import.service'
 export class HomeComponent implements OnInit {
   userName: string = '';
   userEmail: string = '';
-  isImporting: boolean = false;
-  importMessage: string = '';
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private firestoreImportService: FirestoreImportService
-  ) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
     // Carregar informações do usuário
@@ -44,20 +37,7 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  // Método temporário para importar o template
-  async importNarrativeTemplate() {
-    this.isImporting = true;
-    this.importMessage = '';
-
-    try {
-      await this.firestoreImportService.importNarrativeCharacterTemplate();
-      this.importMessage = '✅ Template importado com sucesso! Verifique o console e o Firestore.';
-      console.log('Acesse o Firestore Console: https://console.firebase.google.com/');
-    } catch (error: any) {
-      this.importMessage = `❌ Erro ao importar: ${error.message}`;
-      console.error('Erro detalhado:', error);
-    } finally {
-      this.isImporting = false;
-    }
+  navigateTo(route: string) {
+    this.router.navigate([route]);
   }
 }

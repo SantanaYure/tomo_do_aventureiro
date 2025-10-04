@@ -1,0 +1,232 @@
+<div class="character-creation-container">
+  <!-- Header -->
+  <header class="creation-header">
+    <div class="header-content">
+      <button class="btn-back-minimal" (click)="cancel()" title="Voltar para Home">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <h1 class="page-title">
+        <i class="bi bi-person-plus-fill"></i>
+        Criar Personagem
+      </h1>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner">
+      <i class="bi bi-arrow-repeat spin"></i>
+    </div>
+    <p>Carregando...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="errorMessage && !isLoading">
+    <i class="bi bi-exclamation-circle"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- ========================================
+       STEP 1: SELECIONAR TEMPLATE
+       ======================================== -->
+  <main class="creation-main" *ngIf="step === 'select-template' && !isLoading">
+    <div class="step-indicator">
+      <span class="step active">1</span>
+      <span class="step-line"></span>
+      <span class="step">2</span>
+      <span class="step-line"></span>
+      <span class="step">3</span>
+    </div>
+
+    <div class="step-content">
+      <h2 class="step-title">Escolha um Modelo de Ficha</h2>
+      <p class="step-description">Selecione o tipo de personagem que deseja criar</p>
+
+      <div class="templates-grid">
+        <div
+          class="template-card"
+          *ngFor="let template of templates"
+          (click)="selectTemplate(template)"
+        >
+          <div class="template-icon">
+            <i class="bi bi-file-earmark-text"></i>
+          </div>
+          <h3 class="template-name">{{ template.nome }}</h3>
+          <p class="template-description">{{ template.descricao }}</p>
+          <div class="template-info">
+            <i class="bi bi-grid-3x3-gap"></i>
+            {{ template.estrutura.length }} blocos de informações
+          </div>
+          <button class="btn-select">
+            Selecionar
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="templates.length === 0 && !isLoading">
+        <i class="bi bi-inbox"></i>
+        <h3>Nenhum template disponível</h3>
+        <p>Aguarde enquanto carregamos os modelos de ficha...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================
+       STEP 2: PREENCHER FORMULÁRIO
+       ======================================== -->
+  <main class="creation-main" *ngIf="step === 'fill-form' && selectedTemplate">
+    <div class="step-indicator">
+      <span class="step completed">✓</span>
+      <span class="step-line completed"></span>
+      <span class="step active">2</span>
+      <span class="step-line"></span>
+      <span class="step">3</span>
+    </div>
+
+    <div class="step-content">
+      <!-- Header com Título -->
+      <div class="form-header-title">
+        <h2 class="step-title">{{ selectedTemplate.nome }}</h2>
+        <p class="step-description">{{ selectedTemplate.descricao }}</p>
+      </div>
+
+      <!-- Sistema de Abas -->
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <button
+            *ngFor="let bloco of selectedTemplate.estrutura; let i = index"
+            class="tab-button"
+            [class.active]="activeTabIndex === i"
+            (click)="selectTab(i)"
+            type="button"
+          >
+            <i class="bi {{ bloco.icone }}"></i>
+            <span>{{ bloco.bloco }}</span>
+          </button>
+        </div>
+
+        <!-- Formulário Dinâmico -->
+        <form class="tab-content-form" (ngSubmit)="saveCharacter()">
+          <div
+            class="tab-content"
+            *ngIf="selectedTemplate.estrutura[activeTabIndex] as activeBloco"
+          >
+            <div class="tab-content-header">
+              <i class="bi {{ activeBloco.icone }}"></i>
+              <h3>{{ activeBloco.bloco }}</h3>
+            </div>
+
+            <div class="fields-grid">
+              <div
+                *ngFor="let campo of activeBloco.campos; let i = index"
+                class="field-wrapper"
+                [class.full-width]="campo.type === 'textarea'"
+              >
+                <label [for]="campo.name" class="field-label">
+                  {{ campo.label }}
+                  <span *ngIf="activeTabIndex === 0 && i === 0" class="required-mark">*</span>
+                </label>
+
+                <input
+                  *ngIf="campo.type !== 'textarea'"
+                  [id]="campo.name"
+                  [name]="campo.name"
+                  [type]="campo.type || 'text'"
+                  [(ngModel)]="formData[campo.name]"
+                  [placeholder]="campo.placeholder"
+                  class="field-input"
+                  [class.required-field]="activeTabIndex === 0 && i === 0"
+                />
+
+                <textarea
+                  *ngIf="campo.type === 'textarea'"
+                  [id]="campo.name"
+                  [name]="campo.name"
+                  [(ngModel)]="formData[campo.name]"
+                  [placeholder]="campo.placeholder"
+                  class="field-textarea"
+                  rows="5"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Navegação entre Abas -->
+            <div class="tab-navigation">
+              <button
+                type="button"
+                class="btn-tab-nav"
+                (click)="previousTab()"
+                [disabled]="activeTabIndex === 0"
+              >
+                <i class="bi bi-chevron-left"></i>
+                Anterior
+              </button>
+
+              <span class="tab-indicator">
+                {{ activeTabIndex + 1 }} de {{ selectedTemplate.estrutura.length }}
+              </span>
+
+              <button
+                type="button"
+                class="btn-tab-nav"
+                (click)="nextTab()"
+                *ngIf="activeTabIndex < selectedTemplate.estrutura.length - 1"
+              >
+                Próxima
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Botões de Ação (sempre visíveis) -->
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" (click)="cancel()">
+              <i class="bi bi-x-circle"></i>
+              Cancelar
+            </button>
+            <button type="submit" class="btn-save" [disabled]="isLoading">
+              <i class="bi bi-check-circle" *ngIf="!isLoading"></i>
+              <i class="bi bi-arrow-repeat spin" *ngIf="isLoading"></i>
+              {{ isLoading ? 'Salvando...' : 'Criar Personagem' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================
+       STEP 3: SUCESSO
+       ======================================== -->
+  <main class="creation-main" *ngIf="step === 'success'">
+    <div class="step-indicator">
+      <span class="step completed">✓</span>
+      <span class="step-line completed"></span>
+      <span class="step completed">✓</span>
+      <span class="step-line completed"></span>
+      <span class="step completed">✓</span>
+    </div>
+
+    <div class="success-content">
+      <div class="success-icon">
+        <i class="bi bi-check-circle"></i>
+      </div>
+      <h2 class="success-title">Personagem Criado!</h2>
+      <p class="success-message">{{ successMessage }}</p>
+      <p class="success-redirect">Redirecionando para seus personagens...</p>
+
+      <div class="success-actions">
+        <button class="btn-secondary" (click)="createAnother()">
+          <i class="bi bi-plus-circle"></i>
+          Criar Outro
+        </button>
+        <button class="btn-primary" (click)="router.navigate(['/my-characters'])">
+          <i class="bi bi-list-ul"></i>
+          Ver Meus Personagens
+        </button>
+      </div>
+    </div>
+  </main>
+</div>

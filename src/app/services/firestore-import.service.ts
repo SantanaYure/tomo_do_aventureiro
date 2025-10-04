@@ -29,6 +29,12 @@ export class FirestoreImportService {
               placeholder: 'O nome principal do personagem.',
             },
             {
+              name: 'sexo',
+              label: 'Sexo',
+              type: 'text',
+              placeholder: 'Masculino, Feminino, Não-binário, etc.',
+            },
+            {
               name: 'apelido',
               label: 'Apelido / Alcunha',
               type: 'text',
@@ -255,6 +261,12 @@ export class FirestoreImportService {
               label: 'Nome Completo',
               type: 'text',
               placeholder: 'O nome principal do personagem.',
+            },
+            {
+              name: 'sexo',
+              label: 'Sexo',
+              type: 'text',
+              placeholder: 'Masculino, Feminino, Não-binário, etc.',
             },
             {
               name: 'apelido',

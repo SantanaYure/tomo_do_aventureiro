@@ -1,0 +1,101 @@
+<div class="my-characters-container">
+  <!-- Header -->
+  <header class="characters-header">
+    <div class="header-content">
+      <button class="btn-back" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+        Voltar
+      </button>
+      <h1 class="page-title">
+        <i class="bi bi-list-ul"></i>
+        Meus Personagens
+      </h1>
+      <button class="btn-create" (click)="createNew()">
+        <i class="bi bi-plus-circle"></i>
+        Criar Novo
+      </button>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner">
+      <i class="bi bi-arrow-repeat spin"></i>
+    </div>
+    <p>Carregando seus personagens...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="errorMessage && !isLoading">
+    <i class="bi bi-exclamation-circle"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Main Content -->
+  <main class="characters-main" *ngIf="!isLoading">
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="characters.length === 0">
+      <div class="empty-icon">
+        <i class="bi bi-inbox"></i>
+      </div>
+      <h2>Nenhum personagem criado</h2>
+      <p>Comece criando seu primeiro personagem para suas aventuras!</p>
+      <button class="btn-create-large" (click)="createNew()">
+        <i class="bi bi-plus-circle"></i>
+        Criar Primeiro Personagem
+      </button>
+    </div>
+
+    <!-- Characters Grid -->
+    <div class="characters-grid" *ngIf="characters.length > 0">
+      <div class="character-card" *ngFor="let character of characters">
+        <div class="card-header">
+          <div class="character-avatar">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <div class="character-info">
+            <h3 class="character-name">{{ character.nome }}</h3>
+            <span class="character-template">{{ character.templateNome }}</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="character-meta">
+            <div class="meta-item">
+              <i class="bi bi-calendar-plus"></i>
+              <span
+                >Criado:
+                {{ formatDate(character.createdAt) | date : 'dd/MM/yyyy' : '' : 'pt-BR' }}</span
+              >
+            </div>
+            <div class="meta-item">
+              <i class="bi bi-clock-history"></i>
+              <span
+                >Atualizado:
+                {{ formatDate(character.updatedAt) | date : 'dd/MM/yyyy' : '' : 'pt-BR' }}</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-action btn-view" (click)="viewCharacter(character.id)">
+            <i class="bi bi-eye"></i>
+            Visualizar
+          </button>
+          <button class="btn-action btn-edit" (click)="editCharacter(character.id)">
+            <i class="bi bi-pencil"></i>
+            Editar
+          </button>
+          <button
+            class="btn-action btn-delete"
+            (click)="deleteCharacter(character.id, character.nome)"
+          >
+            <i class="bi bi-trash"></i>
+            Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
