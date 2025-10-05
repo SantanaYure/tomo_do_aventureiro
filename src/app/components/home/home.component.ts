@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 export class HomeComponent implements OnInit {
   userName: string = '';
   userEmail: string = '';
+  isDropdownOpen: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -35,6 +36,14 @@ export class HomeComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
   }
 
   navigateTo(route: string) {
