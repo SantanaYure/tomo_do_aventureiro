@@ -5,17 +5,28 @@
 
 /* ===== VARIÁVEIS DE CORES DO PROJETO ===== */
 :root {
-  /* Paleta Principal - Tons de Roxo/Lilás */
-  --color-primary-lightest: #c5b0d9; /* Lilás mais claro */
-  --color-primary-light: #b39fc7; /* Lilás claro */
-  --color-primary: #a18db5; /* Lilás médio */
-  --color-primary-dark: #8f7ca2; /* Lilás escuro */
-  --color-primary-darkest: #7d6a90; /* Lilás mais escuro */
+  /* Paleta Principal - Tons de Roxo/Lilás com MELHOR CONTRASTE */
+  --color-primary-lightest: #e8dcf3; /* Lilás muito claro - fundos */
+  --color-primary-light: #b39ddb; /* Lilás claro - hovers */
+  --color-primary: #7b50c6; /* Roxo vibrante médio - principal */
+  --color-secondary: #9c27b0; /* Roxo magenta - secundário */
+  --color-primary-dark: #5e35b1; /* Roxo escuro - botões */
+  --color-primary-darkest: #4527a0; /* Roxo mais escuro - texto */
+
+  /* Cores de Acento */
+  --color-accent: #52b788; /* Verde - ações positivas */
+  --color-accent-dark: #2d6a4f; /* Verde escuro */
+  --color-warning: #ff9800; /* Laranja - avisos */
+  --color-danger: #f44336; /* Vermelho - erros/deletar */
+  --color-info: #2196f3; /* Azul - informações */
 
   /* Cores Neutras */
   --color-white: #ffffff; /* Branco puro */
   --color-ice: #f8f9fa; /* Branco gelo */
-  --color-black: #010101; /* Preto */
+  --color-gray-light: #e0e0e0; /* Cinza claro */
+  --color-gray: #9e9e9e; /* Cinza médio */
+  --color-gray-dark: #616161; /* Cinza escuro */
+  --color-black: #212121; /* Preto suave (melhor que #010101) */
 
   /* Alias para facilitar o uso */
   --primary: var(--color-primary);
@@ -23,35 +34,44 @@
   --primary-dark: var(--color-primary-dark);
   --background: var(--color-ice);
   --text-primary: var(--color-black);
-  --text-secondary: var(--color-primary-darkest);
+  --text-secondary: var(--color-gray-dark);
+  --text-muted: var(--color-gray);
 
-  /* Gradientes */
-  --gradient-primary: linear-gradient(
-    135deg,
-    var(--color-primary-light) 0%,
-    var(--color-primary-dark) 100%
-  );
+  /* Gradientes com cores mais vibrantes */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   --gradient-header: linear-gradient(
     135deg,
-    var(--color-primary) 0%,
+    var(--color-primary-dark) 0%,
     var(--color-primary-darkest) 100%
   );
+  --gradient-success: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-accent-dark) 100%
+  );
 
-  /* Sombras usando as cores da paleta */
-  --shadow-light: 0 2px 8px rgba(125, 106, 144, 0.1);
-  --shadow-medium: 0 4px 16px rgba(125, 106, 144, 0.15);
-  --shadow-heavy: 0 8px 32px rgba(125, 106, 144, 0.2);
+  /* Sombras com melhor definição */
+  --shadow-light: 0 2px 8px rgba(123, 80, 198, 0.15);
+  --shadow-medium: 0 4px 16px rgba(123, 80, 198, 0.2);
+  --shadow-heavy: 0 8px 32px rgba(123, 80, 198, 0.25);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.16);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.19);
 
   /* Estados de interação */
-  --hover-opacity: 0.8;
-  --active-opacity: 0.6;
-  --disabled-opacity: 0.4;
+  --hover-opacity: 0.9;
+  --active-opacity: 0.7;
+  --disabled-opacity: 0.5;
 
-  /* Scrollbar customizada - Tema D&D/RPG */
-  --scroll-track: rgba(125, 106, 144, 0.3);
-  --scroll-thumb: rgba(186, 142, 215, 0.8);
-  --scroll-thumb-hover: rgba(186, 142, 215, 1);
-  --scroll-border: rgba(255, 255, 255, 0.2);
+  /* Scrollbar customizada - Tema D&D/RPG com cores vibrantes */
+  --scroll-track: rgba(123, 80, 198, 0.15);
+  --scroll-thumb: rgba(123, 80, 198, 0.6);
+  --scroll-thumb-hover: rgba(123, 80, 198, 0.9);
+  --scroll-border: rgba(255, 255, 255, 0.3);
+
+  /* Glass Morphism */
+  --glass-background: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(123, 80, 198, 0.2);
 }
 
 /* ===== SCROLLBAR CUSTOMIZADA - TEMA D&D/RPG ===== */
@@ -71,28 +91,28 @@
   background: var(--scroll-track);
   border-radius: 10px;
   border: 1px solid var(--scroll-border);
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
   /* Textura de pergaminho */
   background-image: repeating-linear-gradient(
     90deg,
     transparent,
     transparent 2px,
-    rgba(125, 106, 144, 0.1) 2px,
-    rgba(125, 106, 144, 0.1) 4px
+    rgba(123, 80, 198, 0.05) 2px,
+    rgba(123, 80, 198, 0.05) 4px
   );
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--scroll-thumb);
   border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   background-image: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.3) 0%,
     transparent 20%,
     transparent 80%,
-    rgba(0, 0, 0, 0.3) 100%
+    rgba(0, 0, 0, 0.2) 100%
   );
   transition: all 0.3s ease;
   position: relative;
@@ -107,16 +127,16 @@
   transform: translate(-50%, -50%);
   width: 4px;
   height: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 2px;
   opacity: 0.5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scroll-thumb-hover);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 8px rgba(186, 142, 215, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 0 15px rgba(186, 142, 215, 0.5); /* Brilho mágico */
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 8px rgba(123, 80, 198, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 0 15px rgba(123, 80, 198, 0.3); /* Brilho mágico */
   transform: scale(1.05);
   animation: magical-glow 2s ease-in-out infinite;
 }
@@ -125,17 +145,17 @@
 @keyframes magical-glow {
   0%,
   100% {
-    box-shadow: 0 4px 8px rgba(186, 142, 215, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3),
-      0 0 15px rgba(186, 142, 215, 0.5);
+    box-shadow: 0 4px 8px rgba(123, 80, 198, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      0 0 15px rgba(123, 80, 198, 0.3);
   }
   50% {
-    box-shadow: 0 4px 8px rgba(186, 142, 215, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.5),
-      0 0 20px rgba(186, 142, 215, 0.7);
+    box-shadow: 0 4px 8px rgba(123, 80, 198, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 0 20px rgba(123, 80, 198, 0.5);
   }
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(135deg, #ba8ed7 0%, #9b6bb3 100%);
+  background: linear-gradient(135deg, #7b50c6 0%, #5e35b1 100%);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -203,6 +223,21 @@ body {
 .text-secondary {
   color: var(--text-secondary) !important;
 }
+.text-muted {
+  color: var(--text-muted) !important;
+}
+.text-accent {
+  color: var(--color-accent) !important;
+}
+.text-danger {
+  color: var(--color-danger) !important;
+}
+.text-warning {
+  color: var(--color-warning) !important;
+}
+.text-info {
+  color: var(--color-info) !important;
+}
 
 .bg-primary {
   background-color: var(--color-primary) !important;
@@ -213,8 +248,44 @@ body {
 .bg-primary-dark {
   background-color: var(--color-primary-dark) !important;
 }
+.bg-secondary {
+  background-color: var(--color-secondary) !important;
+}
+.bg-accent {
+  background-color: var(--color-accent) !important;
+}
 .bg-gradient {
   background: var(--gradient-primary) !important;
+}
+.bg-gradient-success {
+  background: var(--gradient-success) !important;
+}
+
+/* Botões com melhor contraste */
+.btn-primary {
+  background: var(--gradient-primary) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600 !important;
+}
+
+.btn-primary:hover {
+  background: var(--gradient-header) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+.btn-success {
+  background: var(--gradient-success) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600 !important;
+}
+
+.btn-success:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md) !important;
 }
 
 /* Customizações do Bootstrap podem ser adicionadas aqui */
