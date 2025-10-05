@@ -92,15 +92,15 @@ export class MyCharactersComponent implements OnInit {
   }
 
   createNew() {
-    this.router.navigate(['/character-creation']);
+    this.router.navigate(['/create-character']);
   }
 
   viewCharacter(id: string) {
-    this.router.navigate(['/character-creation', id]);
+    this.router.navigate(['/create-character', id]);
   }
 
   editCharacter(id: string) {
-    this.router.navigate(['/character-creation', id]);
+    this.router.navigate(['/create-character', id]);
   }
 
   async deleteCharacter(id: string, name: string) {
@@ -120,7 +120,7 @@ export class MyCharactersComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/character-creation']);
+    this.router.navigate(['/home']);
   }
 
   // O método formatDate foi removido, pois a conversão agora é feita
