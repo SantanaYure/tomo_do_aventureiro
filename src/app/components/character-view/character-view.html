@@ -1,0 +1,168 @@
+<div class="character-view-container">
+  <!-- Header -->
+  <header class="view-header">
+    <div class="header-content">
+      <button class="btn-back" (click)="goBack()" title="Voltar para lista">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+
+      <div class="header-info" *ngIf="character && !isLoading">
+        <div class="character-title">
+          <h1 class="character-name">
+            <i class="bi bi-person-circle"></i>
+            {{ character.nome }}
+          </h1>
+          <span class="character-template">{{ character.templateNome }}</span>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn-edit" (click)="editCharacter()" title="Editar personagem">
+            <i class="bi bi-pencil-square"></i>
+            Editar
+          </button>
+          <button class="btn-delete" (click)="deleteCharacter()" title="Excluir personagem">
+            <i class="bi bi-trash"></i>
+            Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner">
+      <i class="bi bi-arrow-repeat spin"></i>
+    </div>
+    <p>Carregando personagem...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="errorMessage && !isLoading">
+    <i class="bi bi-exclamation-circle"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Dashboard Principal -->
+  <main class="dashboard-main" *ngIf="!isLoading && character && template">
+    <!-- Info Rápida (Cards Superiores) -->
+    <div class="quick-info">
+      <div class="info-card">
+        <div class="info-icon">
+          <i class="bi bi-calendar-plus"></i>
+        </div>
+        <div class="info-content">
+          <span class="info-label">Criado em</span>
+          <span class="info-value">{{ formatDate(character.createdAt) }}</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <i class="bi bi-calendar-check"></i>
+        </div>
+        <div class="info-content">
+          <span class="info-label">Última edição</span>
+          <span class="info-value">{{ formatDate(character.updatedAt) }}</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <i class="bi bi-file-earmark-text"></i>
+        </div>
+        <div class="info-content">
+          <span class="info-label">Template</span>
+          <span class="info-value">{{ character.templateNome }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sistema de Abas -->
+    <div class="dashboard-tabs">
+      <!-- Header das Abas -->
+      <div class="tabs-header">
+        <button
+          *ngFor="let bloco of template.estrutura; let i = index"
+          class="tab-button"
+          [class.active]="activeTabIndex === i"
+          (click)="selectTab(i)"
+        >
+          <i class="bi {{ bloco.icone }}"></i>
+          <span class="tab-label">{{ bloco.bloco }}</span>
+        </button>
+      </div>
+
+      <!-- Conteúdo da Aba Ativa -->
+      <div class="tabs-content">
+        <div *ngFor="let bloco of template.estrutura; let i = index">
+          <div *ngIf="activeTabIndex === i" class="tab-panel">
+            <!-- Cabeçalho da Seção -->
+            <div class="section-header">
+              <i class="bi {{ bloco.icone }}"></i>
+              <h2>{{ bloco.bloco }}</h2>
+            </div>
+
+            <!-- Grid de Campos -->
+            <div class="fields-grid">
+              <div
+                *ngFor="let campo of bloco.campos"
+                class="field-item"
+                [class.full-width]="campo.type === 'textarea'"
+              >
+                <label class="field-label">
+                  <i class="bi bi-chevron-right"></i>
+                  {{ campo.label }}
+                </label>
+                <div class="field-value" [class.multiline]="campo.type === 'textarea'">
+                  {{ getFieldValue(campo.name) }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Navegação entre abas (rodapé) -->
+            <div class="tab-navigation">
+              <button class="btn-nav" (click)="previousTab()" [disabled]="activeTabIndex === 0">
+                <i class="bi bi-chevron-left"></i>
+                Anterior
+              </button>
+
+              <span class="tab-indicator">
+                Seção {{ activeTabIndex + 1 }} de {{ template.estrutura.length }}
+              </span>
+
+              <button
+                class="btn-nav"
+                (click)="nextTab()"
+                [disabled]="activeTabIndex === template.estrutura.length - 1"
+              >
+                Próxima
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Estado Vazio (Sem Template) -->
+  <main class="dashboard-main" *ngIf="!isLoading && character && !template">
+    <div class="empty-state">
+      <i class="bi bi-exclamation-triangle"></i>
+      <h3>Template não encontrado</h3>
+      <p>O template associado a este personagem não está mais disponível.</p>
+      <p>Você ainda pode editá-lo ou excluí-lo.</p>
+      <div class="empty-actions">
+        <button class="btn-primary" (click)="editCharacter()">
+          <i class="bi bi-pencil-square"></i>
+          Editar Personagem
+        </button>
+        <button class="btn-secondary" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i>
+          Voltar
+        </button>
+      </div>
+    </div>
+  </main>
+</div>

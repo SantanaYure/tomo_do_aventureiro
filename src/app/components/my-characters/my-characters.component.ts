@@ -96,7 +96,7 @@ export class MyCharactersComponent implements OnInit {
   }
 
   viewCharacter(id: string) {
-    this.router.navigate(['/create-character', id]);
+    this.router.navigate(['/view-character', id]);
   }
 
   editCharacter(id: string) {
