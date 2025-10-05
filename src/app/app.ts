@@ -12,6 +12,9 @@ import { AuthService } from './services/auth.service';
 export class App implements OnInit {
   protected readonly title = 'tomo_do_aventureiro';
 
+  // Constantes de configuração
+  private readonly AUTH_VERIFICATION_DELAY = 2000; // ms
+
   constructor(
     private firebaseService: FirebaseService,
     private authService: AuthService,
@@ -88,7 +91,7 @@ export class App implements OnInit {
             } else {
               console.log('✅ [APP] Firebase restaurou a sessão, mantendo login');
             }
-          }, 2000);
+          }, this.AUTH_VERIFICATION_DELAY);
         } else {
           console.log('ℹ️ [APP] Usuário não autenticado (esperado na página de login)');
         }

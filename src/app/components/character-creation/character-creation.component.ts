@@ -31,7 +31,7 @@ interface Template {
   templateUrl: './character-creation.component.html',
   styleUrls: ['./character-creation.component.css'],
 })
-export class CharacterCreationComponent implements OnInit {
+export class CharacterCreationComponent implements OnInit, OnDestroy {
   // Estados
   step: 'select-template' | 'fill-form' | 'success' = 'select-template';
   isLoading = false;
@@ -50,7 +50,7 @@ export class CharacterCreationComponent implements OnInit {
   activeTabIndex = 0;
 
   // Timeout para redirecionamento
-  private redirectTimeout?: number;
+  private redirectTimeout?: ReturnType<typeof setTimeout>;
 
   // NOVO: Modo de edição
   isEditMode = false;
@@ -356,7 +356,7 @@ export class CharacterCreationComponent implements OnInit {
       this.step = 'success';
 
       // Redirecionar após 2 segundos
-      this.redirectTimeout = window.setTimeout(() => {
+      this.redirectTimeout = setTimeout(() => {
         this.router.navigate(['/my-characters']);
       }, 2000);
     } catch (error: any) {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
+import { ERROR_MESSAGES, EMAIL_REGEX, PASSWORD_RULES } from '../../constants/app.constants';
 
 @Component({
   selector: 'app-register',
@@ -135,37 +136,36 @@ export class RegisterComponent {
       !this.registerData.password ||
       !this.registerData.confirmPassword
     ) {
-      this.errorMessage = 'Por favor, preencha todos os campos';
+      this.errorMessage = ERROR_MESSAGES.REQUIRED_FIELDS;
       return false;
     }
 
     // Verificar email válido
     if (!this.isValidEmail(this.registerData.email)) {
-      this.errorMessage = 'Por favor, insira um email válido';
+      this.errorMessage = ERROR_MESSAGES.INVALID_EMAIL;
       return false;
     }
 
     // Verificar senha forte
-    if (this.registerData.password.length < 8) {
-      this.errorMessage = 'A senha deve ter pelo menos 8 caracteres';
+    if (this.registerData.password.length < PASSWORD_RULES.RECOMMENDED_LENGTH) {
+      this.errorMessage = `A senha deve ter pelo menos ${PASSWORD_RULES.RECOMMENDED_LENGTH} caracteres`;
       return false;
     }
 
     if (!this.isStrongPassword(this.registerData.password)) {
-      this.errorMessage =
-        'A senha deve conter pelo menos: 1 letra maiúscula, 1 minúscula, 1 número e 1 caractere especial';
+      this.errorMessage = ERROR_MESSAGES.PASSWORD_WEAK;
       return false;
     }
 
     // Verificar se senhas coincidem
     if (this.registerData.password !== this.registerData.confirmPassword) {
-      this.errorMessage = 'As senhas não coincidem';
+      this.errorMessage = ERROR_MESSAGES.PASSWORDS_DONT_MATCH;
       return false;
     }
 
     // Verificar termos de uso (LGPD)
     if (!this.acceptTerms) {
-      this.errorMessage = 'Você deve aceitar os Termos de Uso e Política de Privacidade';
+      this.errorMessage = ERROR_MESSAGES.TERMS_NOT_ACCEPTED;
       return false;
     }
 
@@ -173,13 +173,11 @@ export class RegisterComponent {
   }
 
   private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return EMAIL_REGEX.test(email);
   }
 
   private isStrongPassword(password: string): boolean {
-    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/;
-    return strongRegex.test(password);
+    return PASSWORD_RULES.REGEX.test(password);
   }
 
   showTermsModal() {

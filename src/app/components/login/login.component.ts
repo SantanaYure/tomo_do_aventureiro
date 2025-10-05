@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ERROR_MESSAGES, EMAIL_REGEX } from '../../constants/app.constants';
 
 @Component({
   selector: 'app-login',
@@ -94,12 +95,12 @@ export class LoginComponent {
 
   private validateForm(): boolean {
     if (!this.loginData.email || !this.loginData.password) {
-      this.errorMessage = 'Por favor, preencha todos os campos';
+      this.errorMessage = ERROR_MESSAGES.REQUIRED_FIELDS;
       return false;
     }
 
     if (!this.isValidEmail(this.loginData.email)) {
-      this.errorMessage = 'Por favor, insira um email válido';
+      this.errorMessage = ERROR_MESSAGES.INVALID_EMAIL;
       return false;
     }
 
@@ -107,8 +108,7 @@ export class LoginComponent {
   }
 
   private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return EMAIL_REGEX.test(email);
   }
 
   navigateToRegister() {

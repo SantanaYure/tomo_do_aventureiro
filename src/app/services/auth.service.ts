@@ -99,34 +99,6 @@ export class AuthService {
     }
   }
 
-  // Fallback para quando a API não estiver disponível
-  private async simulateFirebaseLogin(email: string, password: string): Promise<boolean> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Credenciais de teste
-        if (email === 'admin@rpg.com' && password === '123456') {
-          const userData: User = {
-            uid: 'test-uid-123',
-            email: 'admin@rpg.com',
-            nome: 'Administrador',
-            sobrenome: 'Sistema',
-            nickname: 'Admin',
-          };
-
-          const token = 'fake-jwt-token-' + Date.now();
-
-          localStorage.setItem('authToken', token);
-          localStorage.setItem('currentUser', JSON.stringify(userData));
-
-          this.currentUserSubject.next(userData);
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      }, 1500);
-    });
-  }
-
   // Logout
   async logout(): Promise<void> {
     try {
