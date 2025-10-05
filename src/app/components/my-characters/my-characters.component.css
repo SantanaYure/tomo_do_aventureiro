@@ -1,3 +1,7 @@
+/* Nenhum erro foi encontrado neste arquivo. O código está bem estruturado. */
+/* Apenas certifique-se de que as variáveis CSS (ex: --color-primary) */
+/* estão definidas em um escopo global, como o arquivo styles.css. */
+
 .my-characters-container {
   min-height: 100vh;
   background: linear-gradient(

@@ -34,7 +34,7 @@
   <!-- Main Content -->
   <main class="characters-main" *ngIf="!isLoading">
     <!-- Empty State -->
-    <div class="empty-state" *ngIf="characters.length === 0">
+    <div class="empty-state" *ngIf="!characters || characters.length === 0">
       <div class="empty-icon">
         <i class="bi bi-inbox"></i>
       </div>
@@ -63,17 +63,15 @@
           <div class="character-meta">
             <div class="meta-item">
               <i class="bi bi-calendar-plus"></i>
-              <span
-                >Criado:
-                {{ formatDate(character.createdAt) | date : 'dd/MM/yyyy' : '' : 'pt-BR' }}</span
-              >
+              <!-- CORREÇÃO: Removida a chamada ao método formatDate. -->
+              <!-- O pipe 'date' é aplicado diretamente na propriedade, que já é um objeto Date. -->
+              <!-- A sintaxe correta para o formato é 'dd/MM/yyyy'. -->
+              <span>Criado: {{ character.createdAt | date : 'dd/MM/yyyy' }}</span>
             </div>
             <div class="meta-item">
               <i class="bi bi-clock-history"></i>
-              <span
-                >Atualizado:
-                {{ formatDate(character.updatedAt) | date : 'dd/MM/yyyy' : '' : 'pt-BR' }}</span
-              >
+              <!-- CORREÇÃO: Aplicada a mesma lógica para a data de atualização. -->
+              <span>Atualizado: {{ character.updatedAt | date : 'dd/MM/yyyy' }}</span>
             </div>
           </div>
         </div>
