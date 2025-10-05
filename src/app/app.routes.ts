@@ -12,6 +12,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'create-character', component: CharacterCreationComponent, canActivate: [AuthGuard] },
+  { path: 'create-character/:id', component: CharacterCreationComponent, canActivate: [AuthGuard] },
   { path: 'my-characters', component: MyCharactersComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' }, // Wildcard route para páginas não encontradas
 ];

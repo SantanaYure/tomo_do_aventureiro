@@ -6,8 +6,8 @@
         <i class="bi bi-arrow-left"></i>
       </button>
       <h1 class="page-title">
-        <i class="bi bi-person-plus-fill"></i>
-        Criar Personagem
+        <i class="bi" [ngClass]="isEditMode ? 'bi-pencil-square' : 'bi-person-plus-fill'"></i>
+        {{ isEditMode ? 'Editar Personagem' : 'Criar Personagem' }}
       </h1>
     </div>
   </header>
@@ -17,7 +17,7 @@
     <div class="spinner">
       <i class="bi bi-arrow-repeat spin"></i>
     </div>
-    <p>Carregando...</p>
+    <p>{{ isEditMode ? 'Carregando personagem...' : 'Carregando...' }}</p>
   </div>
 
   <!-- Error Message -->
@@ -29,7 +29,7 @@
   <!-- ========================================
        STEP 1: SELECIONAR TEMPLATE
        ======================================== -->
-  <main class="creation-main" *ngIf="step === 'select-template' && !isLoading">
+  <main class="creation-main" *ngIf="step === 'select-template' && !isLoading && !isEditMode">
     <div class="step-indicator">
       <span class="step active">1</span>
       <span class="step-line"></span>
@@ -189,7 +189,9 @@
             <button type="submit" class="btn-save" [disabled]="isLoading">
               <i class="bi bi-check-circle" *ngIf="!isLoading"></i>
               <i class="bi bi-arrow-repeat spin" *ngIf="isLoading"></i>
-              {{ isLoading ? 'Salvando...' : 'Criar Personagem' }}
+              {{
+                isLoading ? 'Salvando...' : isEditMode ? 'Atualizar Personagem' : 'Criar Personagem'
+              }}
             </button>
           </div>
         </form>
@@ -213,12 +215,14 @@
       <div class="success-icon">
         <i class="bi bi-check-circle"></i>
       </div>
-      <h2 class="success-title">Personagem Criado!</h2>
+      <h2 class="success-title">
+        {{ isEditMode ? 'Personagem Atualizado!' : 'Personagem Criado!' }}
+      </h2>
       <p class="success-message">{{ successMessage }}</p>
       <p class="success-redirect">Redirecionando para seus personagens...</p>
 
       <div class="success-actions">
-        <button class="btn-secondary" (click)="createAnother()">
+        <button class="btn-secondary" (click)="createAnother()" *ngIf="!isEditMode">
           <i class="bi bi-plus-circle"></i>
           Criar Outro
         </button>

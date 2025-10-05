@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 
 interface Campo {
@@ -52,10 +52,125 @@ export class CharacterCreationComponent implements OnInit {
   // Timeout para redirecionamento
   private redirectTimeout?: number;
 
-  constructor(private firebaseService: FirebaseService, public router: Router) {}
+  // NOVO: Modo de edição
+  isEditMode = false;
+  characterId: string | null = null;
+  originalCharacterData: any = null;
+
+  constructor(
+    private firebaseService: FirebaseService,
+    public router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   async ngOnInit() {
-    await this.loadTemplates();
+    // Verificar se há ID na rota (modo edição)
+    this.route.params.subscribe(async (params) => {
+      if (params['id']) {
+        this.characterId = params['id'];
+        this.isEditMode = true;
+        console.log('✏️ Modo de edição ativado para personagem:', this.characterId);
+        if (this.characterId) {
+          await this.loadCharacterForEdit(this.characterId);
+        }
+      } else {
+        console.log('✨ Modo de criação ativado');
+        await this.loadTemplates();
+      }
+    });
+  }
+
+  // ========================================
+  // NOVO: CARREGAR PERSONAGEM PARA EDIÇÃO
+  // ========================================
+
+  async loadCharacterForEdit(characterId: string) {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    try {
+      console.log('📥 Carregando personagem para edição...');
+      const characterDoc = await this.firebaseService.getCharacterSheetById(characterId);
+
+      if (!characterDoc.exists()) {
+        throw new Error('Personagem não encontrado');
+      }
+
+      const characterData = characterDoc.data();
+      this.originalCharacterData = characterData;
+
+      console.log('📦 Dados do personagem carregados:', characterData);
+
+      // Carregar o template usado
+      const templateId = characterData['templateId'];
+      if (!templateId) {
+        throw new Error('Template do personagem não encontrado');
+      }
+
+      const templateDoc = await this.firebaseService.getTemplateById(templateId);
+      if (!templateDoc.exists()) {
+        throw new Error('Template não existe no banco de dados');
+      }
+
+      const templateData = templateDoc.data();
+      this.selectedTemplate = {
+        id: templateDoc.id,
+        nome: templateData['nome'],
+        descricao: templateData['descricao'],
+        estrutura: templateData['estrutura'],
+      };
+
+      console.log('📋 Template carregado:', this.selectedTemplate.nome);
+
+      // Preencher o formulário com os dados existentes
+      this.populateFormWithCharacterData(characterData);
+
+      // Ir direto para o formulário
+      this.step = 'fill-form';
+    } catch (error: any) {
+      console.error('❌ Erro ao carregar personagem:', error);
+      this.errorMessage = error.message || 'Erro ao carregar personagem para edição';
+      // Redirecionar de volta após erro
+      setTimeout(() => {
+        this.router.navigate(['/my-characters']);
+      }, 3000);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  // ========================================
+  // NOVO: PREENCHER FORMULÁRIO COM DADOS
+  // ========================================
+
+  populateFormWithCharacterData(characterData: any) {
+    // Obter o nome do personagem
+    this.characterName =
+      characterData['dados']?.['basicInfo']?.['nomeDoPersonagem'] || characterData['nome'] || '';
+
+    console.log('📝 Nome do personagem:', this.characterName);
+
+    // Inicializar formData
+    this.formData = {};
+
+    // Preencher campos do formulário
+    const campos = characterData['dados'] || characterData['campos'] || {};
+
+    // Se os dados estão em basicInfo ou outras estruturas aninhadas
+    if (campos['basicInfo']) {
+      Object.keys(campos['basicInfo']).forEach((key) => {
+        this.formData[key] = campos['basicInfo'][key] || '';
+      });
+    }
+
+    // Se os dados estão diretamente em campos
+    Object.keys(campos).forEach((key) => {
+      if (typeof campos[key] === 'string' || typeof campos[key] === 'number') {
+        this.formData[key] = String(campos[key]) || '';
+      }
+    });
+
+    console.log('📝 Formulário preenchido:', this.formData);
   }
 
   // ========================================
@@ -113,12 +228,17 @@ export class CharacterCreationComponent implements OnInit {
   // ========================================
 
   backToTemplateSelection() {
-    this.step = 'select-template';
-    this.selectedTemplate = null;
-    this.characterName = '';
-    this.formData = {};
-    this.errorMessage = '';
-    this.activeTabIndex = 0;
+    if (this.isEditMode) {
+      // Se estiver editando, voltar para lista
+      this.router.navigate(['/my-characters']);
+    } else {
+      this.step = 'select-template';
+      this.selectedTemplate = null;
+      this.characterName = '';
+      this.formData = {};
+      this.errorMessage = '';
+      this.activeTabIndex = 0;
+    }
   }
 
   // ========================================
@@ -178,7 +298,7 @@ export class CharacterCreationComponent implements OnInit {
   }
 
   // ========================================
-  // SALVAR PERSONAGEM
+  // SALVAR OU ATUALIZAR PERSONAGEM
   // ========================================
 
   async saveCharacter() {
@@ -200,20 +320,39 @@ export class CharacterCreationComponent implements OnInit {
         }
       });
 
-      const sheetData = {
-        templateId: this.selectedTemplate.id,
-        templateNome: this.selectedTemplate.nome,
-        nome: this.characterName.trim(),
-        campos: cleanedFormData,
-      };
+      if (this.isEditMode && this.characterId) {
+        // MODO EDIÇÃO: Atualizar personagem existente
+        console.log('💾 Atualizando personagem:', this.characterId);
 
-      console.log('📤 Enviando dados para o Firebase:', sheetData);
+        const updateData = {
+          nome: this.characterName.trim(),
+          campos: cleanedFormData,
+        };
 
-      const docRef = await this.firebaseService.addCharacterSheet(sheetData);
+        await this.firebaseService.updateCharacterSheet(this.characterId, updateData);
+        console.log('✅ Personagem atualizado com sucesso!');
 
-      console.log('✅ Personagem criado com sucesso! ID:', docRef.id);
+        this.successMessage = `✅ ${this.characterName} foi atualizado com sucesso!`;
+      } else {
+        // MODO CRIAÇÃO: Criar novo personagem
+        console.log('💾 Salvando novo personagem...');
 
-      this.successMessage = `✅ ${this.characterName} foi criado com sucesso!`;
+        const sheetData = {
+          templateId: this.selectedTemplate.id,
+          templateNome: this.selectedTemplate.nome,
+          nome: this.characterName.trim(),
+          campos: cleanedFormData,
+        };
+
+        console.log('📤 Enviando dados para o Firebase:', sheetData);
+
+        const docRef = await this.firebaseService.addCharacterSheet(sheetData);
+
+        console.log('✅ Personagem criado com sucesso! ID:', docRef.id);
+
+        this.successMessage = `✅ ${this.characterName} foi criado com sucesso!`;
+      }
+
       this.step = 'success';
 
       // Redirecionar após 2 segundos
@@ -221,8 +360,13 @@ export class CharacterCreationComponent implements OnInit {
         this.router.navigate(['/my-characters']);
       }, 2000);
     } catch (error: any) {
-      console.error('❌ Erro ao criar personagem:', error);
-      this.errorMessage = error.message || 'Erro ao criar personagem';
+      console.error('❌ Erro ao salvar:', error);
+
+      if (error.code === 'invalid-argument') {
+        this.errorMessage = '❌ Dados inválidos enviados ao servidor. Verifique os campos.';
+      } else {
+        this.errorMessage = error.message || 'Erro ao salvar o personagem. Tente novamente.';
+      }
     } finally {
       this.isLoading = false;
     }
@@ -247,8 +391,16 @@ export class CharacterCreationComponent implements OnInit {
   // ========================================
 
   cancel() {
-    if (confirm('Deseja realmente cancelar? Todos os dados serão perdidos.')) {
-      this.router.navigate(['/home']);
+    const confirmMessage = this.isEditMode
+      ? 'Deseja cancelar a edição? As alterações não salvas serão perdidas.'
+      : 'Deseja realmente cancelar? Todos os dados serão perdidos.';
+
+    if (confirm(confirmMessage)) {
+      if (this.isEditMode) {
+        this.router.navigate(['/my-characters']);
+      } else {
+        this.router.navigate(['/home']);
+      }
     }
   }
 
