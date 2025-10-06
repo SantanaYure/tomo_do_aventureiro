@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
+import { AuthService } from '../../services/auth.service';
 import { ERROR_MESSAGES, EMAIL_REGEX, PASSWORD_RULES } from '../../constants/app.constants';
 import { PrivacyPolicyModalComponent } from '../privacy-policy-modal/privacy-policy-modal.component';
 
@@ -30,7 +31,11 @@ export class RegisterComponent {
   acceptTerms = false;
   showPrivacyModal = false;
 
-  constructor(private router: Router, private firebaseService: FirebaseService) {}
+  constructor(
+    private router: Router,
+    private firebaseService: FirebaseService,
+    private authService: AuthService
+  ) {}
 
   async onSubmit() {
     if (this.validateForm()) {
@@ -50,7 +55,7 @@ export class RegisterComponent {
             uid: user.uid,
             firstName: this.registerData.firstName,
             lastName: this.registerData.lastName,
-            nickname: this.registerData.nickname,
+            nickname: this.registerData.email, // Nickname é o próprio e-mail
             email: this.registerData.email,
             createdAt: new Date(),
             emailVerified: false,
@@ -122,10 +127,34 @@ export class RegisterComponent {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  socialLogin(provider: string) {
-    console.log('Login social com:', provider);
-    // Implementar login social aqui
-    alert('Cadastro com ' + provider.charAt(0).toUpperCase() + provider.slice(1));
+  async socialLogin(provider: string) {
+    if (provider !== 'google') {
+      alert('Apenas login com Google está disponível no momento');
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    try {
+      const success = await this.authService.loginWithGoogle();
+
+      if (success) {
+        console.log('Cadastro/Login com Google realizado com sucesso!');
+        this.router.navigate(['/home']);
+      }
+    } catch (error: any) {
+      this.isLoading = false;
+      console.error('Erro no login com Google:', error);
+
+      if (error.code === 'auth/popup-closed-by-user') {
+        this.errorMessage = '❌ Login cancelado. Tente novamente.';
+      } else if (error.code === 'auth/popup-blocked') {
+        this.errorMessage = '❌ Pop-up bloqueado. Permita pop-ups para este site.';
+      } else {
+        this.errorMessage = '❌ Erro ao fazer login com Google. Tente novamente.';
+      }
+    }
   }
 
   private validateForm(): boolean {
@@ -133,7 +162,6 @@ export class RegisterComponent {
     if (
       !this.registerData.firstName ||
       !this.registerData.lastName ||
-      !this.registerData.nickname ||
       !this.registerData.email ||
       !this.registerData.password ||
       !this.registerData.confirmPassword

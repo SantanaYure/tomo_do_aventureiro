@@ -9,46 +9,50 @@
     </div>
 
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="firstName" class="form-label">Nome</label>
-          <input
-            type="text"
-            class="form-control"
-            id="firstName"
-            name="firstName"
-            [(ngModel)]="registerData.firstName"
-            #firstName="ngModel"
-            required
-            placeholder="Seu primeiro nome"
-            [class.is-invalid]="firstName.invalid && firstName.touched"
-          />
-          <div class="invalid-feedback" *ngIf="firstName.invalid && firstName.touched">
-            <div *ngIf="firstName.errors?.['required']">Nome é obrigatório</div>
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label for="lastName" class="form-label">Sobrenome</label>
-          <input
-            type="text"
-            class="form-control"
-            id="lastName"
-            name="lastName"
-            [(ngModel)]="registerData.lastName"
-            #lastName="ngModel"
-            required
-            placeholder="Seu sobrenome"
-            [class.is-invalid]="lastName.invalid && lastName.touched"
-          />
-          <div class="invalid-feedback" *ngIf="lastName.invalid && lastName.touched">
-            <div *ngIf="lastName.errors?.['required']">Sobrenome é obrigatório</div>
-          </div>
+      <div class="mb-3">
+        <label for="firstName" class="form-label">
+          Nome <span class="required-asterisk">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="firstName"
+          name="firstName"
+          [(ngModel)]="registerData.firstName"
+          #firstName="ngModel"
+          required
+          placeholder="Seu primeiro nome"
+          [class.is-invalid]="firstName.invalid && firstName.touched"
+        />
+        <div class="invalid-feedback" *ngIf="firstName.invalid && firstName.touched">
+          <div *ngIf="firstName.errors?.['required']">Nome é obrigatório</div>
         </div>
       </div>
 
       <div class="mb-3">
-        <label for="email" class="form-label">E-mail</label>
+        <label for="lastName" class="form-label">
+          Sobrenome <span class="required-asterisk">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="lastName"
+          name="lastName"
+          [(ngModel)]="registerData.lastName"
+          #lastName="ngModel"
+          required
+          placeholder="Seu sobrenome"
+          [class.is-invalid]="lastName.invalid && lastName.touched"
+        />
+        <div class="invalid-feedback" *ngIf="lastName.invalid && lastName.touched">
+          <div *ngIf="lastName.errors?.['required']">Sobrenome é obrigatório</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">
+          E-mail <span class="required-asterisk">*</span>
+        </label>
         <input
           type="email"
           class="form-control"
@@ -68,25 +72,9 @@
       </div>
 
       <div class="mb-3">
-        <label for="nickname" class="form-label">Nickname (Nome de Usuário)</label>
-        <input
-          type="text"
-          class="form-control"
-          id="nickname"
-          name="nickname"
-          [(ngModel)]="registerData.nickname"
-          #nickname="ngModel"
-          required
-          placeholder="Seu nome de aventureiro"
-          [class.is-invalid]="nickname.invalid && nickname.touched"
-        />
-        <div class="invalid-feedback" *ngIf="nickname.invalid && nickname.touched">
-          <div *ngIf="nickname.errors?.['required']">Nickname é obrigatório</div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label for="password" class="form-label">Senha</label>
+        <label for="password" class="form-label">
+          Senha <span class="required-asterisk">*</span>
+        </label>
         <div class="input-group">
           <input
             [type]="showPassword ? 'text' : 'password'"
@@ -114,7 +102,9 @@
       </div>
 
       <div class="mb-3">
-        <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+        <label for="confirmPassword" class="form-label">
+          Confirmar Senha <span class="required-asterisk">*</span>
+        </label>
         <div class="input-group">
           <input
             [type]="showConfirmPassword ? 'text' : 'password'"
@@ -185,14 +175,9 @@
     </div>
 
     <div class="social-login">
-      <div class="social-btn" (click)="socialLogin('google')">
-        <i class="fab fa-google"></i>
-      </div>
-      <div class="social-btn" (click)="socialLogin('facebook')">
-        <i class="fab fa-facebook-f"></i>
-      </div>
-      <div class="social-btn" (click)="socialLogin('github')">
-        <i class="fab fa-github"></i>
+      <div class="social-btn google" (click)="socialLogin('google')">
+        <i class="fab fa-google me-2"></i>
+        <span>Entrar com Google</span>
       </div>
     </div>
 

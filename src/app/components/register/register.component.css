@@ -417,15 +417,11 @@ h2 {
 /* Login social */
 .social-login {
   display: flex;
-  gap: 12px;
   justify-content: center;
   margin-bottom: 15px;
 }
 
 .social-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -434,15 +430,27 @@ h2 {
   align-items: center;
   justify-content: center;
   color: var(--color-white);
-  font-size: 20px;
   transition: all 0.3s ease;
   cursor: pointer;
+  font-weight: 500;
 }
 
-.social-btn:hover {
+.social-btn.google {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.social-btn.google:hover {
   background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.social-btn.google i {
+  font-size: 18px;
 }
 
 /* Links */
@@ -504,13 +512,12 @@ h2 {
     font-size: 13px;
   }
 
-  .social-login {
-    gap: 8px;
+  .social-btn.google {
+    padding: 10px 15px;
+    font-size: 13px;
   }
 
-  .social-btn {
-    width: 45px;
-    height: 45px;
+  .social-btn.google i {
     font-size: 16px;
   }
 
