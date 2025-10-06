@@ -61,42 +61,19 @@
 .brand-section {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex: 1;
+  flex: 0;
 }
 
 .logo {
-  height: 48px;
+  height: 60px;
   width: auto;
   transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 8px rgba(123, 80, 198, 0.2));
 }
 
 .logo:hover {
   transform: scale(1.05);
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.brand-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-primary-dark);
-  margin: 0;
-  letter-spacing: -0.5px;
-  line-height: 1;
-}
-
-.brand-subtitle {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  margin: 0;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  filter: drop-shadow(0 4px 12px rgba(123, 80, 198, 0.3));
 }
 
 /* ===================================
@@ -147,6 +124,22 @@
   font-size: 1.8rem;
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  position: relative;
+}
+
+.user-avatar i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .user-info {
@@ -609,10 +602,6 @@
    RESPONSIVE
    =================================== */
 @media (max-width: 992px) {
-  .brand-subtitle {
-    display: none;
-  }
-
   .user-role {
     display: none;
   }
@@ -620,21 +609,22 @@
 
 @media (max-width: 768px) {
   .header-content {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding: 1rem;
     gap: 1rem;
+    justify-content: space-between;
   }
 
   .brand-section {
-    width: 100%;
-    justify-content: center;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--glass-border);
+    flex: 0;
+  }
+
+  .logo {
+    height: 50px;
   }
 
   .header-actions {
-    width: 100%;
-    justify-content: flex-end;
+    flex: 0;
   }
 
   .user-profile {
@@ -684,11 +674,7 @@
   }
 
   .logo {
-    height: 40px;
-  }
-
-  .brand-title {
-    font-size: 1.2rem;
+    height: 45px;
   }
 
   .user-profile {

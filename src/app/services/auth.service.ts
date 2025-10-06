@@ -25,6 +25,7 @@ export interface User {
   nickname?: string;
   cpf?: string;
   telefone?: string;
+  photoURL?: string; // URL da foto do perfil
 }
 
 @Injectable({
@@ -81,6 +82,7 @@ export class AuthService {
             nome: firebaseUser.displayName?.split(' ')[0] || 'Usuário',
             sobrenome: firebaseUser.displayName?.split(' ').slice(1).join(' ') || '',
             nickname: firebaseUser.displayName || 'User',
+            photoURL: firebaseUser.photoURL || undefined,
           };
 
           const token = await firebaseUser.getIdToken();
@@ -149,6 +151,7 @@ export class AuthService {
           nome: firebaseUser.displayName?.split(' ')[0] || 'Google',
           sobrenome: firebaseUser.displayName?.split(' ').slice(1).join(' ') || 'User',
           nickname: firebaseUser.displayName || 'Google User',
+          photoURL: firebaseUser.photoURL || undefined,
         };
 
         // Gerar token Firebase

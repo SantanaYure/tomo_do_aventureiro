@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 export class HomeComponent implements OnInit {
   userName: string = '';
   userEmail: string = '';
+  userPhotoURL: string | null = null;
   isDropdownOpen: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
@@ -27,6 +28,7 @@ export class HomeComponent implements OnInit {
         currentUser.email?.split('@')[0] ||
         'Aventureiro';
       this.userEmail = currentUser.email || '';
+      this.userPhotoURL = currentUser.photoURL || null;
     } else {
       // Se não houver usuário logado, redirecionar para login
       this.router.navigate(['/login']);

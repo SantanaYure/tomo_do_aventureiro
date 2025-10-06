@@ -47,6 +47,7 @@ export class App implements OnInit {
               nome: user.displayName?.split(' ')[0] || 'Usuário',
               sobrenome: user.displayName?.split(' ').slice(1).join(' ') || '',
               nickname: user.displayName || 'User',
+              photoURL: user.photoURL || undefined,
             };
 
             localStorage.setItem('authToken', token);

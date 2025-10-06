@@ -2,13 +2,9 @@
   <!-- Header Profissional -->
   <header class="home-header">
     <div class="header-content">
-      <!-- Logo e Branding -->
+      <!-- Logo -->
       <div class="brand-section">
-        <img src="assets/logo_rpg.png" alt="Logo" class="logo" />
-        <div class="brand-text">
-          <h1 class="brand-title">Tomo do Aventureiro</h1>
-          <p class="brand-subtitle">Sistema de Gerenciamento de Personagens</p>
-        </div>
+        <img src="logo_rpg.png" alt="Tomo do Aventureiro" class="logo" />
       </div>
 
       <!-- User Actions -->
@@ -17,7 +13,13 @@
         <div class="user-dropdown">
           <button class="user-profile" (click)="toggleDropdown()" [class.active]="isDropdownOpen">
             <div class="user-avatar">
-              <i class="bi bi-person-circle"></i>
+              <img
+                *ngIf="userPhotoURL"
+                [src]="userPhotoURL"
+                alt="Foto do usuário"
+                class="avatar-image"
+              />
+              <i *ngIf="!userPhotoURL" class="bi bi-person-circle"></i>
             </div>
             <div class="user-info">
               <span class="user-name">{{ userName }}</span>
