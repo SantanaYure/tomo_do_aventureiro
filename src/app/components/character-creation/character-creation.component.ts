@@ -58,6 +58,19 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   characterId: string | null = null;
   originalCharacterData: any = null;
 
+  // Opções para o campo "Papel na Trama"
+  papelNaTramaOptions = [
+    'Protagonista',
+    'Antagonista',
+    'Deuteragonista',
+    'Mentor',
+    'Ajudante/Aliado',
+    'Trapaceiro/Brincalhão (Trickster)',
+    'Guardião do Limiar',
+    'Mensageiro',
+    'Sombra',
+  ];
+
   constructor(
     private firebaseService: FirebaseService,
     public router: Router,

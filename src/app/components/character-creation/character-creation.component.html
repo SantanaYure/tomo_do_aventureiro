@@ -129,8 +129,26 @@
                   <span *ngIf="activeTabIndex === 0 && i === 0" class="required-mark">*</span>
                 </label>
 
+                <!-- Campo especial: Papel na Trama (com datalist) -->
                 <input
-                  *ngIf="campo.type !== 'textarea'"
+                  *ngIf="campo.name === 'papelNaTrama'"
+                  [id]="campo.name"
+                  [name]="campo.name"
+                  type="text"
+                  [(ngModel)]="formData[campo.name]"
+                  [placeholder]="campo.placeholder"
+                  class="field-input"
+                  list="papelNaTramaList"
+                />
+                <datalist id="papelNaTramaList" *ngIf="campo.name === 'papelNaTrama'">
+                  <option *ngFor="let opcao of papelNaTramaOptions" [value]="opcao">
+                    {{ opcao }}
+                  </option>
+                </datalist>
+
+                <!-- Campos normais (texto, número, etc.) -->
+                <input
+                  *ngIf="campo.type !== 'textarea' && campo.name !== 'papelNaTrama'"
                   [id]="campo.name"
                   [name]="campo.name"
                   [type]="campo.type || 'text'"
@@ -140,6 +158,7 @@
                   [class.required-field]="activeTabIndex === 0 && i === 0"
                 />
 
+                <!-- Textarea -->
                 <textarea
                   *ngIf="campo.type === 'textarea'"
                   [id]="campo.name"
