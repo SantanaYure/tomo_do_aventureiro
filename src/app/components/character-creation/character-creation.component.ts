@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
+import { SharedHeaderComponent } from '../shared-header/shared-header.component';
 
 interface Campo {
   name: string;
@@ -27,7 +28,7 @@ interface Template {
 @Component({
   selector: 'app-character-creation',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SharedHeaderComponent],
   templateUrl: './character-creation.component.html',
   styleUrls: ['./character-creation.component.css'],
 })

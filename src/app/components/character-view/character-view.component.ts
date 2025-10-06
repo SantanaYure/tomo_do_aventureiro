@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { DateUtils } from '../../utils/date.utils';
+import { SharedHeaderComponent } from '../shared-header/shared-header.component';
 
 interface Campo {
   name: string;
@@ -37,7 +38,7 @@ interface Character {
 @Component({
   selector: 'app-character-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SharedHeaderComponent],
   templateUrl: './character-view.html',
   styleUrls: ['./character-view.css'],
 })

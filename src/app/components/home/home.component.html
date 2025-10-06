@@ -1,47 +1,6 @@
 <div class="home-container">
-  <!-- Header Profissional -->
-  <header class="home-header">
-    <div class="header-content">
-      <!-- Logo -->
-      <div class="brand-section">
-        <img src="logo_rpg.png" alt="Tomo do Aventureiro" class="logo" />
-      </div>
-
-      <!-- User Actions -->
-      <div class="header-actions">
-        <!-- User Profile com Dropdown -->
-        <div class="user-dropdown">
-          <button class="user-profile" (click)="toggleDropdown()" [class.active]="isDropdownOpen">
-            <div class="user-avatar">
-              <img
-                *ngIf="userPhotoURL"
-                [src]="userPhotoURL"
-                alt="Foto do usuário"
-                class="avatar-image"
-              />
-              <i *ngIf="!userPhotoURL" class="bi bi-person-circle"></i>
-            </div>
-            <div class="user-info">
-              <span class="user-name">{{ userName }}</span>
-              <span class="user-role">{{ userEmail }}</span>
-            </div>
-            <i class="bi bi-chevron-down dropdown-icon" [class.rotated]="isDropdownOpen"></i>
-          </button>
-
-          <!-- Dropdown Menu -->
-          <div class="dropdown-menu" [class.show]="isDropdownOpen">
-            <button class="dropdown-item logout-item" (click)="logout()">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Sair do sistema</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Overlay para fechar dropdown -->
-    <div class="dropdown-overlay" *ngIf="isDropdownOpen" (click)="closeDropdown()"></div>
-  </header>
+  <!-- Shared Header Component -->
+  <app-shared-header></app-shared-header>
 
   <!-- Main Content -->
   <main class="home-main">

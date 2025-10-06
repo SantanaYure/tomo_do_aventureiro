@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common'; // DatePipe importado aqui
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
+import { SharedHeaderComponent } from '../shared-header/shared-header.component';
 
 // Interface atualizada para usar tipos mais estritos para datas.
 // Isso melhora a previsibilidade e ajuda a evitar erros no template.
@@ -17,7 +18,7 @@ interface Character {
 @Component({
   selector: 'app-my-characters',
   standalone: true,
-  imports: [CommonModule, DatePipe], // DatePipe precisa estar nos imports para o pipe 'date' funcionar
+  imports: [CommonModule, DatePipe, SharedHeaderComponent], // DatePipe precisa estar nos imports para o pipe 'date' funcionar
   templateUrl: './my-characters.component.html',
   styleUrls: ['./my-characters.component.css'],
 })

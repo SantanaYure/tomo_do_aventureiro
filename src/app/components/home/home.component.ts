@@ -2,19 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { SharedHeaderComponent } from '../shared-header/shared-header.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SharedHeaderComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
   userName: string = '';
-  userEmail: string = '';
-  userPhotoURL: string | null = null;
-  isDropdownOpen: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -27,25 +25,10 @@ export class HomeComponent implements OnInit {
         currentUser.nome ||
         currentUser.email?.split('@')[0] ||
         'Aventureiro';
-      this.userEmail = currentUser.email || '';
-      this.userPhotoURL = currentUser.photoURL || null;
     } else {
       // Se não houver usuário logado, redirecionar para login
       this.router.navigate(['/login']);
     }
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
-
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
-
-  closeDropdown() {
-    this.isDropdownOpen = false;
   }
 
   navigateTo(route: string) {

@@ -1,11 +1,10 @@
 <div class="character-view-container">
-  <!-- Header -->
+  <!-- Shared Header -->
+  <app-shared-header></app-shared-header>
+
+  <!-- Header Local -->
   <header class="view-header">
     <div class="header-content">
-      <button class="btn-back" (click)="goBack()" title="Voltar para lista">
-        <i class="bi bi-arrow-left"></i>
-      </button>
-
       <div class="header-info" *ngIf="character && !isLoading">
         <div class="character-title">
           <h1 class="character-name">
