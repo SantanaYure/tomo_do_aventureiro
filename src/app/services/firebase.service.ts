@@ -10,6 +10,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  fetchSignInMethodsForEmail,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -113,11 +114,30 @@ export class FirebaseService {
   // Enviar email de recuperação de senha
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
+      console.log('🔥 Verificando se o email existe:', email);
+
+      // Primeiro, verificar se o email está registrado
+      const signInMethods = await fetchSignInMethodsForEmail(this.auth, email);
+
+      if (signInMethods.length === 0) {
+        console.warn('⚠️  Email não encontrado no sistema:', email);
+        throw new Error('❌ Email não cadastrado. Verifique o email ou crie uma nova conta.');
+      }
+
+      console.log('✅ Email encontrado no sistema. Métodos de login:', signInMethods);
       console.log('🔥 Enviando email de recuperação de senha para:', email);
+
       await sendPasswordResetEmail(this.auth, email);
       console.log('✅ Email de recuperação enviado com sucesso!');
     } catch (error: any) {
       console.error('❌ Erro ao enviar email de recuperação:', error);
+
+      // Se o erro for personalizado (email não encontrado), propagar
+      if (error.message.includes('não cadastrado')) {
+        throw error;
+      }
+
+      // Caso contrário, usar mensagem traduzida do Firebase
       throw new Error(this.getFirebaseErrorMessage(error.code));
     }
   }
