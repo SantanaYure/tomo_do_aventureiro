@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ERROR_MESSAGES, EMAIL_REGEX } from '../../constants/app.constants';
+import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ForgotPasswordModalComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -22,6 +23,7 @@ export class LoginComponent {
   isLoading = false;
   showPassword = false;
   rememberMe = false;
+  showForgotPasswordModal = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -88,9 +90,12 @@ export class LoginComponent {
 
   forgotPassword(event: Event) {
     event.preventDefault();
-    console.log('Recuperação de senha solicitada');
-    // Implementar recuperação de senha aqui
-    alert('Funcionalidade de recuperação de senha');
+    console.log('Abrindo modal de recuperação de senha');
+    this.showForgotPasswordModal = true;
+  }
+
+  closeForgotPasswordModal() {
+    this.showForgotPasswordModal = false;
   }
 
   private validateForm(): boolean {

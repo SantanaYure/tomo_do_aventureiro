@@ -99,3 +99,9 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de Recuperação de Senha -->
+<app-forgot-password-modal
+  *ngIf="showForgotPasswordModal"
+  (close)="closeForgotPasswordModal()"
+></app-forgot-password-modal>

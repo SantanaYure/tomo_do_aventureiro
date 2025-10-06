@@ -199,4 +199,14 @@ export class AuthService {
       return null;
     }
   }
+
+  // Recuperação de senha
+  async resetPassword(email: string): Promise<void> {
+    try {
+      await this.firebaseService.sendPasswordResetEmail(email);
+    } catch (error) {
+      console.error('Erro ao enviar email de recuperação:', error);
+      throw error;
+    }
+  }
 }

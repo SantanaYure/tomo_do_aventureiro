@@ -9,6 +9,7 @@ import {
   User as FirebaseUser,
   GoogleAuthProvider,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -106,6 +107,18 @@ export class FirebaseService {
     } catch (error) {
       console.error('Erro no logout:', error);
       throw error;
+    }
+  }
+
+  // Enviar email de recuperação de senha
+  async sendPasswordResetEmail(email: string): Promise<void> {
+    try {
+      console.log('🔥 Enviando email de recuperação de senha para:', email);
+      await sendPasswordResetEmail(this.auth, email);
+      console.log('✅ Email de recuperação enviado com sucesso!');
+    } catch (error: any) {
+      console.error('❌ Erro ao enviar email de recuperação:', error);
+      throw new Error(this.getFirebaseErrorMessage(error.code));
     }
   }
 
