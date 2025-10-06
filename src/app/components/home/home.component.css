@@ -225,16 +225,16 @@
 
 /* Logout Item Specific */
 .logout-item {
-  color: var(--color-danger);
+  color: var(--color-primary-darkest);
   border-top: 1px solid var(--glass-border);
 }
 
 .logout-item:hover {
-  background: rgba(244, 67, 54, 0.1);
+  background: rgba(78, 39, 160, 0.1);
 }
 
 .logout-item i {
-  color: var(--color-danger);
+  color: var(--color-primary-darkest);
 }
 
 /* Dropdown Overlay */
@@ -349,15 +349,15 @@
 }
 
 .import-result p.success {
-  background: rgba(40, 167, 69, 0.1);
-  color: #28a745;
-  border: 2px solid #28a745;
+  background: rgba(179, 157, 219, 0.2);
+  color: var(--color-primary-dark);
+  border: 2px solid var(--color-primary);
 }
 
 .import-result p.error {
-  background: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
-  border: 2px solid #dc3545;
+  background: rgba(78, 39, 160, 0.1);
+  color: var(--color-primary-darkest);
+  border: 2px solid var(--color-primary-darkest);
 }
 
 .btn-secondary {
