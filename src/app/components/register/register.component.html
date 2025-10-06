@@ -156,7 +156,7 @@
         />
         <label class="form-check-label" for="acceptTerms">
           Eu aceito os
-          <a href="#" (click)="showTermsModal()" class="terms-link">
+          <a href="#" (click)="showTermsModal(); $event.preventDefault()" class="terms-link">
             Termos de Uso e Política de Privacidade
           </a>
           <span class="required-asterisk">*</span>
@@ -203,3 +203,10 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de Política de Privacidade -->
+<app-privacy-policy-modal
+  *ngIf="showPrivacyModal"
+  (close)="closePrivacyModal()"
+  (accept)="onPrivacyAccept($event)"
+></app-privacy-policy-modal>

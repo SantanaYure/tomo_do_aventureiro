@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { ERROR_MESSAGES, EMAIL_REGEX, PASSWORD_RULES } from '../../constants/app.constants';
+import { PrivacyPolicyModalComponent } from '../privacy-policy-modal/privacy-policy-modal.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PrivacyPolicyModalComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -27,6 +28,7 @@ export class RegisterComponent {
   showPassword = false;
   showConfirmPassword = false;
   acceptTerms = false;
+  showPrivacyModal = false;
 
   constructor(private router: Router, private firebaseService: FirebaseService) {}
 
@@ -181,7 +183,14 @@ export class RegisterComponent {
   }
 
   showTermsModal() {
-    // Implementar modal com termos de uso
-    alert('Aqui seriam exibidos os Termos de Uso e Política de Privacidade completos');
+    this.showPrivacyModal = true;
+  }
+
+  closePrivacyModal() {
+    this.showPrivacyModal = false;
+  }
+
+  onPrivacyAccept(accepted: boolean) {
+    this.acceptTerms = accepted;
   }
 }
