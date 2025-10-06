@@ -38,55 +38,103 @@ export class MyCharactersComponent implements OnInit {
     this.errorMessage = '';
 
     try {
+      console.log('🔍 Iniciando carregamento de personagens...');
       const snapshot = await this.firebaseService.getUserCharacterSheets();
+      console.log('📦 Snapshot recebido:', snapshot.size, 'documentos');
 
       if (snapshot.empty) {
+        console.log('📭 Nenhum personagem encontrado');
         this.characters = [];
         this.isLoading = false;
         return;
       }
 
       const charactersPromises = snapshot.docs.map(async (doc) => {
-        const data = doc.data();
+        try {
+          const data = doc.data();
+          console.log('📄 Processando documento:', doc.id, data);
 
-        const nome =
-          data['dados']?.['basicInfo']?.['nomeDoPersonagem'] ||
-          data['nome'] ||
-          'Personagem Sem Nome';
+          const nome =
+            data['dados']?.['basicInfo']?.['nomeDoPersonagem'] ||
+            data['nome'] ||
+            'Personagem Sem Nome';
 
-        let templateNome = 'Template Desconhecido';
-        if (data['templateId']) {
-          try {
-            const templateDoc = await this.firebaseService.getTemplateById(data['templateId']);
-            if (templateDoc.exists()) {
-              templateNome = templateDoc.data()['nome'] || 'Template Desconhecido';
+          let templateNome = 'Template Desconhecido';
+          if (data['templateId']) {
+            try {
+              const templateDoc = await this.firebaseService.getTemplateById(data['templateId']);
+              if (templateDoc.exists()) {
+                templateNome = templateDoc.data()['nome'] || 'Template Desconhecido';
+              }
+            } catch (e) {
+              console.warn(
+                `⚠️ Não foi possível carregar o nome do template para a ficha ${doc.id}`,
+                e
+              );
             }
-          } catch (e) {
-            console.warn(`Não foi possível carregar o nome do template para a ficha ${doc.id}`);
           }
+
+          // Conversão de datas - suporta tanto Timestamp quanto string ISO
+          let createdAt: Date | null = null;
+          let updatedAt: Date | null = null;
+
+          // Tentar converter createdAt
+          if (data['createdAt']) {
+            if (typeof data['createdAt'].toDate === 'function') {
+              // É um Timestamp do Firestore
+              createdAt = data['createdAt'].toDate();
+            } else if (typeof data['createdAt'] === 'string') {
+              // É uma string ISO
+              createdAt = new Date(data['createdAt']);
+            } else if (data['createdAt'] instanceof Date) {
+              // Já é um Date
+              createdAt = data['createdAt'];
+            }
+          }
+
+          // Tentar converter updatedAt
+          if (data['updatedAt']) {
+            if (typeof data['updatedAt'].toDate === 'function') {
+              // É um Timestamp do Firestore
+              updatedAt = data['updatedAt'].toDate();
+            } else if (typeof data['updatedAt'] === 'string') {
+              // É uma string ISO
+              updatedAt = new Date(data['updatedAt']);
+            } else if (data['updatedAt'] instanceof Date) {
+              // Já é um Date
+              updatedAt = data['updatedAt'];
+            }
+          }
+
+          // Se não houver updatedAt, usar createdAt
+          if (!updatedAt && createdAt) {
+            updatedAt = createdAt;
+          }
+
+          const character = {
+            id: doc.id,
+            nome: nome,
+            templateNome: templateNome,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            ...data,
+          } as Character;
+
+          console.log('✅ Personagem processado:', character.nome);
+          return character;
+        } catch (docError: any) {
+          console.error('❌ Erro ao processar documento:', doc.id, docError);
+          throw docError;
         }
-
-        // Conversão direta de Timestamp para Date ou null.
-        // Isso garante que o objeto 'character' sempre terá o tipo correto.
-        const createdAt = data['createdAt']?.toDate ? data['createdAt'].toDate() : null;
-        const updatedAt = data['updatedAt']?.toDate
-          ? data['updatedAt'].toDate()
-          : createdAt || null;
-
-        return {
-          id: doc.id,
-          nome: nome,
-          templateNome: templateNome,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          ...data,
-        } as Character;
       });
 
       this.characters = await Promise.all(charactersPromises);
+      console.log('✅ Total de personagens carregados:', this.characters.length);
     } catch (error: any) {
       console.error('❌ Erro ao carregar personagens:', error);
-      this.errorMessage = 'Ocorreu um erro desconhecido ao carregar os personagens.';
+      console.error('Stack trace:', error.stack);
+      this.errorMessage =
+        error.message || 'Ocorreu um erro ao carregar os personagens. Por favor, tente novamente.';
     } finally {
       this.isLoading = false;
     }

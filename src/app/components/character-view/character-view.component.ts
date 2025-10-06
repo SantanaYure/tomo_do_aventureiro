@@ -85,7 +85,7 @@ export class CharacterViewComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      console.log('📥 Carregando personagem para visualização...');
+      console.log('📥 Carregando personagem para visualização...', characterId);
       const characterDoc = await this.firebaseService.getCharacterSheetById(characterId);
 
       if (!characterDoc.exists()) {
@@ -93,14 +93,44 @@ export class CharacterViewComponent implements OnInit {
       }
 
       const characterData = characterDoc.data();
+      console.log('📦 Dados do personagem:', characterData);
 
-      // Processar datas
-      const createdAt = characterData['createdAt']?.toDate
-        ? characterData['createdAt'].toDate()
-        : null;
-      const updatedAt = characterData['updatedAt']?.toDate
-        ? characterData['updatedAt'].toDate()
-        : createdAt || null;
+      // Processar datas - suporta tanto Timestamp quanto string ISO
+      let createdAt: Date | null = null;
+      let updatedAt: Date | null = null;
+
+      // Tentar converter createdAt
+      if (characterData['createdAt']) {
+        if (typeof characterData['createdAt'].toDate === 'function') {
+          // É um Timestamp do Firestore
+          createdAt = characterData['createdAt'].toDate();
+        } else if (typeof characterData['createdAt'] === 'string') {
+          // É uma string ISO
+          createdAt = new Date(characterData['createdAt']);
+        } else if (characterData['createdAt'] instanceof Date) {
+          // Já é um Date
+          createdAt = characterData['createdAt'];
+        }
+      }
+
+      // Tentar converter updatedAt
+      if (characterData['updatedAt']) {
+        if (typeof characterData['updatedAt'].toDate === 'function') {
+          // É um Timestamp do Firestore
+          updatedAt = characterData['updatedAt'].toDate();
+        } else if (typeof characterData['updatedAt'] === 'string') {
+          // É uma string ISO
+          updatedAt = new Date(characterData['updatedAt']);
+        } else if (characterData['updatedAt'] instanceof Date) {
+          // Já é um Date
+          updatedAt = characterData['updatedAt'];
+        }
+      }
+
+      // Se não houver updatedAt, usar createdAt
+      if (!updatedAt && createdAt) {
+        updatedAt = createdAt;
+      }
 
       this.character = {
         id: characterDoc.id,
@@ -120,6 +150,7 @@ export class CharacterViewComponent implements OnInit {
       }
     } catch (error: any) {
       console.error('❌ Erro ao carregar personagem:', error);
+      console.error('Stack trace:', error.stack);
       this.errorMessage = error.message || 'Erro ao carregar personagem';
       setTimeout(() => {
         this.router.navigate(['/my-characters']);

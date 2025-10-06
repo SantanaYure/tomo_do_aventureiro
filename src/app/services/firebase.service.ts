@@ -24,6 +24,7 @@ import {
   where,
   updateDoc,
   deleteDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import { environment } from '../../environments/environment';
 
@@ -150,6 +151,29 @@ export class FirebaseService {
   // Usuário atual
   getCurrentUser(): FirebaseUser | null {
     return this.auth.currentUser;
+  }
+
+  // Aguardar autenticação ser verificada
+  async waitForAuth(): Promise<FirebaseUser | null> {
+    return new Promise((resolve) => {
+      // Se já tem usuário, retorna imediatamente
+      if (this.auth.currentUser) {
+        resolve(this.auth.currentUser);
+        return;
+      }
+
+      // Aguarda a verificação de autenticação
+      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+        unsubscribe();
+        resolve(user);
+      });
+
+      // Timeout de 5 segundos
+      setTimeout(() => {
+        unsubscribe();
+        resolve(null);
+      }, 5000);
+    });
   }
 
   // Salvar dados do usuário no Firestore
@@ -333,8 +357,8 @@ export class FirebaseService {
         nome: sheetData.nome.trim(),
         campos: sheetData.campos || {},
         ownerId: user.uid,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
       };
 
       console.log('🔥 Criando ficha de personagem:', dataToSave);
@@ -355,11 +379,14 @@ export class FirebaseService {
    */
   async getUserCharacterSheets() {
     try {
-      const user = this.getCurrentUser();
+      console.log('🔍 Aguardando autenticação...');
+      const user = await this.waitForAuth();
+
       if (!user) {
         throw new Error('Usuário não autenticado.');
       }
 
+      console.log('✅ Usuário autenticado:', user.uid);
       const sheetCollection = collection(this.firestore, 'personagens');
       // Cria uma query que filtra os documentos pelo ownerId
       const q = query(sheetCollection, where('ownerId', '==', user.uid));
@@ -371,7 +398,8 @@ export class FirebaseService {
       return snapshot;
     } catch (error: any) {
       console.error('❌ Erro ao buscar fichas do usuário:', error);
-      throw new Error(this.getFirebaseErrorMessage(error.code || 'internal'));
+      console.error('Detalhes:', error.message, error.code);
+      throw new Error(error.message || this.getFirebaseErrorMessage(error.code || 'internal'));
     }
   }
 
@@ -437,7 +465,7 @@ export class FirebaseService {
       // Adiciona timestamp de atualização
       const updateData = {
         ...dataToUpdate,
-        updatedAt: new Date().toISOString(),
+        updatedAt: Timestamp.now(),
       };
 
       console.log(`🔄 Atualizando ficha '${sheetId}'`);
