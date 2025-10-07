@@ -7,7 +7,7 @@
   background: var(--color-primary-darkest);
   position: relative;
   overflow: hidden;
-  padding: 20px;
+  padding: 20px 20px 80px 20px; /* Espaço para o footer fixo */
 }
 
 /* Elementos flutuantes de fundo */
@@ -529,4 +529,39 @@ h2 {
   .form-check-label {
     font-size: 12px;
   }
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+.register-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-top: 2px solid var(--color-primary-lightest);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  box-shadow: 0 -2px 8px rgba(161, 141, 181, 0.1);
+  z-index: 999;
+}
+
+.register-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-primary);
+  opacity: 0.3;
+}
+
+.register-footer p {
+  margin: 0;
+  font-weight: 500;
+  color: var(--color-primary-dark);
 }

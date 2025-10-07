@@ -5,7 +5,7 @@
     var(--color-primary-lightest) 0%,
     var(--color-secondary-lightest) 100%
   );
-  padding-bottom: 60px;
+  padding-bottom: 80px; /* Espaço para o footer fixo */
 }
 
 /* ========================================
@@ -820,4 +820,37 @@
   .step-line {
     width: 40px;
   }
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+.creation-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-top: 2px solid var(--color-primary-lightest);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  box-shadow: 0 -2px 8px rgba(161, 141, 181, 0.1);
+  z-index: 999;
+}
+
+.creation-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-primary);
+  opacity: 0.3;
+}
+
+.creation-footer p {
+  margin: 0;
 }
