@@ -1,6 +1,7 @@
 /* ===================================
    HYBRID LAYOUT: Glass Morphism + Flat Design
    Usando variáveis CSS globais
+   Layout ajustado para Sidebar
    =================================== */
 
 .home-container {
@@ -11,6 +12,14 @@
   background: var(--background);
   position: relative;
   overflow-x: hidden;
+  /* Espaçamento para a sidebar */
+  margin-left: 280px;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ajuste quando sidebar está colapsada */
+.home-container.sidebar-collapsed {
+  margin-left: 80px;
 }
 
 /* Efeito de textura sutil no fundo */
@@ -384,6 +393,16 @@
 /* ===================================
    RESPONSIVE
    =================================== */
+@media (max-width: 1024px) {
+  .home-container {
+    margin-left: 240px;
+  }
+
+  .home-container.sidebar-collapsed {
+    margin-left: 70px;
+  }
+}
+
 @media (max-width: 992px) {
   .user-role {
     display: none;
@@ -391,6 +410,15 @@
 }
 
 @media (max-width: 768px) {
+  /* Remover margem em mobile, sidebar vira overlay */
+  .home-container {
+    margin-left: 0;
+  }
+
+  .home-container.sidebar-collapsed {
+    margin-left: 0;
+  }
+
   .header-content {
     flex-wrap: nowrap;
     padding: 1rem;

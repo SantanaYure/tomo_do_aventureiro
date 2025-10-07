@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-shared-header',
@@ -17,9 +18,16 @@ export class SharedHeaderComponent implements OnInit {
   isDropdownOpen: boolean = false;
   isMobileMenuOpen: boolean = false;
   isMobile: boolean = false;
+  isSidebarCollapsed: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private sidebarService: SidebarService
+  ) {
     this.checkScreenSize();
+    // Carregar estado do sidebar do serviço
+    this.isSidebarCollapsed = this.sidebarService.isCollapsed;
   }
 
   ngOnInit() {
@@ -46,6 +54,16 @@ export class SharedHeaderComponent implements OnInit {
 
   checkScreenSize() {
     this.isMobile = window.innerWidth < 768;
+    // Em mobile, sempre mostrar sidebar colapsada quando não estiver aberta
+    if (this.isMobile) {
+      this.isSidebarCollapsed = false;
+    }
+  }
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    // Atualizar através do serviço
+    this.sidebarService.setCollapsed(this.isSidebarCollapsed);
   }
 
   toggleDropdown() {

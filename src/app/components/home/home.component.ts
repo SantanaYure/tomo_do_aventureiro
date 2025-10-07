@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { SidebarService } from '../../services/sidebar.service';
 import { SharedHeaderComponent } from '../shared-header/shared-header.component';
 
 @Component({
@@ -13,8 +14,13 @@ import { SharedHeaderComponent } from '../shared-header/shared-header.component'
 })
 export class HomeComponent implements OnInit {
   userName: string = '';
+  isSidebarCollapsed: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private sidebarService: SidebarService
+  ) {}
 
   ngOnInit() {
     // Carregar informações do usuário
@@ -29,6 +35,11 @@ export class HomeComponent implements OnInit {
       // Se não houver usuário logado, redirecionar para login
       this.router.navigate(['/login']);
     }
+
+    // Observar mudanças no estado da sidebar
+    this.sidebarService.collapsed$.subscribe((collapsed) => {
+      this.isSidebarCollapsed = collapsed;
+    });
   }
 
   navigateTo(route: string) {

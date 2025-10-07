@@ -1,112 +1,100 @@
-<header class="shared-header">
-  <div class="header-content">
-    <!-- Logo -->
-    <div class="brand-section">
-      <img
-        src="logo_rpg.png"
-        alt="Tomo do Aventureiro"
-        class="logo"
-        [routerLink]="['/home']"
-        style="cursor: pointer"
-      />
+<!-- Sidebar Navigation -->
+<aside
+  class="sidebar"
+  [class.collapsed]="isSidebarCollapsed"
+  [class.mobile-open]="isMobileMenuOpen"
+>
+  <div class="sidebar-content">
+    <!-- Logo Section -->
+    <div class="sidebar-header">
+      <div class="brand-section" [routerLink]="['/home']" style="cursor: pointer">
+        <img src="logo_rpg.png" alt="Tomo do Aventureiro" class="logo" />
+        <span class="brand-title">Tomo do Aventureiro</span>
+      </div>
+
+      <!-- Toggle Button (Desktop) - Seta na Borda -->
+      <button
+        class="sidebar-toggle-btn"
+        (click)="toggleSidebar()"
+        *ngIf="!isMobile"
+        [class.collapsed]="isSidebarCollapsed"
+        [title]="isSidebarCollapsed ? 'Expandir menu' : 'Recolher menu'"
+      >
+        <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+      </button>
     </div>
 
-    <!-- Desktop Navigation Menu -->
-    <nav class="desktop-nav" *ngIf="!isMobile">
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
       <a
         routerLink="/home"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
         class="nav-link"
+        (click)="closeMobileMenu()"
+        [title]="isSidebarCollapsed ? 'Home' : ''"
       >
         <i class="bi bi-house-door"></i>
-        <span>Home</span>
+        <span *ngIf="!isSidebarCollapsed">Home</span>
       </a>
-      <a routerLink="/my-characters" routerLinkActive="active" class="nav-link">
+      <a
+        routerLink="/my-characters"
+        routerLinkActive="active"
+        class="nav-link"
+        (click)="closeMobileMenu()"
+        [title]="isSidebarCollapsed ? 'Visualizar Personagens' : ''"
+      >
         <i class="bi bi-people"></i>
-        <span>Visualizar Personagens</span>
+        <span *ngIf="!isSidebarCollapsed">Visualizar Personagens</span>
       </a>
     </nav>
 
-    <!-- Mobile Hamburger Menu -->
-    <button
-      class="hamburger-btn"
-      *ngIf="isMobile"
-      (click)="toggleMobileMenu()"
-      [class.active]="isMobileMenuOpen"
-    >
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
-
-    <!-- User Actions -->
-    <div class="header-actions">
-      <!-- User Profile com Dropdown -->
-      <div class="user-dropdown">
-        <button class="user-profile" (click)="toggleDropdown()" [class.active]="isDropdownOpen">
-          <div class="user-avatar">
-            <img
-              *ngIf="userPhotoURL"
-              [src]="userPhotoURL"
-              alt="Foto do usuário"
-              class="avatar-image"
-            />
-            <i *ngIf="!userPhotoURL" class="bi bi-person-circle"></i>
-          </div>
-          <div class="user-info" *ngIf="!isMobile">
-            <span class="user-name">{{ userName }}</span>
-            <span class="user-role">{{ userEmail }}</span>
-          </div>
-          <i
-            class="bi bi-chevron-down dropdown-icon"
-            [class.rotated]="isDropdownOpen"
-            *ngIf="!isMobile"
-          ></i>
-        </button>
-
-        <!-- Dropdown Menu -->
-        <div class="dropdown-menu" [class.show]="isDropdownOpen">
-          <div class="dropdown-item user-info-mobile" *ngIf="isMobile">
-            <div class="mobile-user-name">{{ userName }}</div>
-            <div class="mobile-user-email">{{ userEmail }}</div>
-          </div>
-          <button class="dropdown-item logout-item" (click)="logout()">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Sair do sistema</span>
-          </button>
+    <!-- User Profile Section - BOTTOM -->
+    <div class="sidebar-footer">
+      <div class="user-profile-sidebar">
+        <div class="user-avatar">
+          <img
+            *ngIf="userPhotoURL"
+            [src]="userPhotoURL"
+            alt="Foto do usuário"
+            class="avatar-image"
+          />
+          <i *ngIf="!userPhotoURL" class="bi bi-person-circle"></i>
+        </div>
+        <div class="user-info" *ngIf="!isSidebarCollapsed">
+          <span class="user-name">{{ userName }}</span>
+          <span class="user-email">{{ userEmail }}</span>
         </div>
       </div>
+
+      <!-- Logout Button - Sempre Visível -->
+      <button
+        class="logout-btn"
+        (click)="logout()"
+        [title]="isSidebarCollapsed ? 'Sair do sistema' : ''"
+      >
+        <i class="bi bi-box-arrow-right"></i>
+        <span *ngIf="!isSidebarCollapsed">Sair do sistema</span>
+      </button>
     </div>
   </div>
+</aside>
 
-  <!-- Mobile Navigation Menu -->
-  <div class="mobile-nav" [class.show]="isMobileMenuOpen">
-    <a
-      routerLink="/home"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="mobile-nav-link"
-      (click)="closeMobileMenu()"
-    >
-      <i class="bi bi-house-door"></i>
-      <span>Home</span>
-    </a>
-    <a
-      routerLink="/my-characters"
-      routerLinkActive="active"
-      class="mobile-nav-link"
-      (click)="closeMobileMenu()"
-    >
-      <i class="bi bi-people"></i>
-      <span>Visualizar Personagens</span>
-    </a>
-  </div>
+<!-- Mobile Menu Button -->
+<button
+  class="mobile-menu-btn"
+  *ngIf="isMobile"
+  (click)="toggleMobileMenu()"
+  [class.active]="isMobileMenuOpen"
+>
+  <span class="hamburger-line"></span>
+  <span class="hamburger-line"></span>
+  <span class="hamburger-line"></span>
+</button>
 
-  <!-- Overlay para fechar menus -->
-  <div
-    class="menu-overlay"
-    *ngIf="isDropdownOpen || isMobileMenuOpen"
-    (click)="closeAllMenus()"
-  ></div>
-</header>
+<!-- Overlay para fechar menus -->
+<div
+  class="menu-overlay"
+  *ngIf="(isDropdownOpen || isMobileMenuOpen) && isMobile"
+  (click)="closeAllMenus()"
+></div>
