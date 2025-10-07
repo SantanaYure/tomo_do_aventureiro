@@ -30,14 +30,6 @@
        STEP 1: SELECIONAR TEMPLATE
        ======================================== -->
   <main class="creation-main" *ngIf="step === 'select-template' && !isLoading && !isEditMode">
-    <div class="step-indicator">
-      <span class="step active">1</span>
-      <span class="step-line"></span>
-      <span class="step">2</span>
-      <span class="step-line"></span>
-      <span class="step">3</span>
-    </div>
-
     <div class="step-content">
       <h2 class="step-title">Escolha um Modelo de Ficha</h2>
       <p class="step-description">Selecione o tipo de personagem que deseja criar</p>
@@ -77,14 +69,6 @@
        STEP 2: PREENCHER FORMULÁRIO
        ======================================== -->
   <main class="creation-main" *ngIf="step === 'fill-form' && selectedTemplate">
-    <div class="step-indicator">
-      <span class="step completed">✓</span>
-      <span class="step-line completed"></span>
-      <span class="step active">2</span>
-      <span class="step-line"></span>
-      <span class="step">3</span>
-    </div>
-
     <div class="step-content">
       <!-- Header com Título -->
       <div class="form-header-title">
@@ -222,14 +206,6 @@
        STEP 3: SUCESSO
        ======================================== -->
   <main class="creation-main" *ngIf="step === 'success'">
-    <div class="step-indicator">
-      <span class="step completed">✓</span>
-      <span class="step-line completed"></span>
-      <span class="step completed">✓</span>
-      <span class="step-line completed"></span>
-      <span class="step completed">✓</span>
-    </div>
-
     <div class="success-content">
       <div class="success-icon">
         <i class="bi bi-check-circle"></i>
