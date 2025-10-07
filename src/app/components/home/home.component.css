@@ -419,7 +419,7 @@
 }
 
 @media (max-width: 768px) {
-  /* Remover margem em mobile, sidebar vira overlay */
+  /* Remover margem em mobile - sidebar vira overlay */
   .home-container {
     margin-left: 0;
   }

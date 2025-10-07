@@ -701,32 +701,39 @@
    RESPONSIVE - MOBILE
    =================================== */
 @media (max-width: 768px) {
+  /* Sidebar escondida por padrão, vira overlay compacto quando aberta */
   .sidebar {
-    width: 280px;
+    width: 80px;
     transform: translateX(-100%);
     box-shadow: none;
+    z-index: 1100;
   }
 
   .sidebar.mobile-open {
     transform: translateX(0);
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
   }
 
   .sidebar.collapsed {
-    width: 280px;
+    width: 80px;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.collapsed.mobile-open {
+    transform: translateX(0);
   }
 
   .sidebar-header {
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 0.5rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 120px;
+    min-height: 100px;
   }
 
   .sidebar.collapsed .sidebar-header {
     flex-direction: column;
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 0.5rem;
   }
 
   .brand-section {
@@ -735,16 +742,21 @@
     align-items: center;
   }
 
-  /* Logo MAIOR no mobile */
+  /* Logo no mobile - apenas ícone */
   .logo {
-    height: 70px !important;
+    height: 50px !important;
   }
 
   .sidebar.collapsed .logo {
-    height: 70px !important;
+    height: 50px !important;
   }
 
+  /* Esconde o título no mobile */
   .brand-title {
+    display: none !important;
+  }
+
+  .sidebar.collapsed .brand-title {
     display: none !important;
   }
 
@@ -756,103 +768,107 @@
     display: flex;
   }
 
+  /* Footer: centralizado e compacto */
   .sidebar-footer {
-    padding: 1rem 1.5rem;
+    padding: 1rem 0.5rem;
   }
 
   .sidebar.collapsed .sidebar-footer {
-    padding: 1rem 1.5rem;
+    padding: 1rem 0.5rem;
     flex-direction: column;
+    align-items: center;
   }
 
   .user-profile-sidebar {
-    padding: 0.75rem;
+    padding: 0.5rem;
     width: 100%;
+    justify-content: center;
   }
 
   .sidebar.collapsed .user-profile-sidebar {
-    padding: 0.75rem;
+    padding: 0.5rem;
     width: 100%;
-    justify-content: flex-start;
+    justify-content: center;
   }
 
+  /* Esconde informações do usuário no mobile */
   .user-info {
-    opacity: 1;
-    width: auto;
+    display: none !important;
   }
 
   .sidebar.collapsed .user-info {
-    opacity: 1;
-    width: auto;
+    display: none !important;
   }
 
+  /* Logout button: apenas ícone */
   .logout-btn {
-    padding: 0.65rem 0.75rem;
-    justify-content: flex-start;
+    padding: 0.65rem;
+    justify-content: center;
     width: 100%;
   }
 
   .sidebar.collapsed .logout-btn {
-    padding: 0.65rem 0.75rem;
-    justify-content: flex-start;
+    padding: 0.65rem;
+    justify-content: center;
     width: 100%;
   }
 
   .logout-btn span {
-    opacity: 1;
-    width: auto;
+    display: none !important;
   }
 
   .sidebar.collapsed .logout-btn span {
-    opacity: 1;
-    width: auto;
+    display: none !important;
   }
 
+  /* Nav links: apenas ícones centralizados */
   .nav-link {
-    padding: 1rem 1.25rem;
-    justify-content: flex-start;
+    padding: 1rem;
+    justify-content: center;
     width: 100%;
   }
 
   .sidebar.collapsed .nav-link {
-    padding: 1rem 1.25rem;
-    justify-content: flex-start;
+    padding: 1rem;
+    justify-content: center;
     width: 100%;
   }
 
   .nav-link span {
-    opacity: 1;
-    width: auto;
+    display: none !important;
   }
 
   .sidebar.collapsed .nav-link span {
-    opacity: 1;
-    width: auto;
+    display: none !important;
   }
 
   .sidebar-nav {
-    padding: 0 1.5rem;
-    align-items: stretch;
+    padding: 0 0.5rem;
+    align-items: center;
   }
 
   .sidebar.collapsed .sidebar-nav {
-    padding: 0 1.5rem;
-    align-items: stretch;
+    padding: 0 0.5rem;
+    align-items: center;
   }
 }
 
 @media (max-width: 480px) {
   .sidebar {
-    width: 260px;
+    width: 70px;
   }
 
-  /* Logo ainda maior em telas muito pequenas */
+  .sidebar.mobile-open {
+    width: 70px;
+  }
+
+  /* Logo em telas muito pequenas */
   .logo {
-    height: 65px !important;
+    height: 45px !important;
   }
 
   .sidebar.collapsed .logo {
-    height: 65px !important;
+    height: 45px !important;
   }
 
   .mobile-menu-btn {
@@ -869,14 +885,6 @@
 
   .user-avatar i {
     font-size: 1.6rem;
-  }
-
-  .user-name {
-    font-size: 0.85rem;
-  }
-
-  .user-email {
-    font-size: 0.7rem;
   }
 }
 

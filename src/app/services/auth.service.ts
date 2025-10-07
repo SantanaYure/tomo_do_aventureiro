@@ -52,14 +52,10 @@ export class AuthService {
   // Login com Firebase Authentication
   async login(email: string, password: string): Promise<boolean> {
     try {
-      console.log('Tentando login com Firebase:', { email });
-
       // Primeiro, autentica com Firebase
       const firebaseUser = await this.firebaseService.signInWithEmail(email, password);
 
       if (firebaseUser) {
-        console.log('Usuário autenticado no Firebase:', firebaseUser.uid);
-
         // Busca dados adicionais do usuário na API
         try {
           const token = await firebaseUser.getIdToken();
@@ -70,11 +66,8 @@ export class AuthService {
           localStorage.setItem('currentUser', JSON.stringify(userData));
 
           this.currentUserSubject.next(userData);
-          console.log('Login realizado com sucesso');
           return true;
         } catch (apiError) {
-          console.warn('Erro ao buscar dados da API, usando dados do Firebase:', apiError);
-
           // Fallback: usa dados do Firebase se API não disponível
           const userData: User = {
             uid: firebaseUser.uid,
@@ -137,13 +130,9 @@ export class AuthService {
   // Login com Google usando Firebase
   async loginWithGoogle(): Promise<boolean> {
     try {
-      console.log('Iniciando login com Google via Firebase...');
-
       const firebaseUser = await this.firebaseService.signInWithGoogle();
 
       if (firebaseUser) {
-        console.log('Usuário autenticado no Firebase via Google:', firebaseUser.uid);
-
         // Criar dados do usuário baseado no Firebase
         const userData: User = {
           uid: firebaseUser.uid,
@@ -163,7 +152,6 @@ export class AuthService {
 
         this.currentUserSubject.next(userData);
 
-        console.log('Login com Google realizado com sucesso!');
         return true;
       }
 

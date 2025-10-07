@@ -3,6 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common'; // DatePipe importado 
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { SharedHeaderComponent } from '../shared-header/shared-header.component';
+import { SidebarService } from '../../services/sidebar.service';
 
 // Interface atualizada para usar tipos mais estritos para datas.
 // Isso melhora a previsibilidade e ajuda a evitar erros no template.
@@ -26,11 +27,21 @@ export class MyCharactersComponent implements OnInit {
   characters: Character[] = [];
   isLoading = true;
   errorMessage = '';
+  isSidebarCollapsed = false;
 
-  constructor(private firebaseService: FirebaseService, private router: Router) {}
+  constructor(
+    private firebaseService: FirebaseService,
+    private router: Router,
+    private sidebarService: SidebarService
+  ) {}
 
   ngOnInit() {
     this.loadCharacters();
+
+    // Subscrever ao estado da sidebar
+    this.sidebarService.collapsed$.subscribe((collapsed) => {
+      this.isSidebarCollapsed = collapsed;
+    });
   }
 
   async loadCharacters() {
@@ -38,12 +49,9 @@ export class MyCharactersComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      console.log('🔍 Iniciando carregamento de personagens...');
       const snapshot = await this.firebaseService.getUserCharacterSheets();
-      console.log('📦 Snapshot recebido:', snapshot.size, 'documentos');
 
       if (snapshot.empty) {
-        console.log('📭 Nenhum personagem encontrado');
         this.characters = [];
         this.isLoading = false;
         return;
@@ -52,7 +60,6 @@ export class MyCharactersComponent implements OnInit {
       const charactersPromises = snapshot.docs.map(async (doc) => {
         try {
           const data = doc.data();
-          console.log('📄 Processando documento:', doc.id, data);
 
           const nome =
             data['dados']?.['basicInfo']?.['nomeDoPersonagem'] ||
@@ -67,10 +74,7 @@ export class MyCharactersComponent implements OnInit {
                 templateNome = templateDoc.data()['nome'] || 'Template Desconhecido';
               }
             } catch (e) {
-              console.warn(
-                `⚠️ Não foi possível carregar o nome do template para a ficha ${doc.id}`,
-                e
-              );
+              // Template não encontrado, usar valor padrão
             }
           }
 
@@ -120,7 +124,6 @@ export class MyCharactersComponent implements OnInit {
             ...data,
           } as Character;
 
-          console.log('✅ Personagem processado:', character.nome);
           return character;
         } catch (docError: any) {
           console.error('❌ Erro ao processar documento:', doc.id, docError);
@@ -129,10 +132,8 @@ export class MyCharactersComponent implements OnInit {
       });
 
       this.characters = await Promise.all(charactersPromises);
-      console.log('✅ Total de personagens carregados:', this.characters.length);
     } catch (error: any) {
       console.error('❌ Erro ao carregar personagens:', error);
-      console.error('Stack trace:', error.stack);
       this.errorMessage =
         error.message || 'Ocorreu um erro ao carregar os personagens. Por favor, tente novamente.';
     } finally {

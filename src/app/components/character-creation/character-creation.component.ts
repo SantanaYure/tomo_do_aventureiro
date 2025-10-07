@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { SharedHeaderComponent } from '../shared-header/shared-header.component';
+import { SidebarService } from '../../services/sidebar.service';
 
 interface Campo {
   name: string;
@@ -58,6 +59,9 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   characterId: string | null = null;
   originalCharacterData: any = null;
 
+  // Sidebar state
+  isSidebarCollapsed = false;
+
   // Opções para o campo "Papel na Trama"
   papelNaTramaOptions = [
     'Protagonista',
@@ -74,21 +78,25 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   constructor(
     private firebaseService: FirebaseService,
     public router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private sidebarService: SidebarService
   ) {}
 
   async ngOnInit() {
+    // Subscrever ao estado da sidebar
+    this.sidebarService.collapsed$.subscribe((collapsed) => {
+      this.isSidebarCollapsed = collapsed;
+    });
+
     // Verificar se há ID na rota (modo edição)
     this.route.params.subscribe(async (params) => {
       if (params['id']) {
         this.characterId = params['id'];
         this.isEditMode = true;
-        console.log('✏️ Modo de edição ativado para personagem:', this.characterId);
         if (this.characterId) {
           await this.loadCharacterForEdit(this.characterId);
         }
       } else {
-        console.log('✨ Modo de criação ativado');
         await this.loadTemplates();
       }
     });
@@ -103,7 +111,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     try {
-      console.log('📥 Carregando personagem para edição...');
       const characterDoc = await this.firebaseService.getCharacterSheetById(characterId);
 
       if (!characterDoc.exists()) {
@@ -112,8 +119,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
 
       const characterData = characterDoc.data();
       this.originalCharacterData = characterData;
-
-      console.log('📦 Dados do personagem carregados:', characterData);
 
       // Carregar o template usado
       const templateId = characterData['templateId'];
@@ -133,8 +138,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         descricao: templateData['descricao'],
         estrutura: templateData['estrutura'],
       };
-
-      console.log('📋 Template carregado:', this.selectedTemplate.nome);
 
       // Preencher o formulário com os dados existentes
       this.populateFormWithCharacterData(characterData);
@@ -162,8 +165,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     this.characterName =
       characterData['dados']?.['basicInfo']?.['nomeDoPersonagem'] || characterData['nome'] || '';
 
-    console.log('📝 Nome do personagem:', this.characterName);
-
     // Inicializar formData
     this.formData = {};
 
@@ -183,8 +184,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         this.formData[key] = String(campos[key]) || '';
       }
     });
-
-    console.log('📝 Formulário preenchido:', this.formData);
   }
 
   // ========================================
@@ -205,8 +204,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
           ...(doc.data() as Omit<Template, 'id'>),
         });
       });
-
-      console.log(`✅ ${this.templates.length} template(s) carregado(s)`);
     } catch (error: any) {
       console.error('❌ Erro ao carregar templates:', error);
       this.errorMessage = error.message || 'Erro ao carregar templates';
@@ -233,8 +230,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         this.formData[campo.name] = '';
       });
     });
-
-    console.log('Template selecionado:', template.nome);
   }
 
   // ========================================
@@ -294,9 +289,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     const firstField = this.selectedTemplate.estrutura[0].campos[0];
     const firstFieldValue = this.formData[firstField.name] || '';
 
-    console.log('🔍 Validação - Campo:', firstField.name, 'Valor:', firstFieldValue);
-    console.log('🔍 Validação - FormData completo:', this.formData);
-
     if (!firstFieldValue.trim()) {
       this.errorMessage = `❌ Por favor, preencha o campo "${firstField.label}"`;
       this.activeTabIndex = 0; // Voltar para a primeira aba
@@ -305,8 +297,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
 
     // Usar o primeiro campo como characterName
     this.characterName = firstFieldValue.trim();
-
-    console.log('✅ Validação OK - Nome do personagem:', this.characterName);
 
     return true;
   }
@@ -336,21 +326,15 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
 
       if (this.isEditMode && this.characterId) {
         // MODO EDIÇÃO: Atualizar personagem existente
-        console.log('💾 Atualizando personagem:', this.characterId);
-
         const updateData = {
           nome: this.characterName.trim(),
           campos: cleanedFormData,
         };
 
         await this.firebaseService.updateCharacterSheet(this.characterId, updateData);
-        console.log('✅ Personagem atualizado com sucesso!');
-
         this.successMessage = `✅ ${this.characterName} foi atualizado com sucesso!`;
       } else {
         // MODO CRIAÇÃO: Criar novo personagem
-        console.log('💾 Salvando novo personagem...');
-
         const sheetData = {
           templateId: this.selectedTemplate.id,
           templateNome: this.selectedTemplate.nome,
@@ -358,12 +342,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
           campos: cleanedFormData,
         };
 
-        console.log('📤 Enviando dados para o Firebase:', sheetData);
-
-        const docRef = await this.firebaseService.addCharacterSheet(sheetData);
-
-        console.log('✅ Personagem criado com sucesso! ID:', docRef.id);
-
+        await this.firebaseService.addCharacterSheet(sheetData);
         this.successMessage = `✅ ${this.characterName} foi criado com sucesso!`;
       }
 

@@ -6,6 +6,7 @@ import { FirebaseService } from '../../services/firebase.service';
 import { AuthService } from '../../services/auth.service';
 import { ERROR_MESSAGES, EMAIL_REGEX, PASSWORD_RULES } from '../../constants/app.constants';
 import { PrivacyPolicyModalComponent } from '../privacy-policy-modal/privacy-policy-modal.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -63,7 +64,6 @@ export class RegisterComponent {
 
           await this.firebaseService.saveUserData(userData);
 
-          console.log('Cadastro realizado com sucesso!', userData);
           alert(
             'Cadastro realizado com sucesso!\nBem-vindo ao Tomo do Aventureiro!\n\nClique em OK para fazer login.'
           );
@@ -74,14 +74,10 @@ export class RegisterComponent {
       } catch (error: any) {
         this.isLoading = false;
 
-        // Log detalhado para o desenvolvedor
-        console.group('🔥 ERRO NO CADASTRO - Detalhes para Developer:');
-        console.error('Erro completo:', error);
-        console.error('Código do erro:', error.code);
-        console.error('Mensagem original:', error.message);
-        console.error('Stack trace:', error.stack);
-        console.error('Dados do formulário:', this.registerData);
-        console.groupEnd();
+        // Log detalhado apenas em desenvolvimento
+        if (!environment.production) {
+          console.error('Erro no cadastro:', error);
+        }
 
         // Verificar se é erro do Firebase Auth ou Firestore
         if (error.code) {
@@ -103,20 +99,12 @@ export class RegisterComponent {
           this.errorMessage =
             '❌ Erro inesperado. Verifique os dados e tente novamente. Se o problema persistir, entre em contato com o suporte.';
         }
-
-        // Alerta adicional para erros críticos
-        if (error.message && error.message.includes('Firebase')) {
-          console.warn('⚠️  ATENÇÃO: Erro relacionado ao Firebase - Verifique a configuração!');
-        }
       }
     }
   }
 
   navigateToLogin() {
-    console.log('Navegando para login');
-    this.router.navigate(['/login']).then(() => {
-      console.log('Navegação para login concluída');
-    });
+    this.router.navigate(['/login']);
   }
 
   togglePassword() {

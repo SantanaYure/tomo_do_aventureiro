@@ -9,7 +9,15 @@
     var(--color-primary-lightest) 100%
   );
   color: var(--text-primary);
-  padding-bottom: 2rem;
+  padding-bottom: 100px; /* Espaço para o footer fixo */
+  /* Espaçamento para a sidebar */
+  margin-left: 280px;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ajuste quando sidebar está colapsada */
+.character-view-container.sidebar-collapsed {
+  margin-left: 80px;
 }
 
 /* ========================================
@@ -561,6 +569,15 @@
    RESPONSIVIDADE
    ======================================== */
 @media (max-width: 768px) {
+  /* Remover margem em mobile - sidebar vira overlay */
+  .character-view-container {
+    margin-left: 0;
+  }
+
+  .character-view-container.sidebar-collapsed {
+    margin-left: 0;
+  }
+
   .header-content {
     flex-direction: column;
     align-items: flex-start;
@@ -606,4 +623,37 @@
     width: 100%;
     justify-content: center;
   }
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+.view-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-top: 2px solid var(--color-primary-lightest);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  box-shadow: 0 -2px 8px rgba(161, 141, 181, 0.1);
+  z-index: 999;
+}
+
+.view-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-primary);
+  opacity: 0.3;
+}
+
+.view-footer p {
+  margin: 0;
 }

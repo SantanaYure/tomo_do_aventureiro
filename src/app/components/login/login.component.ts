@@ -33,16 +33,9 @@ export class LoginComponent {
       this.errorMessage = '';
 
       try {
-        console.log('Tentando fazer login com:', this.loginData.email);
-
         const success = await this.authService.login(this.loginData.email, this.loginData.password);
 
         if (success) {
-          console.log('Login realizado com sucesso!', {
-            email: this.loginData.email,
-            rememberMe: this.rememberMe,
-          });
-
           // Redirecionar para página home após login
           this.router.navigate(['/home']);
         } else {
@@ -63,8 +56,6 @@ export class LoginComponent {
   }
 
   async socialLogin(provider: string) {
-    console.log('Login com:', provider);
-
     try {
       if (provider === 'google') {
         this.isLoading = true;
@@ -72,7 +63,6 @@ export class LoginComponent {
 
         const success = await this.authService.loginWithGoogle();
         if (success) {
-          console.log('Login com Google realizado com sucesso!');
           this.router.navigate(['/home']);
         } else {
           this.errorMessage = 'Falha no login com Google. Tente novamente.';
@@ -90,7 +80,6 @@ export class LoginComponent {
 
   forgotPassword(event: Event) {
     event.preventDefault();
-    console.log('Abrindo modal de recuperação de senha');
     this.showForgotPasswordModal = true;
   }
 
@@ -117,9 +106,6 @@ export class LoginComponent {
   }
 
   navigateToRegister() {
-    console.log('Navegando para registro');
-    this.router.navigate(['/register']).then(() => {
-      console.log('Navegação para registro concluída');
-    });
+    this.router.navigate(['/register']);
   }
 }

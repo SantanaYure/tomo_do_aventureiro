@@ -9,7 +9,15 @@
     var(--color-primary-lightest) 0%,
     var(--color-secondary-lightest) 100%
   );
-  padding-bottom: 80px; /* Espaço para o footer fixo */
+  padding-bottom: 100px; /* Espaço para o footer fixo */
+  /* Espaçamento para a sidebar */
+  margin-left: 280px;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ajuste quando sidebar está colapsada */
+.my-characters-container.sidebar-collapsed {
+  margin-left: 80px;
 }
 
 /* ========================================
@@ -361,6 +369,15 @@
    ======================================== */
 
 @media (max-width: 768px) {
+  /* Manter sem margem - sidebar é overlay */
+  .my-characters-container {
+    margin-left: 0;
+  }
+
+  .my-characters-container.sidebar-collapsed {
+    margin-left: 0;
+  }
+
   .header-content {
     padding: 0 20px;
     flex-wrap: wrap;

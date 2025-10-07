@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { DateUtils } from '../../utils/date.utils';
 import { SharedHeaderComponent } from '../shared-header/shared-header.component';
+import { SidebarService } from '../../services/sidebar.service';
 
 interface Campo {
   name: string;
@@ -55,13 +56,22 @@ export class CharacterViewComponent implements OnInit {
   // Sistema de Abas
   activeTabIndex = 0;
 
+  // Sidebar state
+  isSidebarCollapsed = false;
+
   constructor(
     private firebaseService: FirebaseService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private sidebarService: SidebarService
   ) {}
 
   async ngOnInit() {
+    // Subscrever ao estado da sidebar
+    this.sidebarService.collapsed$.subscribe((collapsed) => {
+      this.isSidebarCollapsed = collapsed;
+    });
+
     // Capturar ID da URL
     this.route.params.subscribe(async (params) => {
       if (params['id']) {
