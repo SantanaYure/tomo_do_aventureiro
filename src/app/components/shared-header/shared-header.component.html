@@ -97,9 +97,7 @@
   (click)="toggleMobileMenu()"
   [class.active]="isMobileMenuOpen"
 >
-  <span class="hamburger-line"></span>
-  <span class="hamburger-line"></span>
-  <span class="hamburger-line"></span>
+  <i class="bi" [ngClass]="isMobileMenuOpen ? 'bi-chevron-left' : 'bi-chevron-right'"></i>
 </button>
 
 <!-- Overlay para fechar menus -->
