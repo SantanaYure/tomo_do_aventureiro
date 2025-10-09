@@ -44,39 +44,6 @@
 
   <!-- Dashboard Principal -->
   <main class="dashboard-main" *ngIf="!isLoading && character && template">
-    <!-- Info Rápida (Cards Superiores) -->
-    <div class="quick-info">
-      <div class="info-card">
-        <div class="info-icon">
-          <i class="bi bi-calendar-plus"></i>
-        </div>
-        <div class="info-content">
-          <span class="info-label">Criado em</span>
-          <span class="info-value">{{ formatDate(character.createdAt) }}</span>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-icon">
-          <i class="bi bi-calendar-check"></i>
-        </div>
-        <div class="info-content">
-          <span class="info-label">Última edição</span>
-          <span class="info-value">{{ formatDate(character.updatedAt) }}</span>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-icon">
-          <i class="bi bi-file-earmark-text"></i>
-        </div>
-        <div class="info-content">
-          <span class="info-label">Template</span>
-          <span class="info-value">{{ character.templateNome }}</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Sistema de Abas -->
     <div class="dashboard-tabs">
       <!-- Header das Abas -->
