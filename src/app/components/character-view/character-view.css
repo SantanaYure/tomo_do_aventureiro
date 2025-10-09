@@ -3,19 +3,13 @@
    ======================================== */
 .character-view-container {
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    var(--color-primary-lightest) 0%,
-    var(--color-primary-lightest) 100%
-  );
+  background: linear-gradient(135deg, #1c1624 0%, #2a2135 100%);
   color: var(--text-primary);
-  padding-bottom: 100px; /* Espaço para o footer fixo */
-  /* Espaçamento para a sidebar */
+  padding-bottom: 100px;
   margin-left: 280px;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Ajuste quando sidebar está colapsada */
 .character-view-container.sidebar-collapsed {
   margin-left: 80px;
 }
@@ -24,7 +18,7 @@
    HEADER
    ======================================== */
 .view-header {
-  background: var(--glass-background);
+  background: white;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--glass-border);
   box-shadow: var(--shadow-md);
@@ -206,7 +200,7 @@
 }
 
 /* ========================================
-   DASHBOARD PRINCIPAL
+   PERGAMINHO PRINCIPAL
    ======================================== */
 .dashboard-main {
   max-width: 1400px;
@@ -215,15 +209,151 @@
 }
 
 /* ========================================
-   SISTEMA DE ABAS - Estilo Moderno
+   CONTAINER DO PERGAMINHO
    ======================================== */
-.dashboard-tabs {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  overflow: visible;
-  box-shadow: none;
-  margin-bottom: 2rem;
+.scroll-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.scroll-paper {
+  background: white;
+  border: 3px solid var(--color-primary);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), inset 0 0 60px rgba(161, 141, 181, 0.08);
+  padding: 3.5rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-primary-light) 25%,
+    var(--color-primary) 50%,
+    var(--color-primary-light) 75%,
+    transparent
+  );
+}
+
+.scroll-paper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-primary-light) 25%,
+    var(--color-primary) 50%,
+    var(--color-primary-light) 75%,
+    transparent
+  );
+}
+
+/* ========================================
+   CABEÇALHO DO PERGAMINHO
+   ======================================== */
+.scroll-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--color-primary-light);
+  position: relative;
+}
+
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  color: var(--color-primary);
+  opacity: 0.7;
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-primary-light), transparent);
+}
+
+.ornament-divider i {
+  font-size: 0.75rem;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.scroll-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: var(--color-primary-darkest);
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
+}
+
+.scroll-subtitle {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--color-primary);
+  margin: 0.75rem 0 0 0;
+  font-weight: 400;
+}
+
+/* ========================================
+   SISTEMA DE ABAS - Estilo Pergaminho
+   ======================================== */
+.scroll-tabs {
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.scroll-tabs::before,
+.scroll-tabs::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 1.5rem;
+  width: 30px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-tabs::before {
+  left: 0;
+  background: linear-gradient(to right, white, transparent);
+}
+
+.scroll-tabs::after {
+  right: 0;
+  background: linear-gradient(to left, white, transparent);
 }
 
 .tabs-header {
@@ -231,11 +361,15 @@
   background: transparent;
   border-bottom: none;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--color-primary) transparent;
   gap: 0.75rem;
-  padding: 0.5rem 0;
-  flex-wrap: wrap;
+  padding: 0.5rem 0 1.5rem 0;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling no iOS */
+  scroll-behavior: smooth;
 }
 
 .tabs-header::-webkit-scrollbar {
@@ -253,79 +387,91 @@
 
 .tab-button {
   flex: 0 0 auto;
+  flex-shrink: 0;
   min-width: auto;
   padding: 0.875rem 1.75rem;
-  border: 2px solid var(--glass-border);
+  border: 2px solid var(--color-primary-light);
   background: white;
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--color-primary-darkest);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -2px 8px rgba(161, 141, 181, 0.1);
   white-space: nowrap;
+  position: relative;
+  touch-action: pan-x; /* Permite scroll horizontal no touch */
+}
+
+.tab-button::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background 0.3s ease;
 }
 
 .tab-button i {
   font-size: 1.25rem;
   transition: transform 0.3s ease;
-}
-
-.tab-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(123, 80, 198, 0.15);
-  border-color: var(--color-primary-light);
   color: var(--color-primary);
 }
 
-.tab-button.active {
-  background: var(--gradient-primary);
-  color: white;
+.tab-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 -4px 12px rgba(161, 141, 181, 0.2);
   border-color: var(--color-primary);
-  box-shadow: 0 4px 16px rgba(123, 80, 198, 0.3);
-  transform: translateY(-2px);
+  background: white;
+}
+
+.tab-button.active {
+  background: white;
+  color: var(--color-primary-darkest);
+  border-color: var(--color-primary);
+  border-bottom-color: white;
+  box-shadow: 0 -6px 16px rgba(161, 141, 181, 0.25);
+  transform: translateY(-4px);
+  z-index: 1;
+}
+
+.tab-button.active::after {
+  background: white;
 }
 
 .tab-button.active i {
-  transform: scale(1.1);
+  transform: scale(1.15);
+  color: var(--color-primary-darkest);
 }
 
 .tab-label {
   display: inline;
-}
-
-.tab-button i {
-  font-size: 1.25rem;
-  transition: transform 0.3s ease;
-}
-
-.tab-label {
   white-space: nowrap;
 }
 
 /* ========================================
-   CONTEÚDO DA ABA
+   CONTEÚDO DO PERGAMINHO
    ======================================== */
-.tabs-content {
-  padding: 2rem;
-  background: white;
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-md);
+.scroll-content {
+  padding: 0;
+  padding-top: 2rem;
 }
 
 .tab-panel {
-  animation: fadeIn 0.4s ease;
+  animation: fadeInManuscript 0.5s ease;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInManuscript {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -333,84 +479,85 @@
   }
 }
 
+/* ========================================
+   CABEÇALHO DA SEÇÃO
+   ======================================== */
 .section-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.section-header i {
-  font-size: 2rem;
-  color: var(--color-primary);
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--color-primary-light);
 }
 
 .section-header h2 {
   margin: 0;
-  font-size: 1.75rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.85rem;
   font-weight: 700;
-  color: var(--color-primary-dark);
+  color: var(--color-primary-darkest);
+  letter-spacing: 0.5px;
 }
 
 /* ========================================
-   GRID DE CAMPOS
+   MANUSCRITO - Estilo de Texto
    ======================================== */
-.fields-grid {
+.manuscript {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
 }
 
-.field-item {
-  background: var(--color-primary-lightest);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  padding: 1.25rem;
+.manuscript-entry {
+  background: rgba(255, 255, 255, 0.4);
+  border-left: 3px solid var(--color-primary-light);
+  border-radius: 10px;
+  padding: 1.5rem 1.75rem;
   transition: all 0.3s ease;
 }
 
-.field-item:hover {
-  background: white;
-  border-color: var(--color-primary-light);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-}
-
-.field-item.full-width {
+.manuscript-entry.full-width {
   grid-column: 1 / -1;
 }
 
-.field-label {
+.manuscript-entry:hover {
+  background: rgba(255, 255, 255, 0.65);
+  border-left-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(161, 141, 181, 0.15);
+  transform: translateX(4px);
+}
+
+.entry-label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: 0.65rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.98rem;
+  color: var(--color-primary-darkest);
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+}
+
+.entry-label i {
+  font-size: 0.85rem;
   color: var(--color-primary);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.75rem;
 }
 
-.field-label i {
-  font-size: 0.75rem;
-}
-
-.field-value {
-  font-size: 1.1rem;
-  color: var(--text-primary);
-  font-weight: 500;
-  line-height: 1.6;
-  min-height: 1.6em;
+.entry-text {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.08rem;
+  color: var(--color-primary-darkest);
+  font-weight: 400;
+  line-height: 1.85;
+  min-height: 1.85em;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
-.field-value.multiline {
-  white-space: pre-wrap;
-  line-height: 1.8;
+.entry-text:empty::before {
+  content: '—';
+  color: #999;
+  font-style: italic;
 }
 
 /* ========================================
@@ -611,12 +758,14 @@
     overflow-x: auto;
     gap: 0.5rem;
     padding: 0.5rem;
+    justify-content: flex-start;
   }
 
   .tab-button {
     min-width: auto;
     padding: 0.75rem 1.25rem;
     font-size: 0.85rem;
+    flex-shrink: 0;
   }
 
   .tab-button i {
@@ -624,7 +773,7 @@
   }
 
   .tab-label {
-    display: none; /* Apenas ícones no mobile */
+    display: inline;
   }
 
   .tabs-content {
@@ -637,6 +786,42 @@
 
   .btn-nav {
     flex: 1;
+  }
+
+  /* Pergaminho Responsivo - Tablet/Mobile */
+  .scroll-paper {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+  }
+
+  .scroll-title {
+    font-size: 2.25rem;
+  }
+
+  .scroll-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .ornament-divider {
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .manuscript {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .manuscript-entry {
+    padding: 1rem 1.25rem;
+  }
+
+  .entry-label {
+    font-size: 0.9rem;
+  }
+
+  .entry-text {
+    font-size: 1rem;
   }
 }
 
@@ -706,6 +891,82 @@
   .field-value {
     font-size: 0.9rem;
     padding: 8px;
+  }
+
+  /* Pergaminho Responsivo - Extra Small Mobile */
+  .scroll-paper {
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
+    border-width: 2px;
+  }
+
+  .scroll-title {
+    font-size: 1.75rem;
+    letter-spacing: 0.5px;
+  }
+
+  .scroll-subtitle {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .scroll-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .ornament-divider {
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .ornament-divider i {
+    font-size: 0.65rem;
+  }
+
+  .scroll-tabs {
+    margin-bottom: 1.5rem;
+  }
+
+  .tabs-header {
+    gap: 0.35rem;
+    padding: 0.35rem 0 1rem 0;
+  }
+
+  .tab-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 8px 8px 0 0;
+    flex-shrink: 0;
+  }
+
+  .tab-button i {
+    font-size: 1rem;
+  }
+
+  .manuscript {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .manuscript-entry {
+    padding: 0.875rem 1rem;
+    border-left-width: 2px;
+  }
+
+  .entry-label {
+    font-size: 0.85rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .entry-label i {
+    font-size: 0.75rem;
+  }
+
+  .entry-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 }
 

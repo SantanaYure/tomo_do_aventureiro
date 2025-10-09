@@ -6,14 +6,6 @@
   <header class="view-header">
     <div class="header-content">
       <div class="header-info" *ngIf="character && !isLoading">
-        <div class="character-title">
-          <h1 class="character-name">
-            <i class="bi bi-person-circle"></i>
-            {{ character.nome }}
-          </h1>
-          <span class="character-template">{{ character.templateNome }}</span>
-        </div>
-
         <div class="header-actions">
           <button class="btn-edit" (click)="editCharacter()" title="Editar personagem">
             <i class="bi bi-pencil-square"></i>
@@ -44,69 +36,88 @@
 
   <!-- Dashboard Principal -->
   <main class="dashboard-main" *ngIf="!isLoading && character && template">
-    <!-- Sistema de Abas -->
-    <div class="dashboard-tabs">
-      <!-- Header das Abas -->
-      <div class="tabs-header">
-        <button
-          *ngFor="let bloco of template.estrutura; let i = index"
-          class="tab-button"
-          [class.active]="activeTabIndex === i"
-          (click)="selectTab(i)"
-        >
-          <i class="bi {{ bloco.icone }}"></i>
-          <span class="tab-label">{{ bloco.bloco }}</span>
-        </button>
-      </div>
+    <!-- Pergaminho -->
+    <div class="scroll-container">
+      <div class="scroll-paper">
+        <!-- Cabeçalho do Pergaminho -->
+        <div class="scroll-header">
+          <div class="ornament-divider">
+            <i class="bi bi-diamond-fill"></i>
+          </div>
+          <h1 class="scroll-title">{{ character.nome }}</h1>
+          <p class="scroll-subtitle">{{ character.templateNome }}</p>
+          <div class="ornament-divider">
+            <i class="bi bi-diamond-fill"></i>
+          </div>
+        </div>
 
-      <!-- Conteúdo da Aba Ativa -->
-      <div class="tabs-content">
-        <div *ngFor="let bloco of template.estrutura; let i = index">
-          <div *ngIf="activeTabIndex === i" class="tab-panel">
-            <!-- Cabeçalho da Seção -->
-            <div class="section-header">
-              <i class="bi {{ bloco.icone }}"></i>
-              <h2>{{ bloco.bloco }}</h2>
-            </div>
+        <!-- Sistema de Abas -->
+        <div class="scroll-tabs">
+          <!-- Header das Abas -->
+          <div class="tabs-header">
+            <button
+              *ngFor="let bloco of template.estrutura; let i = index"
+              class="tab-button"
+              [class.active]="activeTabIndex === i"
+              (click)="selectTab(i)"
+            >
+              <span class="tab-label">{{ bloco.bloco }}</span>
+            </button>
+          </div>
 
-            <!-- Grid de Campos -->
-            <div class="fields-grid">
-              <div
-                *ngFor="let campo of bloco.campos"
-                class="field-item"
-                [class.full-width]="campo.type === 'textarea'"
-              >
-                <label class="field-label">
-                  <i class="bi bi-chevron-right"></i>
-                  {{ campo.label }}
-                </label>
-                <div class="field-value" [class.multiline]="campo.type === 'textarea'">
-                  {{ getFieldValue(campo.name) }}
+          <!-- Conteúdo da Aba Ativa -->
+          <div class="scroll-content">
+            <div *ngFor="let bloco of template.estrutura; let i = index">
+              <div *ngIf="activeTabIndex === i" class="tab-panel">
+                <!-- Cabeçalho da Seção -->
+                <div class="section-header">
+                  <h2>{{ bloco.bloco }}</h2>
+                </div>
+
+                <!-- Manuscrito -->
+                <div class="manuscript">
+                  <div
+                    *ngFor="let campo of bloco.campos"
+                    class="manuscript-entry"
+                    [class.full-width]="campo.type === 'textarea'"
+                  >
+                    <div class="entry-label">
+                      <i class="bi bi-feather"></i>
+                      {{ campo.label }}
+                    </div>
+                    <div class="entry-text" [class.long-text]="campo.type === 'textarea'">
+                      {{ getFieldValue(campo.name) || '—' }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Navegação entre abas (rodapé) -->
+                <div class="tab-navigation">
+                  <div>
+                    <button
+                      class="btn-nav"
+                      (click)="previousTab()"
+                      [disabled]="activeTabIndex === 0"
+                    >
+                      <i class="bi bi-chevron-left"></i>
+                      Anterior
+                    </button>
+
+                    <button
+                      class="btn-nav"
+                      (click)="nextTab()"
+                      [disabled]="activeTabIndex === template.estrutura.length - 1"
+                    >
+                      Próxima
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </div>
+
+                  <span class="tab-indicator">
+                    Seção {{ activeTabIndex + 1 }} de {{ template.estrutura.length }}
+                  </span>
                 </div>
               </div>
-            </div>
-
-            <!-- Navegação entre abas (rodapé) -->
-            <div class="tab-navigation">
-              <div>
-                <button class="btn-nav" (click)="previousTab()" [disabled]="activeTabIndex === 0">
-                  <i class="bi bi-chevron-left"></i>
-                  Anterior
-                </button>
-
-                <button
-                  class="btn-nav"
-                  (click)="nextTab()"
-                  [disabled]="activeTabIndex === template.estrutura.length - 1"
-                >
-                  Próxima
-                  <i class="bi bi-chevron-right"></i>
-                </button>
-              </div>
-
-              <span class="tab-indicator">
-                Seção {{ activeTabIndex + 1 }} de {{ template.estrutura.length }}
-              </span>
             </div>
           </div>
         </div>
