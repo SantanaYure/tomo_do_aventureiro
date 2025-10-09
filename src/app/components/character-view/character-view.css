@@ -635,14 +635,8 @@
     grid-template-columns: 1fr;
   }
 
-  .tab-navigation > div {
-    flex-direction: column;
-    width: 100%;
-  }
-
   .btn-nav {
-    width: 100%;
-    justify-content: center;
+    flex: 1;
   }
 }
 

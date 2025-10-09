@@ -808,16 +808,10 @@
     padding: 20px;
   }
 
-  .tab-navigation > div {
-    flex-direction: column;
-    width: 100%;
-  }
-
   .btn-tab-nav {
     padding: 8px 12px;
     font-size: 0.85rem;
-    width: 100%;
-    justify-content: center;
+    flex: 1;
   }
 
   .form-actions {
