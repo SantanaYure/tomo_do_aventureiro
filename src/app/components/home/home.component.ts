@@ -45,4 +45,12 @@ export class HomeComponent implements OnInit {
   navigateTo(route: string) {
     this.router.navigate([route]);
   }
+
+  createCharacter() {
+    this.router.navigate(['/create-character']);
+  }
+
+  viewCharacters() {
+    this.router.navigate(['/my-characters']);
+  }
 }

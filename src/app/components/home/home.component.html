@@ -4,11 +4,103 @@
 
   <!-- Main Content -->
   <main class="home-main">
-    <div class="welcome-section">
-      <h2 class="welcome-title">Bem-vindo, {{ userName }}!</h2>
-      <p class="welcome-text">
-        Esta é sua área principal. Aqui você poderá acessar todas as funcionalidades do sistema.
-      </p>
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">Bem-vindo ao Tomo do Aventureiro!</h1>
+        <p class="hero-subtitle">
+          Sua jornada criativa começa aqui. Crie, organize e desenvolva personagens incríveis para
+          suas histórias.
+        </p>
+
+        <div class="hero-description">
+          <p>
+            <i class="bi bi-book-half"></i>
+            O <strong>Tomo do Aventureiro</strong> é uma ferramenta completa para escritores,
+            mestres de RPG e criadores de histórias. Organize fichas detalhadas de personagens com
+            templates personalizados, acompanhe sua evolução e tenha tudo em um só lugar.
+          </p>
+        </div>
+
+        <div class="cta-section">
+          <button class="btn-cta-primary" (click)="createCharacter()">
+            <i class="bi bi-plus-circle-fill"></i>
+            <span>Criar Meu Primeiro Personagem</span>
+          </button>
+          <button class="btn-cta-secondary" (click)="viewCharacters()">
+            <i class="bi bi-collection"></i>
+            <span>Ver Meus Personagens</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-illustration">
+        <div class="illustration-card">
+          <i class="bi bi-journals"></i>
+          <div class="floating-badge badge-1">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>Fácil de usar</span>
+          </div>
+          <div class="floating-badge badge-2">
+            <i class="bi bi-lightning-fill"></i>
+            <span>Rápido</span>
+          </div>
+          <div class="floating-badge badge-3">
+            <i class="bi bi-shield-check"></i>
+            <span>Seguro</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      <h2 class="section-title">O que você pode fazer?</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-file-earmark-plus"></i>
+          </div>
+          <h3 class="feature-title">Templates Personalizados</h3>
+          <p class="feature-description">
+            Escolha entre diversos modelos de ficha ou crie o seu próprio. Organize informações de
+            forma estruturada e profissional.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-people"></i>
+          </div>
+          <h3 class="feature-title">Múltiplos Personagens</h3>
+          <p class="feature-description">
+            Crie quantos personagens quiser. Ideal para escritores com universos complexos ou
+            mestres com campanhas épicas.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-pencil-square"></i>
+          </div>
+          <h3 class="feature-title">Edição Completa</h3>
+          <p class="feature-description">
+            Edite suas fichas a qualquer momento. Acompanhe a evolução dos seus personagens conforme
+            sua história se desenvolve.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-cloud-check"></i>
+          </div>
+          <h3 class="feature-title">Salvamento Automático</h3>
+          <p class="feature-description">
+            Seus dados ficam seguros na nuvem. Acesse de qualquer lugar e nunca perca suas criações.
+          </p>
+        </div>
+      </div>
     </div>
   </main>
 

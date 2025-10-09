@@ -53,9 +53,10 @@
           <div class="card-banner-gradient"></div>
           <div class="card-banner-content">
             <h3 class="character-name">{{ character.nome }}</h3>
-            <p class="character-template" *ngIf="character.templateNome">
-              {{ character.templateNome }}
-            </p>
+            <div class="character-template" *ngIf="character.templateNome">
+              <i class="bi bi-grid-3x3-gap-fill template-icon"></i>
+              <span class="template-text">{{ character.templateNome }}</span>
+            </div>
           </div>
         </div>
 
