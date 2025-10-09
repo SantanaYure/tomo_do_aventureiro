@@ -32,14 +32,17 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  position: relative;
 }
 
 .header-content {
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
+  text-align: center;
 }
 
 .btn-back {
@@ -56,26 +59,33 @@
   transition: all 0.3s ease;
   font-size: 1.5rem;
   box-shadow: var(--shadow-sm);
+  position: absolute;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .btn-back:hover {
   background: var(--color-primary-dark);
-  transform: translateY(-2px);
+  transform: translateY(-50%) scale(1.1);
   box-shadow: var(--shadow-md);
 }
 
 .header-info {
   flex: 1;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .character-title {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .character-name {
@@ -86,6 +96,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  justify-content: center;
 }
 
 .character-name i {
@@ -99,12 +110,14 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding-left: 3.25rem;
+  justify-content: center;
+  padding-left: 0;
 }
 
 .header-actions {
   display: flex;
   gap: 1rem;
+  justify-content: center;
 }
 
 .btn-edit,
@@ -452,7 +465,7 @@
    ESTADO VAZIO
    ======================================== */
 .empty-state {
-  text-align: center;
+  text-align: left;
   padding: 4rem 2rem;
 }
 
@@ -461,6 +474,7 @@
   color: var(--color-primary);
   margin-bottom: 1.5rem;
   opacity: 0.7;
+  display: block;
 }
 
 .empty-state h3 {
@@ -478,8 +492,10 @@
 
 .empty-actions {
   display: flex;
+  flex-direction: row;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
   margin-top: 2rem;
 }
 
@@ -494,7 +510,9 @@
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
+  width: auto;
 }
 
 .btn-primary {
@@ -536,28 +554,48 @@
 
   .header-content {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 1rem;
     padding-left: 70px; /* Espaço à esquerda para o botão mobile */
+    padding-right: 20px;
+    text-align: center;
   }
 
   .header-info {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
+  }
+
+  .character-title {
+    align-items: center;
   }
 
   .character-name {
     font-size: 1.5rem;
+    justify-content: center;
+  }
+
+  .character-template {
+    justify-content: center;
   }
 
   .header-actions {
     width: 100%;
+    max-width: 500px;
+    justify-content: center;
   }
 
   .btn-edit,
   .btn-delete {
     flex: 1;
+  }
+
+  .btn-back {
+    left: 1rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
 
   .tabs-header {

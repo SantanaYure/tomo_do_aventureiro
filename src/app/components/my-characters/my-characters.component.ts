@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common'; // DatePipe importado aqui
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { SharedHeaderComponent } from '../shared-header/shared-header.component';
@@ -19,7 +19,7 @@ interface Character {
 @Component({
   selector: 'app-my-characters',
   standalone: true,
-  imports: [CommonModule, DatePipe, SharedHeaderComponent], // DatePipe precisa estar nos imports para o pipe 'date' funcionar
+  imports: [CommonModule, SharedHeaderComponent],
   templateUrl: './my-characters.component.html',
   styleUrls: ['./my-characters.component.css'],
 })
