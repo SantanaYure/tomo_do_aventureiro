@@ -46,7 +46,7 @@
 .home-main {
   flex: 1;
   padding: 3rem 2rem;
-  padding-bottom: 100px; /* Espaço para o footer fixo */
+  padding-bottom: 120px; /* Espaço para o footer fixo */
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
@@ -250,7 +250,7 @@
    FEATURES SECTION
    =================================== */
 .features-section {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .section-title {
@@ -779,6 +779,7 @@
 
   .home-main {
     padding: 1.5rem 1rem;
+    padding-bottom: 100px; /* Espaço extra para footer em mobile */
   }
 
   .hero-section {
@@ -963,6 +964,7 @@
 
   .home-main {
     padding: 1rem 0.75rem;
+    padding-bottom: 90px; /* Espaço extra para footer em small mobile */
   }
 
   .hero-section {

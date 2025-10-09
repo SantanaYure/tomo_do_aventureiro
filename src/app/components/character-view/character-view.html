@@ -88,23 +88,25 @@
 
             <!-- Navegação entre abas (rodapé) -->
             <div class="tab-navigation">
-              <button class="btn-nav" (click)="previousTab()" [disabled]="activeTabIndex === 0">
-                <i class="bi bi-chevron-left"></i>
-                Anterior
-              </button>
+              <div>
+                <button class="btn-nav" (click)="previousTab()" [disabled]="activeTabIndex === 0">
+                  <i class="bi bi-chevron-left"></i>
+                  Anterior
+                </button>
+
+                <button
+                  class="btn-nav"
+                  (click)="nextTab()"
+                  [disabled]="activeTabIndex === template.estrutura.length - 1"
+                >
+                  Próxima
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
 
               <span class="tab-indicator">
                 Seção {{ activeTabIndex + 1 }} de {{ template.estrutura.length }}
               </span>
-
-              <button
-                class="btn-nav"
-                (click)="nextTab()"
-                [disabled]="activeTabIndex === template.estrutura.length - 1"
-              >
-                Próxima
-                <i class="bi bi-chevron-right"></i>
-              </button>
             </div>
           </div>
         </div>
