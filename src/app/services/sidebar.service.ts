@@ -6,16 +6,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class SidebarService {
   private collapsedSubject = new BehaviorSubject<boolean>(
-    // Verificar localStorage, caso contrário iniciar como FALSE (aberta)
-    localStorage.getItem('sidebarCollapsed') === 'true' ? true : false
+    // Verificar localStorage, caso contrário iniciar como TRUE (colapsada)
+    localStorage.getItem('sidebarCollapsed') === 'false' ? false : true
   );
 
   public collapsed$: Observable<boolean> = this.collapsedSubject.asObservable();
 
   constructor() {
-    // Se não há valor no localStorage, definir como false (aberta) por padrão
+    // Se não há valor no localStorage, definir como true (colapsada) por padrão
     if (localStorage.getItem('sidebarCollapsed') === null) {
-      localStorage.setItem('sidebarCollapsed', 'false');
+      localStorage.setItem('sidebarCollapsed', 'true');
     }
   }
 
