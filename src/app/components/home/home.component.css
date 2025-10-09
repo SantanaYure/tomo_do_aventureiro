@@ -430,7 +430,7 @@
 
   .header-content {
     flex-wrap: nowrap;
-    padding: 1rem;
+    padding: 1rem 1rem 1rem 70px; /* Espaço à esquerda para o botão mobile */
     gap: 1rem;
     justify-content: space-between;
   }
@@ -490,7 +490,7 @@
   }
 
   .header-content {
-    padding: 0.75rem;
+    padding: 0.75rem 0.75rem 0.75rem 60px; /* Espaço à esquerda para o botão mobile */
   }
 
   .logo {

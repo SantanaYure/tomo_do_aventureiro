@@ -751,7 +751,7 @@
   }
 
   .header-content {
-    padding: 0 20px;
+    padding: 0 20px 0 70px; /* Espaço à esquerda para o botão mobile */
   }
 
   .creation-main {

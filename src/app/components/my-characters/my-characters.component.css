@@ -379,7 +379,7 @@
   }
 
   .header-content {
-    padding: 0 20px;
+    padding: 0 20px 0 70px; /* Espaço à esquerda para o botão mobile */
     flex-wrap: wrap;
   }
 
@@ -388,6 +388,7 @@
     width: 100%;
     justify-content: center;
     order: -1;
+    margin-left: 0;
   }
 
   .btn-back,
