@@ -61,13 +61,22 @@ export class MyCharactersComponent implements OnInit {
         try {
           const data = doc.data();
 
+          console.log('📦 Dados brutos do documento:', doc.id, {
+            templateId: data['templateId'],
+            templateNome: data['templateNome'],
+            nome: data['nome'],
+          });
+
           const nome =
             data['dados']?.['basicInfo']?.['nomeDoPersonagem'] ||
             data['nome'] ||
             'Personagem Sem Nome';
 
-          let templateNome = 'Template Desconhecido';
-          if (data['templateId']) {
+          // Priorizar templateNome do documento, se não existir, buscar do template
+          let templateNome = data['templateNome'] || 'Template Desconhecido';
+
+          // Se não tiver templateNome salvo, buscar do template
+          if (!data['templateNome'] && data['templateId']) {
             try {
               const templateDoc = await this.firebaseService.getTemplateById(data['templateId']);
               if (templateDoc.exists()) {
@@ -75,6 +84,7 @@ export class MyCharactersComponent implements OnInit {
               }
             } catch (e) {
               // Template não encontrado, usar valor padrão
+              console.warn('⚠️ Template não encontrado para o personagem:', doc.id);
             }
           }
 
@@ -123,6 +133,13 @@ export class MyCharactersComponent implements OnInit {
             updatedAt: updatedAt,
             ...data,
           } as Character;
+
+          console.log('✅ Personagem carregado:', {
+            id: doc.id,
+            nome: nome,
+            templateNome: templateNome,
+            hasTemplateName: !!data['templateNome'],
+          });
 
           return character;
         } catch (docError: any) {

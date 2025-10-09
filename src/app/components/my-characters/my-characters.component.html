@@ -51,12 +51,16 @@
         <!-- Card Image/Banner -->
         <div class="card-banner">
           <div class="card-banner-gradient"></div>
+          <div class="card-banner-content">
+            <h3 class="character-name">{{ character.nome }}</h3>
+            <p class="character-template" *ngIf="character.templateNome">
+              {{ character.templateNome }}
+            </p>
+          </div>
         </div>
 
         <!-- Card Content -->
         <div class="card-content">
-          <h3 class="character-name">{{ character.nome }}</h3>
-
           <!-- Card Actions -->
           <div class="card-actions">
             <button

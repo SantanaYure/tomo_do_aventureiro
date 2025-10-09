@@ -328,6 +328,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         // MODO EDIÇÃO: Atualizar personagem existente
         const updateData = {
           nome: this.characterName.trim(),
+          templateNome: this.selectedTemplate.nome,
           campos: cleanedFormData,
         };
 
