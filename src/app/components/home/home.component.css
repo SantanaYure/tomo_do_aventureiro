@@ -937,11 +937,11 @@
   }
 
   .header-content {
-    padding: 0.75rem 0.75rem 0.75rem 60px; /* Espaço à esquerda para o botão mobile */
+    padding: 0.5rem 0.5rem 0.5rem 55px;
   }
 
   .logo {
-    height: 45px;
+    height: 40px;
   }
 
   .user-profile {
@@ -949,28 +949,30 @@
   }
 
   .user-avatar {
-    width: 32px;
-    height: 32px;
-    font-size: 1.3rem;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
   }
 
   .user-name {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   .btn-logout {
-    padding: 0.5rem 0.75rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
   }
 
   .home-main {
-    padding: 1rem 0.75rem;
-    padding-bottom: 90px; /* Espaço extra para footer em small mobile */
+    padding: 0.75rem 0.5rem;
+    padding-bottom: 90px;
   }
 
   .hero-section {
-    padding: 1rem 0.75rem;
+    padding: 1rem 0.5rem;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
+    border-radius: 16px;
   }
 
   .hero-content {
@@ -978,81 +980,86 @@
   }
 
   .hero-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin-bottom: 0.5rem;
+    line-height: 1.3;
   }
 
   .hero-subtitle {
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.875rem;
   }
 
   .hero-description {
-    padding: 0.875rem;
-    margin-bottom: 1.25rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .hero-description p {
-    font-size: 0.85rem;
-    line-height: 1.6;
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
 
   .hero-description i {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .illustration-card {
-    width: 140px;
-    height: 140px;
-    border-radius: 20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 18px;
   }
 
   .illustration-card i {
-    font-size: 3.5rem;
+    font-size: 3rem;
+  }
+
+  .cta-section {
+    gap: 0.5rem;
   }
 
   .btn-cta-primary,
   .btn-cta-secondary {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
   }
 
   .btn-cta-primary i,
   .btn-cta-secondary i {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .section-title {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
   }
 
   .features-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
   }
 
   .feature-card {
-    padding: 1.5rem 1.25rem;
+    padding: 1.25rem 1rem;
   }
 
   .feature-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 14px;
-    margin-bottom: 1rem;
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    margin-bottom: 0.875rem;
   }
 
   .feature-icon i {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
   }
 
   .feature-title {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     margin-bottom: 0.5rem;
   }
 
   .feature-description {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.5;
   }
 

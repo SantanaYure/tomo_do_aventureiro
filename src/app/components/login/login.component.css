@@ -426,45 +426,67 @@ h2 {
 /* Responsividade */
 @media (max-width: 480px) {
   .login-container {
-    padding: 15px;
+    padding: 10px;
   }
 
   .glass-container {
-    padding: 25px 20px;
+    padding: 20px 15px;
     max-width: 100%;
   }
 
   .logo-icon {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
   }
 
   .logo-icon i {
-    font-size: 30px;
+    font-size: 28px;
   }
 
   h2 {
-    font-size: 22px;
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    font-size: 12px;
   }
 
   .form-control,
   .input-group-text {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 9px 11px;
+    font-size: 12px;
   }
 
   .google-btn {
-    padding: 10px 15px;
-    font-size: 13px;
+    padding: 9px 13px;
+    font-size: 12px;
   }
 
   .google-btn i {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .btn-login {
-    font-size: 13px;
-    padding: 10px;
+    font-size: 12px;
+    padding: 9px;
+  }
+
+  .register-link,
+  .forgot-password-link {
+    font-size: 12px;
+  }
+
+  .divider {
+    font-size: 12px;
   }
 }
 

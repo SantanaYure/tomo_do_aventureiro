@@ -850,6 +850,67 @@
 }
 
 /* ===================================
+   SMALL MOBILE (320px - 480px)
+   =================================== */
+@media (max-width: 480px) {
+  .creation-main {
+    padding: 0 10px;
+  }
+
+  .step-content {
+    padding: 15px;
+  }
+
+  .page-title {
+    font-size: 1.2rem;
+  }
+
+  .step-title {
+    font-size: 1.3rem;
+  }
+
+  .tab-navigation {
+    gap: 10px;
+  }
+
+  .tab-navigation > div {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-tab-nav {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    justify-content: center;
+  }
+
+  .tab-indicator {
+    font-size: 0.85rem;
+  }
+
+  .form-actions {
+    gap: 10px;
+  }
+
+  .btn-cancel,
+  .btn-save {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+
+  .field-label {
+    font-size: 0.9rem;
+  }
+
+  .field-input,
+  .field-textarea {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
+
+/* ===================================
    FOOTER
    =================================== */
 .creation-footer {

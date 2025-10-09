@@ -641,6 +641,75 @@
 }
 
 /* ===================================
+   SMALL MOBILE (320px - 480px)
+   =================================== */
+@media (max-width: 480px) {
+  .dashboard-main {
+    padding: 10px;
+  }
+
+  .character-card {
+    padding: 15px;
+  }
+
+  .character-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .character-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .tabs-header {
+    gap: 5px;
+    padding: 0;
+  }
+
+  .tab-button {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    min-width: auto;
+  }
+
+  .tab-button i {
+    font-size: 1rem;
+  }
+
+  .tabs-content {
+    padding: 1rem;
+  }
+
+  .tab-navigation {
+    gap: 10px;
+  }
+
+  .tab-navigation > div {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-nav {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    justify-content: center;
+  }
+
+  .tab-indicator {
+    font-size: 0.85rem;
+  }
+
+  .field-label {
+    font-size: 0.85rem;
+  }
+
+  .field-value {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+}
+
+/* ===================================
    FOOTER
    =================================== */
 .view-footer {
