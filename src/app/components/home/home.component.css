@@ -246,54 +246,6 @@
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
 }
 
-.floating-badge {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1rem;
-  background: white;
-  border-radius: 50px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-primary-darkest);
-  animation: pulse 3s ease-in-out infinite;
-}
-
-.floating-badge i {
-  font-size: 1rem;
-  color: var(--color-primary);
-}
-
-.badge-1 {
-  top: 10%;
-  right: -10%;
-  animation-delay: 0s;
-}
-
-.badge-2 {
-  bottom: 15%;
-  left: -15%;
-  animation-delay: 1s;
-}
-
-.badge-3 {
-  top: 50%;
-  right: -20%;
-  animation-delay: 2s;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
 /* ===================================
    FEATURES SECTION
    =================================== */
@@ -674,6 +626,140 @@
   }
 }
 
+/* ===================================
+   TABLET / iPAD (769px - 1024px)
+   =================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .home-container {
+    margin-left: 240px;
+  }
+
+  .home-container.sidebar-collapsed {
+    margin-left: 80px;
+  }
+
+  .home-main {
+    padding: 2rem 2rem;
+    padding-bottom: 100px;
+  }
+
+  /* Hero em 1 coluna como mobile */
+  .hero-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .hero-content {
+    padding: 0.5rem;
+    order: 2;
+  }
+
+  .hero-illustration {
+    order: 1;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .illustration-card {
+    width: 240px;
+    height: 240px;
+  }
+
+  .illustration-card i {
+    font-size: 6rem;
+  }
+
+  /* Tipografia */
+  .hero-title {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-description {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-description p {
+    font-size: 1rem;
+  }
+
+  .hero-description i {
+    font-size: 1.4rem;
+  }
+
+  /* Botões lado a lado */
+  .cta-section {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn-cta-primary,
+  .btn-cta-secondary {
+    flex: 1;
+    padding: 1rem 2rem;
+    font-size: 1.05rem;
+  }
+
+  .btn-cta-primary i,
+  .btn-cta-secondary i {
+    font-size: 1.25rem;
+  }
+
+  /* Features */
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .features-section {
+    margin-bottom: 3rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .feature-card {
+    padding: 2rem 1.75rem;
+  }
+
+  .feature-icon {
+    width: 75px;
+    height: 75px;
+    border-radius: 18px;
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-icon i {
+    font-size: 2.25rem;
+  }
+
+  .feature-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-feature {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   /* Remover margem em mobile - sidebar vira overlay */
   .home-container {
@@ -721,10 +807,6 @@
 
   .illustration-card i {
     font-size: 4rem;
-  }
-
-  .floating-badge {
-    display: none; /* Ocultar badges em mobile para não poluir */
   }
 
   .hero-title {
