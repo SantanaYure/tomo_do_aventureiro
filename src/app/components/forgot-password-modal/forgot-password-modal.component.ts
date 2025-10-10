@@ -44,12 +44,10 @@ export class ForgotPasswordModalComponent {
       this.successMessage =
         'Email de recuperação enviado com sucesso! Verifique sua caixa de entrada e spam.';
 
-      // Fechar modal após 3 segundos
       setTimeout(() => {
         this.closeModal();
       }, 3000);
     } catch (error: any) {
-      console.error('Erro ao enviar email de recuperação:', error);
       this.errorMessage = error.message || 'Erro ao enviar email. Tente novamente.';
     } finally {
       this.isLoading = false;

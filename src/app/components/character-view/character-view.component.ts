@@ -67,12 +67,10 @@ export class CharacterViewComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // Subscrever ao estado da sidebar
     this.sidebarService.collapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
 
-    // Capturar ID da URL
     this.route.params.subscribe(async (params) => {
       if (params['id']) {
         this.characterId = params['id'];
@@ -86,16 +84,11 @@ export class CharacterViewComponent implements OnInit {
     });
   }
 
-  // ========================================
-  // CARREGAR PERSONAGEM
-  // ========================================
-
   async loadCharacter(characterId: string) {
     this.isLoading = true;
     this.errorMessage = '';
 
     try {
-      console.log('📥 Carregando personagem para visualização...', characterId);
       const characterDoc = await this.firebaseService.getCharacterSheetById(characterId);
 
       if (!characterDoc.exists()) {
@@ -103,41 +96,30 @@ export class CharacterViewComponent implements OnInit {
       }
 
       const characterData = characterDoc.data();
-      console.log('📦 Dados do personagem:', characterData);
 
-      // Processar datas - suporta tanto Timestamp quanto string ISO
       let createdAt: Date | null = null;
       let updatedAt: Date | null = null;
 
-      // Tentar converter createdAt
       if (characterData['createdAt']) {
         if (typeof characterData['createdAt'].toDate === 'function') {
-          // É um Timestamp do Firestore
           createdAt = characterData['createdAt'].toDate();
         } else if (typeof characterData['createdAt'] === 'string') {
-          // É uma string ISO
           createdAt = new Date(characterData['createdAt']);
         } else if (characterData['createdAt'] instanceof Date) {
-          // Já é um Date
           createdAt = characterData['createdAt'];
         }
       }
 
-      // Tentar converter updatedAt
       if (characterData['updatedAt']) {
         if (typeof characterData['updatedAt'].toDate === 'function') {
-          // É um Timestamp do Firestore
           updatedAt = characterData['updatedAt'].toDate();
         } else if (typeof characterData['updatedAt'] === 'string') {
-          // É uma string ISO
           updatedAt = new Date(characterData['updatedAt']);
         } else if (characterData['updatedAt'] instanceof Date) {
-          // Já é um Date
           updatedAt = characterData['updatedAt'];
         }
       }
 
-      // Se não houver updatedAt, usar createdAt
       if (!updatedAt && createdAt) {
         updatedAt = createdAt;
       }
@@ -152,15 +134,10 @@ export class CharacterViewComponent implements OnInit {
         updatedAt: updatedAt,
       };
 
-      console.log('📦 Personagem carregado:', this.character);
-
-      // Carregar template
       if (this.character.templateId) {
         await this.loadTemplate(this.character.templateId);
       }
     } catch (error: any) {
-      console.error('❌ Erro ao carregar personagem:', error);
-      console.error('Stack trace:', error.stack);
       this.errorMessage = error.message || 'Erro ao carregar personagem';
       setTimeout(() => {
         this.router.navigate(['/my-characters']);
@@ -170,17 +147,11 @@ export class CharacterViewComponent implements OnInit {
     }
   }
 
-  // ========================================
-  // CARREGAR TEMPLATE
-  // ========================================
-
   async loadTemplate(templateId: string) {
     try {
-      console.log('📋 Carregando template...');
       const templateDoc = await this.firebaseService.getTemplateById(templateId);
 
       if (!templateDoc.exists()) {
-        console.warn('Template não encontrado');
         return;
       }
 
@@ -191,24 +162,14 @@ export class CharacterViewComponent implements OnInit {
         descricao: templateData['descricao'],
         estrutura: templateData['estrutura'],
       };
-
-      console.log('✅ Template carregado:', this.template.nome);
-    } catch (error: any) {
-      console.error('❌ Erro ao carregar template:', error);
-      // Não bloqueia a visualização se o template não carregar
-    }
+    } catch (error: any) {}
   }
-
-  // ========================================
-  // OBTER VALOR DO CAMPO
-  // ========================================
 
   getFieldValue(fieldName: string): string {
     if (!this.character || !this.character.campos) {
       return '-';
     }
 
-    // Verificar em basicInfo (estrutura antiga)
     if (this.character.campos['basicInfo']) {
       const value = this.character.campos['basicInfo'][fieldName];
       if (value !== undefined && value !== null && value !== '') {
@@ -216,7 +177,6 @@ export class CharacterViewComponent implements OnInit {
       }
     }
 
-    // Verificar direto nos campos
     const value = this.character.campos[fieldName];
     if (value !== undefined && value !== null && value !== '') {
       return value;
@@ -224,10 +184,6 @@ export class CharacterViewComponent implements OnInit {
 
     return '-';
   }
-
-  // ========================================
-  // NAVEGAÇÃO ENTRE ABAS
-  // ========================================
 
   selectTab(index: number) {
     this.activeTabIndex = index;
@@ -244,10 +200,6 @@ export class CharacterViewComponent implements OnInit {
       this.activeTabIndex--;
     }
   }
-
-  // ========================================
-  // AÇÕES
-  // ========================================
 
   editCharacter() {
     if (this.characterId) {
@@ -269,20 +221,14 @@ export class CharacterViewComponent implements OnInit {
       this.firebaseService
         .deleteCharacterSheet(this.characterId)
         .then(() => {
-          console.log('✅ Personagem excluído com sucesso');
           this.router.navigate(['/my-characters']);
         })
         .catch((error) => {
-          console.error('❌ Erro ao excluir personagem:', error);
           this.errorMessage = 'Erro ao excluir personagem. Tente novamente.';
           this.isLoading = false;
         });
     }
   }
-
-  // ========================================
-  // FORMATAÇÃO
-  // ========================================
 
   formatDate(date: Date | null): string {
     return DateUtils.formatToBrazilian(date);

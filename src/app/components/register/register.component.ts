@@ -44,19 +44,17 @@ export class RegisterComponent {
       this.errorMessage = '';
 
       try {
-        // Criar usuário no Firebase Authentication
         const user = await this.firebaseService.createUserWithEmail(
           this.registerData.email,
           this.registerData.password
         );
 
         if (user) {
-          // Salvar dados adicionais no Firestore
           const userData = {
             uid: user.uid,
             firstName: this.registerData.firstName,
             lastName: this.registerData.lastName,
-            nickname: this.registerData.email, // Nickname é o próprio e-mail
+            nickname: this.registerData.email,
             email: this.registerData.email,
             createdAt: new Date(),
             emailVerified: false,
@@ -74,17 +72,9 @@ export class RegisterComponent {
       } catch (error: any) {
         this.isLoading = false;
 
-        // Log detalhado apenas em desenvolvimento
-        if (!environment.production) {
-          console.error('Erro no cadastro:', error);
-        }
-
-        // Verificar se é erro do Firebase Auth ou Firestore
         if (error.code) {
-          // Erro do Firebase com código específico
           this.errorMessage = this.firebaseService.getErrorMessage(error.code);
         } else if (error.message) {
-          // Erro customizado ou do Firestore
           if (error.message.includes('network')) {
             this.errorMessage = '❌ Erro de conexão. Verifique sua internet e tente novamente.';
           } else if (error.message.includes('permission')) {
@@ -95,7 +85,6 @@ export class RegisterComponent {
             this.errorMessage = `❌ Erro técnico: ${error.message}`;
           }
         } else {
-          // Erro genérico
           this.errorMessage =
             '❌ Erro inesperado. Verifique os dados e tente novamente. Se o problema persistir, entre em contato com o suporte.';
         }
@@ -128,12 +117,10 @@ export class RegisterComponent {
       const success = await this.authService.loginWithGoogle();
 
       if (success) {
-        console.log('Cadastro/Login com Google realizado com sucesso!');
         this.router.navigate(['/home']);
       }
     } catch (error: any) {
       this.isLoading = false;
-      console.error('Erro no login com Google:', error);
 
       if (error.code === 'auth/popup-closed-by-user') {
         this.errorMessage = '❌ Login cancelado. Tente novamente.';
@@ -146,7 +133,6 @@ export class RegisterComponent {
   }
 
   private validateForm(): boolean {
-    // Verificar campos obrigatórios
     if (
       !this.registerData.firstName ||
       !this.registerData.lastName ||
@@ -158,13 +144,11 @@ export class RegisterComponent {
       return false;
     }
 
-    // Verificar email válido
     if (!this.isValidEmail(this.registerData.email)) {
       this.errorMessage = ERROR_MESSAGES.INVALID_EMAIL;
       return false;
     }
 
-    // Verificar senha forte
     if (this.registerData.password.length < PASSWORD_RULES.RECOMMENDED_LENGTH) {
       this.errorMessage = `A senha deve ter pelo menos ${PASSWORD_RULES.RECOMMENDED_LENGTH} caracteres`;
       return false;
@@ -175,13 +159,11 @@ export class RegisterComponent {
       return false;
     }
 
-    // Verificar se senhas coincidem
     if (this.registerData.password !== this.registerData.confirmPassword) {
       this.errorMessage = ERROR_MESSAGES.PASSWORDS_DONT_MATCH;
       return false;
     }
 
-    // Verificar termos de uso (LGPD)
     if (!this.acceptTerms) {
       this.errorMessage = ERROR_MESSAGES.TERMS_NOT_ACCEPTED;
       return false;

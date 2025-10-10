@@ -36,14 +36,11 @@ export class LoginComponent {
         const success = await this.authService.login(this.loginData.email, this.loginData.password);
 
         if (success) {
-          // Redirecionar para página home após login
           this.router.navigate(['/home']);
         } else {
           this.errorMessage = 'Falha no login. Verifique suas credenciais.';
         }
       } catch (error: any) {
-        console.error('Erro no login:', error);
-        // Usar a mensagem de erro do Firebase se disponível
         this.errorMessage = error.message || 'Erro interno. Tente novamente.';
       } finally {
         this.isLoading = false;
@@ -71,7 +68,6 @@ export class LoginComponent {
         this.errorMessage = 'Login com ' + provider + ' não implementado ainda.';
       }
     } catch (error) {
-      console.error('Erro no login social:', error);
       this.errorMessage = 'Erro no login social. Tente novamente.';
     } finally {
       this.isLoading = false;

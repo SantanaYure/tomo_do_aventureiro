@@ -22,15 +22,11 @@ export class GoogleSignInService {
       if (typeof window.google !== 'undefined') {
         window.google.accounts.id.initialize({
           client_id: environment.googleClientId,
-          callback: (response: any) => {
-            // Callback será tratado individualmente por cada componente
-            console.log('Google Sign-In callback:', response);
-          },
+          callback: (response: any) => {},
         });
         this.googleInitialized = true;
         resolve();
       } else {
-        // Se o Google ainda não carregou, tenta novamente
         setTimeout(() => {
           this.initializeGoogleSignIn().then(resolve);
         }, 100);
@@ -43,8 +39,6 @@ export class GoogleSignInService {
 
     return new Promise((resolve, reject) => {
       if (typeof window.google !== 'undefined') {
-        // Simula login com Google para desenvolvimento
-        // Em produção, use o Google Sign-In real
         setTimeout(() => {
           const mockUser = {
             credential: 'mock_google_token_' + Date.now(),
@@ -76,7 +70,6 @@ export class GoogleSignInService {
           shape: 'rectangular',
         });
 
-        // Override callback
         window.google.accounts.id.initialize({
           client_id: environment.googleClientId,
           callback: callback,

@@ -49,26 +49,21 @@ export class AuthService {
     }
   }
 
-  // Login com Firebase Authentication
   async login(email: string, password: string): Promise<boolean> {
     try {
-      // Primeiro, autentica com Firebase
       const firebaseUser = await this.firebaseService.signInWithEmail(email, password);
 
       if (firebaseUser) {
-        // Busca dados adicionais do usuário na API
         try {
           const token = await firebaseUser.getIdToken();
           const userData = await this.getUserDataFromAPI(token);
 
-          // Salva o token e dados do usuário
           localStorage.setItem('authToken', token);
           localStorage.setItem('currentUser', JSON.stringify(userData));
 
           this.currentUserSubject.next(userData);
           return true;
         } catch (apiError) {
-          // Fallback: usa dados do Firebase se API não disponível
           const userData: User = {
             uid: firebaseUser.uid,
             email: firebaseUser.email || email,
@@ -89,22 +84,15 @@ export class AuthService {
 
       return false;
     } catch (error: any) {
-      console.error('Erro no login:', error);
-      throw error; // Propaga o erro para o componente mostrar a mensagem correta
+      throw error;
     }
   }
 
-  // Logout
   async logout(): Promise<void> {
     try {
       await this.firebaseService.signOut();
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('currentUser');
-      this.currentUserSubject.next(null);
-      this.router.navigate(['/login']);
     } catch (error) {
-      console.error('Erro no logout:', error);
-      // Mesmo com erro, limpa dados locais
+    } finally {
       localStorage.removeItem('authToken');
       localStorage.removeItem('currentUser');
       this.currentUserSubject.next(null);
@@ -127,13 +115,11 @@ export class AuthService {
     return localStorage.getItem('authToken');
   }
 
-  // Login com Google usando Firebase
   async loginWithGoogle(): Promise<boolean> {
     try {
       const firebaseUser = await this.firebaseService.signInWithGoogle();
 
       if (firebaseUser) {
-        // Criar dados do usuário baseado no Firebase
         const userData: User = {
           uid: firebaseUser.uid,
           email: firebaseUser.email || '',
@@ -143,10 +129,8 @@ export class AuthService {
           photoURL: firebaseUser.photoURL || undefined,
         };
 
-        // Gerar token Firebase
         const token = await firebaseUser.getIdToken();
 
-        // Salvar dados
         localStorage.setItem('authToken', token);
         localStorage.setItem('currentUser', JSON.stringify(userData));
 
@@ -157,7 +141,6 @@ export class AuthService {
 
       return false;
     } catch (error) {
-      console.error('Erro no login com Google:', error);
       throw error;
     }
   }
@@ -177,23 +160,19 @@ export class AuthService {
     return response;
   }
 
-  // Busca dados do usuário na API
   async getUserData(): Promise<User | null> {
     try {
       const response = await this.http.get<User>(`${this.apiUrl}/users/me`).toPromise();
       return response || null;
     } catch (error) {
-      console.error('Erro ao buscar dados do usuário:', error);
       return null;
     }
   }
 
-  // Recuperação de senha
   async resetPassword(email: string): Promise<void> {
     try {
       await this.firebaseService.sendPasswordResetEmail(email);
     } catch (error) {
-      console.error('Erro ao enviar email de recuperação:', error);
       throw error;
     }
   }

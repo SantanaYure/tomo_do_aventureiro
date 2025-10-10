@@ -39,13 +39,7 @@ export class NetworkError extends AppError {
   }
 }
 
-/**
- * Utilitário para tratamento de erros
- */
 export class ErrorHandler {
-  /**
-   * Extrai mensagem amigável do erro
-   */
   static getUserFriendlyMessage(error: any): string {
     if (error instanceof AppError) {
       return error.message;
@@ -62,9 +56,6 @@ export class ErrorHandler {
     return 'Erro inesperado. Tente novamente mais tarde.';
   }
 
-  /**
-   * Loga erro de forma estruturada
-   */
   static logError(error: any, context?: string): void {
     const errorInfo = {
       timestamp: new Date().toISOString(),
@@ -74,16 +65,8 @@ export class ErrorHandler {
       code: error?.code,
       name: error?.name,
     };
-
-    console.error('🔥 Error Details:', errorInfo);
-
-    // Em produção, aqui você enviaria para um serviço de monitoramento
-    // como Sentry, LogRocket, etc.
   }
 
-  /**
-   * Verifica se é erro de rede
-   */
   static isNetworkError(error: any): boolean {
     return (
       error instanceof NetworkError ||
@@ -93,9 +76,6 @@ export class ErrorHandler {
     );
   }
 
-  /**
-   * Verifica se é erro de autenticação
-   */
   static isAuthError(error: any): boolean {
     return (
       error instanceof AuthError ||

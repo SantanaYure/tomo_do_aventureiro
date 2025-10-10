@@ -22,14 +22,10 @@ export class DateUtils {
         minute: '2-digit',
       });
     } catch (error) {
-      console.error('Erro ao formatar data:', error);
       return '-';
     }
   }
 
-  /**
-   * Formata data para padrão curto (dd/mm/yyyy)
-   */
   static formatShort(date: Date | null | undefined): string {
     if (!date) {
       return '-';
@@ -44,14 +40,10 @@ export class DateUtils {
         year: 'numeric',
       });
     } catch (error) {
-      console.error('Erro ao formatar data:', error);
       return '-';
     }
   }
 
-  /**
-   * Formata apenas a hora (hh:mm)
-   */
   static formatTime(date: Date | null | undefined): string {
     if (!date) {
       return '-';
@@ -65,14 +57,10 @@ export class DateUtils {
         minute: '2-digit',
       });
     } catch (error) {
-      console.error('Erro ao formatar hora:', error);
       return '-';
     }
   }
 
-  /**
-   * Converte Firestore Timestamp para Date
-   */
   static fromFirestoreTimestamp(timestamp: any): Date | null {
     if (!timestamp) {
       return null;
@@ -93,14 +81,10 @@ export class DateUtils {
 
       return null;
     } catch (error) {
-      console.error('Erro ao converter timestamp:', error);
       return null;
     }
   }
 
-  /**
-   * Calcula diferença entre datas em dias
-   */
   static daysBetween(date1: Date, date2: Date): number {
     const oneDay = 24 * 60 * 60 * 1000;
     return Math.round(Math.abs((date1.getTime() - date2.getTime()) / oneDay));

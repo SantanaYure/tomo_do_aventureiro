@@ -34,35 +34,26 @@ interface Template {
   styleUrls: ['./character-creation.component.css'],
 })
 export class CharacterCreationComponent implements OnInit, OnDestroy {
-  // Estados
   step: 'select-template' | 'fill-form' | 'success' = 'select-template';
   isLoading = false;
   errorMessage = '';
   successMessage = '';
 
-  // Templates
   templates: Template[] = [];
   selectedTemplate: Template | null = null;
 
-  // Formulário
   characterName = '';
   formData: { [key: string]: string } = {};
 
-  // Sistema de Abas
   activeTabIndex = 0;
 
-  // Timeout para redirecionamento
   private redirectTimeout?: ReturnType<typeof setTimeout>;
 
-  // NOVO: Modo de edição
   isEditMode = false;
   characterId: string | null = null;
   originalCharacterData: any = null;
 
-  // Sidebar state
   isSidebarCollapsed = false;
-
-  // Opções para o campo "Papel na Trama"
   papelNaTramaOptions = [
     'Protagonista',
     'Antagonista',
@@ -83,12 +74,10 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    // Subscrever ao estado da sidebar
     this.sidebarService.collapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
 
-    // Verificar se há ID na rota (modo edição)
     this.route.params.subscribe(async (params) => {
       if (params['id']) {
         this.characterId = params['id'];
@@ -101,10 +90,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  // ========================================
-  // NOVO: CARREGAR PERSONAGEM PARA EDIÇÃO
-  // ========================================
 
   async loadCharacterForEdit(characterId: string) {
     this.isLoading = true;
@@ -120,7 +105,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       const characterData = characterDoc.data();
       this.originalCharacterData = characterData;
 
-      // Carregar o template usado
       const templateId = characterData['templateId'];
       if (!templateId) {
         throw new Error('Template do personagem não encontrado');
@@ -139,15 +123,11 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         estrutura: templateData['estrutura'],
       };
 
-      // Preencher o formulário com os dados existentes
       this.populateFormWithCharacterData(characterData);
 
-      // Ir direto para o formulário
       this.step = 'fill-form';
     } catch (error: any) {
-      console.error('❌ Erro ao carregar personagem:', error);
       this.errorMessage = error.message || 'Erro ao carregar personagem para edição';
-      // Redirecionar de volta após erro
       setTimeout(() => {
         this.router.navigate(['/my-characters']);
       }, 3000);
@@ -156,12 +136,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ========================================
-  // NOVO: PREENCHER FORMULÁRIO COM DADOS
-  // ========================================
-
   populateFormWithCharacterData(characterData: any) {
-    // Obter o nome do personagem
     this.characterName =
       characterData['dados']?.['basicInfo']?.['nomeDoPersonagem'] || characterData['nome'] || '';
 
@@ -205,16 +180,11 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         });
       });
     } catch (error: any) {
-      console.error('❌ Erro ao carregar templates:', error);
       this.errorMessage = error.message || 'Erro ao carregar templates';
     } finally {
       this.isLoading = false;
     }
   }
-
-  // ========================================
-  // SELECIONAR TEMPLATE
-  // ========================================
 
   selectTemplate(template: Template) {
     this.selectedTemplate = template;
@@ -222,7 +192,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
     this.activeTabIndex = 0;
 
-    // Inicializar formData com campos vazios
     this.formData = {};
 
     template.estrutura.forEach((bloco) => {
@@ -232,13 +201,8 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ========================================
-  // VOLTAR PARA SELEÇÃO
-  // ========================================
-
   backToTemplateSelection() {
     if (this.isEditMode) {
-      // Se estiver editando, voltar para lista
       this.router.navigate(['/my-characters']);
     } else {
       this.step = 'select-template';
@@ -250,13 +214,9 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ========================================
-  // NAVEGAÇÃO ENTRE ABAS
-  // ========================================
-
   selectTab(index: number) {
     this.activeTabIndex = index;
-    this.errorMessage = ''; // Limpar erro ao mudar de aba
+    this.errorMessage = '';
   }
 
   nextTab() {
@@ -271,12 +231,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ========================================
-  // VALIDAR FORMULÁRIO
-  // ========================================
-
   validateForm(): boolean {
-    // O primeiro campo do primeiro bloco é obrigatório (geralmente o nome)
     if (
       !this.selectedTemplate ||
       this.selectedTemplate.estrutura.length === 0 ||
@@ -291,19 +246,14 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
 
     if (!firstFieldValue.trim()) {
       this.errorMessage = `❌ Por favor, preencha o campo "${firstField.label}"`;
-      this.activeTabIndex = 0; // Voltar para a primeira aba
+      this.activeTabIndex = 0;
       return false;
     }
 
-    // Usar o primeiro campo como characterName
     this.characterName = firstFieldValue.trim();
 
     return true;
   }
-
-  // ========================================
-  // SALVAR OU ATUALIZAR PERSONAGEM
-  // ========================================
 
   async saveCharacter() {
     if (!this.validateForm() || !this.selectedTemplate) {
@@ -314,7 +264,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     try {
-      // Limpar campos vazios e undefined do formData
       const cleanedFormData: { [key: string]: string } = {};
 
       Object.keys(this.formData).forEach((key) => {
@@ -325,7 +274,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       });
 
       if (this.isEditMode && this.characterId) {
-        // MODO EDIÇÃO: Atualizar personagem existente
         const updateData = {
           nome: this.characterName.trim(),
           templateNome: this.selectedTemplate.nome,
@@ -335,7 +283,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         await this.firebaseService.updateCharacterSheet(this.characterId, updateData);
         this.successMessage = `✅ ${this.characterName} foi atualizado com sucesso!`;
       } else {
-        // MODO CRIAÇÃO: Criar novo personagem
         const sheetData = {
           templateId: this.selectedTemplate.id,
           templateNome: this.selectedTemplate.nome,
@@ -349,13 +296,10 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
 
       this.step = 'success';
 
-      // Redirecionar após 2 segundos
       this.redirectTimeout = setTimeout(() => {
         this.router.navigate(['/my-characters']);
       }, 2000);
     } catch (error: any) {
-      console.error('❌ Erro ao salvar:', error);
-
       if (error.code === 'invalid-argument') {
         this.errorMessage = '❌ Dados inválidos enviados ao servidor. Verifique os campos.';
       } else {
@@ -366,10 +310,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ========================================
-  // CRIAR OUTRO PERSONAGEM
-  // ========================================
-
   createAnother() {
     this.step = 'select-template';
     this.selectedTemplate = null;
@@ -379,10 +319,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     this.successMessage = '';
     this.activeTabIndex = 0;
   }
-
-  // ========================================
-  // CANCELAR E VOLTAR
-  // ========================================
 
   cancel() {
     const confirmMessage = this.isEditMode
@@ -398,7 +334,6 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Cleanup ao destruir componente
   ngOnDestroy() {
     if (this.redirectTimeout) {
       clearTimeout(this.redirectTimeout);

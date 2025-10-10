@@ -9,30 +9,23 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
-    // Verificar se há token no localStorage
     const isLoggedIn = this.authService.isLoggedIn();
 
     if (isLoggedIn) {
-      // Validar se o token ainda é válido
       const token = this.authService.getToken();
 
       if (token) {
         try {
-          // Verificar se o token JWT não está expirado
           const tokenPayload = this.parseJwt(token);
           const currentTime = Math.floor(Date.now() / 1000);
 
-          // Se o token expirou, fazer logout
           if (tokenPayload.exp && tokenPayload.exp < currentTime) {
-            console.warn('⚠️ Guard: Token expirado, redirecionando para login');
             this.authService.logout();
             return false;
           }
 
           return true;
         } catch (error) {
-          // Se houver erro ao parsear o token, é inválido
-          console.error('❌ Guard: Token inválido, redirecionando para login');
           this.authService.logout();
           return false;
         }
@@ -42,8 +35,6 @@ export class AuthGuard implements CanActivate {
     this.router.navigate(['/login']);
     return false;
   }
-
-  // Método auxiliar para decodificar JWT
   private parseJwt(token: string): any {
     try {
       const base64Url = token.split('.')[1];
