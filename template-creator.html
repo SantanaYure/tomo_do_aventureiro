@@ -27,13 +27,9 @@
       }
 
       body {
-        font-family: "Inter", sans-serif;
+        font-family: 'Inter', sans-serif;
         background-color: var(--color-bg);
-        background-image: linear-gradient(
-          135deg,
-          var(--color-bg) 0%,
-          #1c1624 100%
-        );
+        background-image: linear-gradient(135deg, var(--color-bg) 0%, #1c1624 100%);
       }
 
       .glass-container {
@@ -58,11 +54,7 @@
       }
 
       .btn-primary {
-        background: linear-gradient(
-          135deg,
-          var(--color-primary),
-          var(--color-primary-dark)
-        );
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
         transition: all 0.3s ease;
       }
 
@@ -119,9 +111,7 @@
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <div class="text-center mb-8">
-        <h1
-          class="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3"
-        >
+        <h1 class="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
           <i class="bi bi-file-earmark-plus text-primary-light"></i>
           Criador de Templates
         </h1>
@@ -154,9 +144,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Editor JSON -->
         <div class="glass-container rounded-2xl p-6 shadow-2xl">
-          <h2
-            class="text-2xl font-bold text-white mb-4 flex items-center gap-2"
-          >
+          <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
             <i class="bi bi-code-square"></i>
             Editor de Template (JSON)
           </h2>
@@ -187,17 +175,12 @@
 
         <!-- Preview e Actions -->
         <div class="glass-container rounded-2xl p-6 shadow-2xl">
-          <h2
-            class="text-2xl font-bold text-white mb-4 flex items-center gap-2"
-          >
+          <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
             <i class="bi bi-eye"></i>
             Preview do Template
           </h2>
 
-          <div
-            id="preview-container"
-            class="space-y-4 max-h-[28rem] overflow-y-auto pr-2"
-          >
+          <div id="preview-container" class="space-y-4 max-h-[28rem] overflow-y-auto pr-2">
             <div class="text-gray-400 text-center py-8">
               <i class="bi bi-info-circle text-4xl mb-2"></i><br />
               Cole um JSON no editor e clique em "Validar" para ver o preview.
@@ -242,11 +225,18 @@
             D&D 5e
           </button>
           <button
-            id="load-simplificado-btn"
+            id="load-personalizado-btn"
             class="btn-primary text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2"
           >
-            <i class="bi bi-feather"></i>
-            Simplificado
+            <i class="bi bi-star-fill"></i>
+            Personalizado
+          </button>
+          <button
+            id="load-simples-btn"
+            class="btn-primary text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2"
+          >
+            <i class="bi bi-lightning-fill"></i>
+            Simples
           </button>
         </div>
       </div>
@@ -284,10 +274,7 @@
               Clique no botão <strong>"Ativar"</strong> e depois em
               <strong>"Salvar"</strong>
             </li>
-            <li>
-              Volte aqui e clique no botão <strong>"Recarregar"</strong> no topo
-              da página
-            </li>
+            <li>Volte aqui e clique no botão <strong>"Recarregar"</strong> no topo da página</li>
           </ol>
         </div>
       </div>
@@ -295,27 +282,27 @@
 
     <!-- Firebase SDK (Módulo) -->
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
       import {
         getFirestore,
         collection,
         addDoc,
         serverTimestamp,
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
       import {
         getAuth,
         signInAnonymously,
         onAuthStateChanged,
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
       // SUAS CREDENCIAIS DO FIREBASE AQUI
       const firebaseConfig = {
-        apiKey: "AIzaSyD9l5LpK2JuNRDC8_pO9QVX7dQLmY5q84w",
-        authDomain: "tomo-do-aventureiro.firebaseapp.com",
-        projectId: "tomo-do-aventureiro",
-        storageBucket: "tomo-do-aventureiro.firebasestorage.app",
-        messagingSenderId: "319369169575",
-        appId: "1:319369169575:web:8e2b575f3f08755145a982",
+        apiKey: 'AIzaSyD9l5LpK2JuNRDC8_pO9QVX7dQLmY5q84w',
+        authDomain: 'tomo-do-aventureiro.firebaseapp.com',
+        projectId: 'tomo-do-aventureiro',
+        storageBucket: 'tomo-do-aventureiro.firebasestorage.app',
+        messagingSenderId: '319369169575',
+        appId: '1:319369169575:web:8e2b575f3f08755145a982',
       };
 
       // Inicialização
@@ -326,589 +313,696 @@
       let validatedTemplateData = null;
 
       // Elementos DOM
-      const jsonEditor = document.getElementById("json-editor");
-      const validateBtn = document.getElementById("validate-btn");
-      const clearBtn = document.getElementById("clear-btn");
-      const saveBtn = document.getElementById("save-btn");
-      const previewContainer = document.getElementById("preview-container");
-      const alertContainer = document.getElementById("alert-container");
-      const firebaseStatus = document.getElementById("firebase-status");
-      const reloadBtn = document.getElementById("reload-btn");
-      const authInstructions = document.getElementById("auth-instructions");
-      const saveHelper = document.getElementById("save-helper");
+      const jsonEditor = document.getElementById('json-editor');
+      const validateBtn = document.getElementById('validate-btn');
+      const clearBtn = document.getElementById('clear-btn');
+      const saveBtn = document.getElementById('save-btn');
+      const previewContainer = document.getElementById('preview-container');
+      const alertContainer = document.getElementById('alert-container');
+      const firebaseStatus = document.getElementById('firebase-status');
+      const reloadBtn = document.getElementById('reload-btn');
+      const authInstructions = document.getElementById('auth-instructions');
+      const saveHelper = document.getElementById('save-helper');
 
-      const loadNarrativaBtn = document.getElementById("load-narrativa-btn");
-      const loadDndBtn = document.getElementById("load-dnd-btn");
-      const loadSimplificadoBtn = document.getElementById(
-        "load-simplificado-btn"
-      );
+      const loadNarrativaBtn = document.getElementById('load-narrativa-btn');
+      const loadDndBtn = document.getElementById('load-dnd-btn');
+      const loadPersonalizadoBtn = document.getElementById('load-personalizado-btn');
+      const loadSimplesBtn = document.getElementById('load-simples-btn');
 
       // Templates de Exemplo
       const templates = {
         narrativa: {
-          nome_template: "Personagem de Narrativa (Romance/Conto)",
+          nome_template: 'Personagem de Narrativa (Romance/Conto)',
           descricao:
-            "Um modelo completo para desenvolvimento de personagens para romances, contos e outras obras de ficção, focado em profundidade psicológica e arco narrativo.",
+            'Um modelo completo para desenvolvimento de personagens para romances, contos e outras obras de ficção, focado em profundidade psicológica e arco narrativo.',
           estrutura: [
             {
-              bloco: "Identidade & Aparência",
+              bloco: 'Identidade & Aparência',
               campos: [
                 {
-                  name: "nomeCompleto",
-                  label: "Nome Completo",
-                  type: "text",
-                  placeholder: "O nome de batismo do personagem.",
+                  name: 'nomeCompleto',
+                  label: 'Nome Completo',
+                  type: 'text',
+                  placeholder: 'O nome de batismo do personagem.',
                 },
                 {
-                  name: "apelido",
-                  label: "Apelido / Como é Conhecido(a)",
-                  type: "text",
-                  placeholder: "Como os outros o chamam? Isso diz muito.",
+                  name: 'apelido',
+                  label: 'Apelido / Como é Conhecido(a)',
+                  type: 'text',
+                  placeholder: 'Como os outros o chamam? Isso diz muito.',
                 },
                 {
-                  name: "idade",
-                  label: "Idade",
-                  type: "number",
-                  placeholder: "Idade cronológica ou aparente.",
+                  name: 'idade',
+                  label: 'Idade',
+                  type: 'number',
+                  placeholder: 'Idade cronológica ou aparente.',
                 },
                 {
-                  name: "ocupacao",
-                  label: "Ocupação / Profissão",
-                  type: "text",
-                  placeholder: "O que ele(a) faz para viver?",
+                  name: 'ocupacao',
+                  label: 'Ocupação / Profissão',
+                  type: 'text',
+                  placeholder: 'O que ele(a) faz para viver?',
                 },
                 {
-                  name: "aparenciaGeral",
-                  label: "Aparência Geral",
-                  type: "textarea",
+                  name: 'aparenciaGeral',
+                  label: 'Aparência Geral',
+                  type: 'textarea',
                   placeholder:
-                    "Descreva o personagem como se estivesse o introduzindo em seu livro.",
+                    'Descreva o personagem como se estivesse o introduzindo em seu livro.',
                 },
                 {
-                  name: "tracosMarcantes",
-                  label: "Traços Marcantes",
-                  type: "text",
-                  placeholder:
-                    "Cicatrizes, tatuagens, um jeito de sorrir, cor dos olhos.",
+                  name: 'tracosMarcantes',
+                  label: 'Traços Marcantes',
+                  type: 'text',
+                  placeholder: 'Cicatrizes, tatuagens, um jeito de sorrir, cor dos olhos.',
                 },
                 {
-                  name: "estiloVestir",
-                  label: "Estilo de se Vestir",
-                  type: "text",
-                  placeholder: "O que suas roupas dizem sobre ele(a)?",
+                  name: 'estiloVestir',
+                  label: 'Estilo de se Vestir',
+                  type: 'text',
+                  placeholder: 'O que suas roupas dizem sobre ele(a)?',
                 },
               ],
             },
             {
-              bloco: "Psicologia & Essência",
+              bloco: 'Psicologia & Essência',
               campos: [
                 {
-                  name: "resumoUmaFrase",
-                  label: "Resumo em Uma Frase (Arquétipo)",
-                  type: "textarea",
-                  placeholder:
-                    "Ex: 'Um artista amargurado que busca redenção.'",
+                  name: 'resumoUmaFrase',
+                  label: 'Resumo em Uma Frase (Arquétipo)',
+                  type: 'textarea',
+                  placeholder: "Ex: 'Um artista amargurado que busca redenção.'",
                 },
                 {
-                  name: "motivacaoPrincipal",
-                  label: "Motivação Principal",
-                  type: "textarea",
-                  placeholder:
-                    "O que ele(a) quer acima de tudo? (Amor, poder, vingança, paz).",
+                  name: 'motivacaoPrincipal',
+                  label: 'Motivação Principal',
+                  type: 'textarea',
+                  placeholder: 'O que ele(a) quer acima de tudo? (Amor, poder, vingança, paz).',
                 },
                 {
-                  name: "maiorMedo",
-                  label: "Maior Medo",
-                  type: "textarea",
+                  name: 'maiorMedo',
+                  label: 'Maior Medo',
+                  type: 'textarea',
                   placeholder:
-                    "O que ele(a) evita a todo custo? (Solidão, fracasso, irrelevância).",
+                    'O que ele(a) evita a todo custo? (Solidão, fracasso, irrelevância).',
                 },
                 {
-                  name: "qualidadesForcas",
-                  label: "Qualidades / Forças Morais",
-                  type: "textarea",
-                  placeholder:
-                    "Leal, corajoso, inteligente, empático, resiliente...",
+                  name: 'qualidadesForcas',
+                  label: 'Qualidades / Forças Morais',
+                  type: 'textarea',
+                  placeholder: 'Leal, corajoso, inteligente, empático, resiliente...',
                 },
                 {
-                  name: "defeitosFraquezas",
-                  label: "Defeitos / Fraquezas Morais",
-                  type: "textarea",
-                  placeholder:
-                    "Teimoso, impulsivo, egoísta, medroso, ingênuo...",
+                  name: 'defeitosFraquezas',
+                  label: 'Defeitos / Fraquezas Morais',
+                  type: 'textarea',
+                  placeholder: 'Teimoso, impulsivo, egoísta, medroso, ingênuo...',
                 },
                 {
-                  name: "oGrandeSegredo",
-                  label: "O Grande Segredo",
-                  type: "textarea",
+                  name: 'oGrandeSegredo',
+                  label: 'O Grande Segredo',
+                  type: 'textarea',
                   placeholder:
-                    "O que ele(a) esconde de todo mundo? Isso é uma mina de ouro para a trama.",
+                    'O que ele(a) esconde de todo mundo? Isso é uma mina de ouro para a trama.',
                 },
                 {
-                  name: "visaoDeMundo",
-                  label: "Visão de Mundo / Filosofia de Vida",
-                  type: "textarea",
-                  placeholder:
-                    "É cínico? Otimista? Acredita no destino ou no livre-arbítrio?",
+                  name: 'visaoDeMundo',
+                  label: 'Visão de Mundo / Filosofia de Vida',
+                  type: 'textarea',
+                  placeholder: 'É cínico? Otimista? Acredita no destino ou no livre-arbítrio?',
                 },
               ],
             },
             {
-              bloco: "História & Relacionamentos",
+              bloco: 'História & Relacionamentos',
               campos: [
                 {
-                  name: "background",
-                  label: "Background / História de Origem",
-                  type: "textarea",
+                  name: 'background',
+                  label: 'Background / História de Origem',
+                  type: 'textarea',
                   placeholder:
-                    "Descreva a sua história pregressa, eventos da infância, formação, etc.",
+                    'Descreva a sua história pregressa, eventos da infância, formação, etc.',
                 },
                 {
-                  name: "eventoMarcantePassado",
-                  label: "Evento Mais Marcante do Passado",
-                  type: "textarea",
+                  name: 'eventoMarcantePassado',
+                  label: 'Evento Mais Marcante do Passado',
+                  type: 'textarea',
                   placeholder:
-                    "O incidente (trauma ou conquista) que o(a) transformou na pessoa que é hoje.",
+                    'O incidente (trauma ou conquista) que o(a) transformou na pessoa que é hoje.',
                 },
                 {
-                  name: "relacionamentosChave",
-                  label: "Relacionamentos Chave",
-                  type: "textarea",
+                  name: 'relacionamentosChave',
+                  label: 'Relacionamentos Chave',
+                  type: 'textarea',
                   placeholder:
-                    "Liste as pessoas importantes e a dinâmica da relação. Ex: \n- João (Pai): Relação distante.\n- Maria (Amiga): Porto seguro.",
+                    'Liste as pessoas importantes e a dinâmica da relação. Ex: \n- João (Pai): Relação distante.\n- Maria (Amiga): Porto seguro.',
                 },
                 {
-                  name: "contextoSocial",
-                  label: "Lugar no Mundo / Contexto Social",
-                  type: "text",
-                  placeholder:
-                    "É rico? Pobre? Faz parte da elite ou é um marginalizado?",
+                  name: 'contextoSocial',
+                  label: 'Lugar no Mundo / Contexto Social',
+                  type: 'text',
+                  placeholder: 'É rico? Pobre? Faz parte da elite ou é um marginalizado?',
                 },
               ],
             },
             {
-              bloco: "Papel na Trama",
+              bloco: 'Papel na Trama',
               campos: [
                 {
-                  name: "objetivoNaHistoria",
-                  label: "Objetivo na História (Goal)",
-                  type: "textarea",
+                  name: 'objetivoNaHistoria',
+                  label: 'Objetivo na História (Goal)',
+                  type: 'textarea',
                   placeholder:
-                    "O que ele(a) quer alcançar dentro dos limites desta história específica?",
+                    'O que ele(a) quer alcançar dentro dos limites desta história específica?',
                 },
                 {
-                  name: "conflitoInterno",
-                  label: "Conflito Interno",
-                  type: "textarea",
+                  name: 'conflitoInterno',
+                  label: 'Conflito Interno',
+                  type: 'textarea',
                   placeholder:
-                    "A principal batalha dentro de si mesmo. (Dever vs. Desejo; Vingança vs. Perdão).",
+                    'A principal batalha dentro de si mesmo. (Dever vs. Desejo; Vingança vs. Perdão).',
                 },
                 {
-                  name: "conflitoExterno",
-                  label: "Conflito Externo",
-                  type: "textarea",
-                  placeholder:
-                    "O principal obstáculo ou pessoa que está em seu caminho.",
+                  name: 'conflitoExterno',
+                  label: 'Conflito Externo',
+                  type: 'textarea',
+                  placeholder: 'O principal obstáculo ou pessoa que está em seu caminho.',
                 },
                 {
-                  name: "arcoNarrativo",
-                  label: "Arco do Personagem (A Transformação)",
-                  type: "textarea",
+                  name: 'arcoNarrativo',
+                  label: 'Arco do Personagem (A Transformação)',
+                  type: 'textarea',
                   placeholder:
-                    "Descreva como ele começa a história, o que o força a mudar, e como ele termina.",
+                    'Descreva como ele começa a história, o que o força a mudar, e como ele termina.',
                 },
               ],
             },
             {
-              bloco: "Detalhes & Cor",
+              bloco: 'Detalhes & Cor',
               campos: [
                 {
-                  name: "hobbies",
-                  label: "Hobbies e Paixões",
-                  type: "textarea",
-                  placeholder: "O que ele(a) faz quando ninguém está olhando?",
+                  name: 'hobbies',
+                  label: 'Hobbies e Paixões',
+                  type: 'textarea',
+                  placeholder: 'O que ele(a) faz quando ninguém está olhando?',
                 },
                 {
-                  name: "tiquesGestos",
-                  label: "Tiques Nervosos / Gestos Habituais",
-                  type: "text",
+                  name: 'tiquesGestos',
+                  label: 'Tiques Nervosos / Gestos Habituais',
+                  type: 'text',
+                  placeholder: 'Roer unhas, tamborilar os dedos, ajeitar os óculos...',
+                },
+                {
+                  name: 'modoDeFalar',
+                  label: 'Modo de Falar / Jargão',
+                  type: 'textarea',
                   placeholder:
-                    "Roer unhas, tamborilar os dedos, ajeitar os óculos...",
+                    'Usa gírias? Fala de modo formal? Tem uma palavra ou frase que repete?',
                 },
                 {
-                  name: "modoDeFalar",
-                  label: "Modo de Falar / Jargão",
-                  type: "textarea",
-                  placeholder:
-                    "Usa gírias? Fala de modo formal? Tem uma palavra ou frase que repete?",
+                  name: 'conteudoBolsos',
+                  label: 'O que carrega nos bolsos / na bolsa?',
+                  type: 'textarea',
+                  placeholder: 'Um pequeno detalhe que pode revelar muito sobre seus hábitos.',
                 },
                 {
-                  name: "conteudoBolsos",
-                  label: "O que carrega nos bolsos / na bolsa?",
-                  type: "textarea",
-                  placeholder:
-                    "Um pequeno detalhe que pode revelar muito sobre seus hábitos.",
-                },
-                {
-                  name: "citacaoFavorita",
-                  label: "Citação Favorita",
-                  type: "text",
-                  placeholder: "Uma frase que define sua filosofia de vida.",
+                  name: 'citacaoFavorita',
+                  label: 'Citação Favorita',
+                  type: 'text',
+                  placeholder: 'Uma frase que define sua filosofia de vida.',
                 },
               ],
             },
           ],
         },
         dnd: {
-          nome_template: "D&D 5ª Edição",
+          nome_template: 'D&D 5ª Edição',
           descricao:
-            "Um template completo para personagens do sistema Dungeons & Dragons 5ª Edição, com campos para cálculos automáticos.",
+            'Um template completo para personagens do sistema Dungeons & Dragons 5ª Edição, com campos para cálculos automáticos.',
           estrutura: [
             {
-              bloco: "Informações Principais",
-              icone: "bi-person-badge-fill",
+              bloco: 'Informações Principais',
+              icone: 'bi-person-badge-fill',
               campos: [
                 {
-                  name: "nomePersonagem",
-                  label: "Nome do Personagem",
-                  type: "text",
-                  placeholder: "Thorne, o Valente",
+                  name: 'nomePersonagem',
+                  label: 'Nome do Personagem',
+                  type: 'text',
+                  placeholder: 'Thorne, o Valente',
                   required: true,
                 },
                 {
-                  name: "classes",
-                  label: "Classes e Níveis",
-                  type: "multiclass",
-                  placeholder:
-                    "Define a classe, subclasse e nível do personagem.",
+                  name: 'classes',
+                  label: 'Classes e Níveis',
+                  type: 'multiclass',
+                  placeholder: 'Define a classe, subclasse e nível do personagem.',
                 },
                 {
-                  name: "antecedente",
-                  label: "Antecedente",
-                  type: "text",
-                  placeholder: "Soldado, Acólito, Sábio...",
+                  name: 'antecedente',
+                  label: 'Antecedente',
+                  type: 'text',
+                  placeholder: 'Soldado, Acólito, Sábio...',
                 },
                 {
-                  name: "nomeJogador",
-                  label: "Nome do Jogador",
-                  type: "text",
-                  placeholder: "Seu nome",
+                  name: 'nomeJogador',
+                  label: 'Nome do Jogador',
+                  type: 'text',
+                  placeholder: 'Seu nome',
                 },
                 {
-                  name: "especie",
-                  label: "Espécie",
-                  type: "text",
-                  placeholder: "Humano, Elfo, Anão...",
+                  name: 'especie',
+                  label: 'Espécie',
+                  type: 'text',
+                  placeholder: 'Humano, Elfo, Anão...',
                 },
                 {
-                  name: "alinhamento",
-                  label: "Alinhamento",
-                  type: "select",
+                  name: 'alinhamento',
+                  label: 'Alinhamento',
+                  type: 'select',
                   options: [
-                    "Leal e Bom",
-                    "Neutro e Bom",
-                    "Caótico e Bom",
-                    "Leal e Neutro",
-                    "Neutro",
-                    "Caótico e Neutro",
-                    "Leal e Mau",
-                    "Neutro e Mau",
-                    "Caótico e Mau",
+                    'Leal e Bom',
+                    'Neutro e Bom',
+                    'Caótico e Bom',
+                    'Leal e Neutro',
+                    'Neutro',
+                    'Caótico e Neutro',
+                    'Leal e Mau',
+                    'Neutro e Mau',
+                    'Caótico e Mau',
                   ],
-                  placeholder: "Selecione o alinhamento",
+                  placeholder: 'Selecione o alinhamento',
                 },
                 {
-                  name: "xp",
-                  label: "Pontos de Experiência",
-                  type: "number",
-                  placeholder: "0",
-                },
-              ],
-            },
-            {
-              bloco: "Atributos",
-              icone: "bi-dice-6-fill",
-              campos: [
-                {
-                  name: "forca",
-                  label: "Força",
-                  type: "attribute_group",
-                  formulaModificador: "floor((valor - 10) / 2)",
-                },
-                {
-                  name: "destreza",
-                  label: "Destreza",
-                  type: "attribute_group",
-                  formulaModificador: "floor((valor - 10) / 2)",
-                },
-                {
-                  name: "constituicao",
-                  label: "Constituição",
-                  type: "attribute_group",
-                  formulaModificador: "floor((valor - 10) / 2)",
-                },
-                {
-                  name: "inteligencia",
-                  label: "Inteligência",
-                  type: "attribute_group",
-                  formulaModificador: "floor((valor - 10) / 2)",
-                },
-                {
-                  name: "sabedoria",
-                  label: "Sabedoria",
-                  type: "attribute_group",
-                  formulaModificador: "floor((valor - 10) / 2)",
-                },
-                {
-                  name: "carisma",
-                  label: "Carisma",
-                  type: "attribute_group",
-                  formulaModificador: "floor((valor - 10) / 2)",
+                  name: 'xp',
+                  label: 'Pontos de Experiência',
+                  type: 'number',
+                  placeholder: '0',
                 },
               ],
             },
             {
-              bloco: "Combate",
-              icone: "bi-shield-shaded",
+              bloco: 'Atributos',
+              icone: 'bi-dice-6-fill',
               campos: [
                 {
-                  name: "classeDeArmadura",
-                  label: "Classe de Armadura",
-                  type: "number_lg",
-                  placeholder: "10",
+                  name: 'forca',
+                  label: 'Força',
+                  type: 'attribute_group',
+                  formulaModificador: 'floor((valor - 10) / 2)',
                 },
                 {
-                  name: "iniciativa",
-                  label: "Iniciativa",
-                  type: "number_lg",
-                  placeholder: "+0",
+                  name: 'destreza',
+                  label: 'Destreza',
+                  type: 'attribute_group',
+                  formulaModificador: 'floor((valor - 10) / 2)',
+                },
+                {
+                  name: 'constituicao',
+                  label: 'Constituição',
+                  type: 'attribute_group',
+                  formulaModificador: 'floor((valor - 10) / 2)',
+                },
+                {
+                  name: 'inteligencia',
+                  label: 'Inteligência',
+                  type: 'attribute_group',
+                  formulaModificador: 'floor((valor - 10) / 2)',
+                },
+                {
+                  name: 'sabedoria',
+                  label: 'Sabedoria',
+                  type: 'attribute_group',
+                  formulaModificador: 'floor((valor - 10) / 2)',
+                },
+                {
+                  name: 'carisma',
+                  label: 'Carisma',
+                  type: 'attribute_group',
+                  formulaModificador: 'floor((valor - 10) / 2)',
+                },
+              ],
+            },
+            {
+              bloco: 'Combate',
+              icone: 'bi-shield-shaded',
+              campos: [
+                {
+                  name: 'classeDeArmadura',
+                  label: 'Classe de Armadura',
+                  type: 'number_lg',
+                  placeholder: '10',
+                },
+                {
+                  name: 'iniciativa',
+                  label: 'Iniciativa',
+                  type: 'number_lg',
+                  placeholder: '+0',
                   readonly: true,
-                  formula: "dados.atributos.destreza.modificador",
+                  formula: 'dados.atributos.destreza.modificador',
                 },
                 {
-                  name: "deslocamento",
-                  label: "Deslocamento",
-                  type: "number_lg",
-                  placeholder: "9m",
+                  name: 'deslocamento',
+                  label: 'Deslocamento',
+                  type: 'number_lg',
+                  placeholder: '9m',
                 },
                 {
-                  name: "pontosDeVida",
-                  label: "Pontos de Vida",
-                  type: "hp_group",
+                  name: 'pontosDeVida',
+                  label: 'Pontos de Vida',
+                  type: 'hp_group',
                 },
                 {
-                  name: "dadosDeVida",
-                  label: "Dados de Vida",
-                  type: "hit_dice_group",
+                  name: 'dadosDeVida',
+                  label: 'Dados de Vida',
+                  type: 'hit_dice_group',
                 },
                 {
-                  name: "salvaguardasContraMorte",
-                  label: "Salvaguardas Contra Morte",
-                  type: "death_saves",
+                  name: 'salvaguardasContraMorte',
+                  label: 'Salvaguardas Contra Morte',
+                  type: 'death_saves',
                 },
               ],
             },
             {
-              bloco: "Perícias e Proficiências",
-              icone: "bi-star-fill",
+              bloco: 'Perícias e Proficiências',
+              icone: 'bi-star-fill',
               campos: [
                 {
-                  name: "bonusDeProficiencia",
-                  label: "Bônus de Proficiência",
-                  type: "number_lg",
+                  name: 'bonusDeProficiencia',
+                  label: 'Bônus de Proficiência',
+                  type: 'number_lg',
                   readonly: true,
-                  formula: "ceil(1 + (dados.info.nivel / 4))",
+                  formula: 'ceil(1 + (dados.info.nivel / 4))',
                 },
                 {
-                  name: "pericias",
-                  label: "Perícias",
-                  type: "skill_list",
+                  name: 'pericias',
+                  label: 'Perícias',
+                  type: 'skill_list',
                   skills: [
-                    { label: "Acrobacia", atributo: "destreza" },
-                    { label: "Arcanismo", atributo: "inteligencia" },
-                    { label: "Atletismo", atributo: "forca" },
-                    { label: "Atuação", atributo: "carisma" },
-                    { label: "Enganação", atributo: "carisma" },
-                    { label: "Furtividade", atributo: "destreza" },
-                    { label: "História", atributo: "inteligencia" },
-                    { label: "Intimidação", atributo: "carisma" },
-                    { label: "Intuição", atributo: "sabedoria" },
-                    { label: "Investigação", atributo: "inteligencia" },
-                    { label: "Lidar com Animais", atributo: "sabedoria" },
-                    { label: "Medicina", atributo: "sabedoria" },
-                    { label: "Natureza", atributo: "inteligencia" },
-                    { label: "Percepção", atributo: "sabedoria" },
-                    { label: "Persuasão", atributo: "carisma" },
-                    { label: "Prestidigitação", atributo: "destreza" },
-                    { label: "Religião", atributo: "inteligencia" },
-                    { label: "Sobrevivência", atributo: "sabedoria" },
+                    { label: 'Acrobacia', atributo: 'destreza' },
+                    { label: 'Arcanismo', atributo: 'inteligencia' },
+                    { label: 'Atletismo', atributo: 'forca' },
+                    { label: 'Atuação', atributo: 'carisma' },
+                    { label: 'Enganação', atributo: 'carisma' },
+                    { label: 'Furtividade', atributo: 'destreza' },
+                    { label: 'História', atributo: 'inteligencia' },
+                    { label: 'Intimidação', atributo: 'carisma' },
+                    { label: 'Intuição', atributo: 'sabedoria' },
+                    { label: 'Investigação', atributo: 'inteligencia' },
+                    { label: 'Lidar com Animais', atributo: 'sabedoria' },
+                    { label: 'Medicina', atributo: 'sabedoria' },
+                    { label: 'Natureza', atributo: 'inteligencia' },
+                    { label: 'Percepção', atributo: 'sabedoria' },
+                    { label: 'Persuasão', atributo: 'carisma' },
+                    { label: 'Prestidigitação', atributo: 'destreza' },
+                    { label: 'Religião', atributo: 'inteligencia' },
+                    { label: 'Sobrevivência', atributo: 'sabedoria' },
                   ],
                 },
                 {
-                  name: "outrasProficiencias",
-                  label: "Outras Proficiências e Idiomas",
-                  type: "textarea",
-                  placeholder:
-                    "Ex: Armaduras leves, escudos, armas simples, élfico, anão...",
+                  name: 'outrasProficiencias',
+                  label: 'Outras Proficiências e Idiomas',
+                  type: 'textarea',
+                  placeholder: 'Ex: Armaduras leves, escudos, armas simples, élfico, anão...',
                 },
               ],
             },
             {
-              bloco: "Equipamento",
-              icone: "bi-backpack2-fill",
+              bloco: 'Equipamento',
+              icone: 'bi-backpack2-fill',
               campos: [
-                { name: "moedas", label: "Moedas", type: "currency_group" },
+                { name: 'moedas', label: 'Moedas', type: 'currency_group' },
                 {
-                  name: "equipamentos",
-                  label: "Equipamentos",
-                  type: "textarea",
-                  placeholder:
-                    "Liste todos os itens que o personagem está carregando...",
+                  name: 'equipamentos',
+                  label: 'Equipamentos',
+                  type: 'textarea',
+                  placeholder: 'Liste todos os itens que o personagem está carregando...',
                 },
               ],
             },
             {
-              bloco: "Personalidade e História",
-              icone: "bi-scroll",
+              bloco: 'Personalidade e História',
+              icone: 'bi-scroll',
               campos: [
                 {
-                  name: "tracosPersonalidade",
-                  label: "Traços de Personalidade",
-                  type: "textarea",
+                  name: 'tracosPersonalidade',
+                  label: 'Traços de Personalidade',
+                  type: 'textarea',
                 },
-                { name: "ideais", label: "Ideais", type: "textarea" },
-                { name: "vinculos", label: "Vínculos", type: "textarea" },
-                { name: "fraquezas", label: "Fraquezas", type: "textarea" },
+                { name: 'ideais', label: 'Ideais', type: 'textarea' },
+                { name: 'vinculos', label: 'Vínculos', type: 'textarea' },
+                { name: 'fraquezas', label: 'Fraquezas', type: 'textarea' },
                 {
-                  name: "historiaPersonagem",
-                  label: "História do Personagem",
-                  type: "textarea",
+                  name: 'historiaPersonagem',
+                  label: 'História do Personagem',
+                  type: 'textarea',
                 },
                 {
-                  name: "aparencia",
-                  label: "Aparência do Personagem",
-                  type: "textarea",
+                  name: 'aparencia',
+                  label: 'Aparência do Personagem',
+                  type: 'textarea',
                 },
               ],
             },
           ],
         },
-        simplificado: {
-          nome_template: "Personagem Simplificado",
+        personalizado: {
+          nome_template: 'Personagem Personalizado',
           descricao:
-            "Um template rápido e direto para esboçar personagens, focando nos pontos mais essenciais da sua criação.",
+            'Template customizado para criação de personagens com foco em desenvolvimento narrativo completo e organizado.',
           estrutura: [
             {
-              bloco: "Essência do Personagem",
-              icone: "bi-person-heart",
+              bloco: 'Informações Básicas',
+              icone: 'bi-person-fill',
               campos: [
                 {
-                  name: "nome",
-                  label: "Nome",
-                  type: "text",
-                  placeholder: "Ex: Kaelen, o Sombrio",
+                  name: 'nome',
+                  label: 'Nome',
+                  type: 'text',
+                  placeholder: 'Digite o nome do personagem...',
+                  required: true,
+                  helpText: 'Campo obrigatório',
+                },
+                {
+                  name: 'idade',
+                  label: 'Idade',
+                  type: 'number',
+                  placeholder: 'Ex: 25',
+                  min: 0,
+                  max: 999,
+                  helpText: 'Campo opcional',
+                },
+                {
+                  name: 'genero',
+                  label: 'Gênero',
+                  type: 'select',
+                  options: ['Masculino', 'Feminino', 'Outro'],
+                  placeholder: 'Selecione o gênero...',
+                  allowCustom: true,
+                  helpText: "Se selecionar 'Outro', você poderá especificar",
+                },
+                {
+                  name: 'genero_customizado',
+                  label: "Especificar Gênero (se 'Outro')",
+                  type: 'text',
+                  placeholder: 'Digite aqui...',
+                  conditional: {
+                    field: 'genero',
+                    value: 'Outro',
+                  },
+                },
+                {
+                  name: 'funcao_historia',
+                  label: 'Função na História',
+                  type: 'select',
+                  options: [
+                    'Não definido',
+                    'Protagonista',
+                    'Antagonista Principal',
+                    'Antagonista Secundário',
+                    'Deuteragonista (Segundo Protagonista)',
+                    'Tritagonista (Terceiro em Importância)',
+                    'Coadjuvante',
+                    'Mentor',
+                    'Guardião do Limiar',
+                    'Arauto',
+                    'Sombra',
+                    'Aliado',
+                    'Shapeshifter (Personagem Ambíguo)',
+                    'Trickster (Trapaceiro/Alívio Cômico)',
+                    'Interesse Romântico',
+                    'Catalisador',
+                    'Figurante',
+                  ],
+                  placeholder: 'Selecione a função narrativa...',
+                  helpText: 'Papel do personagem na estrutura da história',
+                },
+              ],
+            },
+            {
+              bloco: 'Aparência',
+              icone: 'bi-eye-fill',
+              campos: [
+                {
+                  name: 'descricao_fisica',
+                  label: 'Descrição Física',
+                  type: 'textarea',
+                  placeholder:
+                    'Descreva a aparência do personagem: altura, constituição física, cor de pele, cabelo, olhos, traços marcantes, cicatrizes, tatuagens, estilo de vestir...',
+                  rows: 6,
+                  helpText: 'Seja detalhado para criar uma imagem vívida',
+                },
+              ],
+            },
+            {
+              bloco: 'Psicologia e Personalidade',
+              icone: 'bi-brain',
+              campos: [
+                {
+                  name: 'tracos_personalidade',
+                  label: 'Traços de Personalidade',
+                  type: 'textarea',
+                  placeholder:
+                    'Como o personagem age? É extrovertido ou introvertido? Confiante ou inseguro? Calmo ou impulsivo? Liste os principais traços...',
+                  rows: 5,
+                },
+                {
+                  name: 'qualidades',
+                  label: 'Qualidades',
+                  type: 'textarea',
+                  placeholder:
+                    'Liste as virtudes e pontos fortes do personagem: coragem, lealdade, inteligência, bondade, criatividade, determinação...',
+                  rows: 4,
+                },
+                {
+                  name: 'defeitos',
+                  label: 'Defeitos',
+                  type: 'textarea',
+                  placeholder:
+                    'Liste as falhas e fraquezas: arrogância, impulsividade, teimosia, inveja, medo, vícios, inseguranças...',
+                  rows: 4,
+                  helpText: 'Personagens imperfeitos são mais realistas e interessantes',
+                },
+              ],
+            },
+            {
+              bloco: 'Motivações e Objetivos',
+              icone: 'bi-bullseye',
+              campos: [
+                {
+                  name: 'objetivos',
+                  label: 'Objetivos',
+                  type: 'textarea',
+                  placeholder:
+                    'O que o personagem quer alcançar? Quais são suas metas de curto, médio e longo prazo?',
+                  rows: 5,
+                  helpText: 'Objetivos claros criam movimento na narrativa',
+                },
+                {
+                  name: 'motivacao',
+                  label: 'Motivação',
+                  type: 'textarea',
+                  placeholder:
+                    'POR QUE o personagem quer isso? O que o impulsiona? Qual é a razão profunda por trás de seus objetivos?',
+                  rows: 5,
+                  helpText: 'A motivação é o combustível emocional do personagem',
+                },
+                {
+                  name: 'lacos',
+                  label: 'Laços',
+                  type: 'textarea',
+                  placeholder:
+                    'Pessoas, lugares, objetos ou ideias pelos quais o personagem tem forte conexão emocional. O que ele protegeria a qualquer custo?',
+                  rows: 4,
+                },
+              ],
+            },
+            {
+              bloco: 'História',
+              icone: 'bi-book',
+              helpText:
+                'Esta seção é dedicada exclusivamente à história do personagem. Use o espaço amplo para desenvolver o background completo.',
+              campos: [
+                {
+                  name: 'historia',
+                  label: 'História do Personagem',
+                  type: 'textarea',
+                  placeholder:
+                    'Conte a história completa do personagem:\n\n- Onde e quando nasceu?\n- Como foi sua infância?\n- Quem são/eram seus pais e família?\n- Que eventos marcantes moldaram quem ele é?\n- Como ele chegou ao ponto atual da narrativa?\n- Quais experiências definiram seus valores?\n- Que traumas ou conquistas carrega?\n\nEste é o espaço para desenvolver profundamente o passado do personagem.',
+                  rows: 25,
+                  fullWidth: true,
+                  helpText:
+                    'Dimensões de papel ofício - use este espaço generoso para criar um background rico e detalhado',
+                },
+              ],
+            },
+            {
+              bloco: 'Anotações',
+              icone: 'bi-journal-text',
+              campos: [
+                {
+                  name: 'anotacoes',
+                  label: 'Anotações',
+                  type: 'textarea',
+                  placeholder:
+                    'Use este espaço para anotações gerais, ideias, lembretes, arcos de personagem planejados, relacionamentos com outros personagens, citações importantes, referências visuais, etc.',
+                  rows: 10,
+                  helpText: 'Espaço livre para qualquer informação adicional',
+                },
+              ],
+            },
+          ],
+        },
+        simples: {
+          nome_template: 'Personagem Simples',
+          descricao:
+            'Template minimalista com apenas os campos essenciais para uma criação rápida e direta de personagens.',
+          estrutura: [
+            {
+              bloco: 'Informações do Personagem',
+              icone: 'bi-person-circle',
+              campos: [
+                {
+                  name: 'nome',
+                  label: 'Nome',
+                  type: 'text',
+                  placeholder: 'Digite o nome do personagem...',
                   required: true,
                 },
                 {
-                  name: "papelNaTrama",
-                  label: "Papel na Trama",
-                  type: "select",
-                  options: [
-                    "Protagonista",
-                    "Antagonista",
-                    "Coadjuvante",
-                    "Mentor",
-                    "Interesse Amoroso",
-                    "Vilão Secundário",
-                    "Alívio Cômico",
-                  ],
-                  placeholder: "Qual a função dele(a) na história?",
+                  name: 'idade',
+                  label: 'Idade',
+                  type: 'number',
+                  placeholder: 'Ex: 25',
+                  min: 0,
+                  max: 999,
                 },
                 {
-                  name: "motivacao",
-                  label: "Motivação",
-                  type: "textarea",
-                  placeholder:
-                    "O que o move? Qual seu objetivo de vida ou o que o tornou quem ele é?",
-                },
-              ],
-            },
-            {
-              bloco: "Psicologia e Vínculos",
-              icone: "bi-link-45deg",
-              campos: [
-                {
-                  name: "tracosDePersonalidade",
-                  label: "Traços de Personalidade",
-                  type: "textarea",
-                  placeholder:
-                    "Descreva a personalidade do personagem. É corajoso, tímido, arrogante?",
+                  name: 'sexo',
+                  label: 'Sexo',
+                  type: 'select',
+                  options: ['Masculino', 'Feminino', 'Outro'],
+                  placeholder: 'Selecione...',
                 },
                 {
-                  name: "lacos",
-                  label: "Laços",
-                  type: "textarea",
-                  placeholder:
-                    "Uma pessoa, um lugar ou um item especial pelo qual o personagem tem grande apego.",
+                  name: 'funcao_personagem',
+                  label: 'Função do Personagem',
+                  type: 'text',
+                  placeholder: 'Ex: Protagonista, Vilão, Coadjuvante...',
                 },
                 {
-                  name: "fraquezas",
-                  label: "Fraquezas",
-                  type: "textarea",
-                  placeholder:
-                    "Quais são os principais defeitos, medos ou vulnerabilidades do personagem?",
-                },
-              ],
-            },
-            {
-              bloco: "Capacidades e Pertences",
-              icone: "bi-magic",
-              campos: [
-                {
-                  name: "habilidades",
-                  label: "Habilidades",
-                  type: "dynamic_list_object",
-                  maxItems: 10,
-                  schema: [
-                    {
-                      name: "nomeHabilidade",
-                      label: "Nome da Habilidade",
-                      type: "text",
-                      placeholder: "Ex: Bola de Fogo",
-                    },
-                    {
-                      name: "descricaoHabilidade",
-                      label: "Descrição",
-                      type: "textarea",
-                      placeholder: "Descreva o que a habilidade faz",
-                    },
-                  ],
+                  name: 'descricao_fisica',
+                  label: 'Descrição Física',
+                  type: 'textarea',
+                  placeholder: 'Descreva a aparência do personagem...',
+                  rows: 4,
                 },
                 {
-                  name: "equipamentos",
-                  label: "Equipamentos",
-                  type: "textarea",
-                  placeholder:
-                    "Liste os pertences mais importantes do personagem.",
-                },
-              ],
-            },
-            {
-              bloco: "Aparência e História",
-              icone: "bi-book-half",
-              campos: [
-                {
-                  name: "aparenciaFisica",
-                  label: "Aparência Física",
-                  type: "textarea",
-                  placeholder: "Descreva como o personagem se parece.",
-                },
-                {
-                  name: "historia",
-                  label: "História",
-                  type: "textarea",
-                  placeholder:
-                    "Conte a história de origem e os eventos mais importantes da vida do personagem.",
+                  name: 'tracos_personalidade',
+                  label: 'Traços de Personalidade',
+                  type: 'textarea',
+                  placeholder: 'Descreva a personalidade do personagem...',
+                  rows: 4,
                 },
               ],
             },
@@ -917,24 +1011,24 @@
       };
 
       // Funções de alerta
-      const showAlert = (message, type = "info") => {
-        const alertDiv = document.createElement("div");
+      const showAlert = (message, type = 'info') => {
+        const alertDiv = document.createElement('div');
         const icon =
-          type === "success"
-            ? "check-circle-fill"
-            : type === "error"
-            ? "x-circle-fill"
-            : type === "warning"
-            ? "exclamation-triangle-fill"
-            : "info-circle-fill";
+          type === 'success'
+            ? 'check-circle-fill'
+            : type === 'error'
+            ? 'x-circle-fill'
+            : type === 'warning'
+            ? 'exclamation-triangle-fill'
+            : 'info-circle-fill';
         alertDiv.className = `alert p-4 rounded-lg mb-4 flex items-center gap-3 text-white ${
-          type === "success"
-            ? "bg-green-900/50 border border-green-600"
-            : type === "error"
-            ? "bg-red-900/50 border border-red-600"
-            : type === "warning"
-            ? "bg-yellow-900/50 border border-yellow-600"
-            : "bg-blue-900/50 border border-blue-600"
+          type === 'success'
+            ? 'bg-green-900/50 border border-green-600'
+            : type === 'error'
+            ? 'bg-red-900/50 border border-red-600'
+            : type === 'warning'
+            ? 'bg-yellow-900/50 border border-yellow-600'
+            : 'bg-blue-900/50 border border-blue-600'
         }`;
         alertDiv.innerHTML = `
           <i class="bi bi-${icon} text-2xl"></i>
@@ -949,17 +1043,78 @@
       // Gerar preview
       const generatePreview = (template) => {
         let html = `<div class="space-y-4"><div class="bg-black/30 p-4 rounded-lg"><h3 class="text-xl font-bold text-white mb-1">${template.nome_template}</h3><p class="text-sm text-gray-400">${template.descricao}</p></div>`;
+
         template.estrutura.forEach((bloco) => {
-          html += `<div class="bg-black/20 p-4 rounded-lg border border-primary-darkest"><h4 class="font-bold text-white mb-2 flex items-center gap-2"><i class="bi ${bloco.icone}"></i>${bloco.bloco}</h4><div class="space-y-2">`;
+          const iconeHtml = bloco.icone ? `<i class="bi ${bloco.icone}"></i>` : '';
+          const helpTextHtml = bloco.helpText
+            ? `<p class="text-xs text-gray-500 italic mt-1">${bloco.helpText}</p>`
+            : '';
+
+          html += `<div class="bg-black/20 p-4 rounded-lg border border-primary-darkest">
+            <h4 class="font-bold text-white mb-2 flex items-center gap-2">${iconeHtml}${bloco.bloco}</h4>
+            ${helpTextHtml}
+            <div class="space-y-2 mt-3">`;
+
           bloco.campos.forEach((campo) => {
             const requiredBadge = campo.required
               ? '<span class="text-red-400 text-xs ml-1">*</span>'
-              : "";
-            html += `<div class="text-sm"><span class="text-primary-lightest font-medium">${campo.label}${requiredBadge}</span><span class="text-gray-500 ml-2">(${campo.type})</span></div>`;
+              : '';
+            const helpTextCampo = campo.helpText
+              ? `<br><span class="text-xs text-gray-500 italic ml-6">ℹ ${campo.helpText}</span>`
+              : '';
+
+            // Adiciona informações extras dependendo do tipo e propriedades
+            let extraInfo = '';
+            let conditionalInfo = '';
+
+            // Campo condicional
+            if (campo.conditional) {
+              conditionalInfo = ` <span class="text-xs text-orange-400">→ 🔀 Aparece somente se "${campo.conditional.field}" = "${campo.conditional.value}"</span>`;
+            }
+
+            // Select com opções
+            if (campo.type === 'select' && campo.options) {
+              extraInfo = ` <span class="text-xs text-yellow-400">→ ${campo.options.length} opções</span>`;
+              if (campo.allowCustom) {
+                extraInfo += ' <span class="text-xs text-blue-400">+ campo customizado</span>';
+              }
+            }
+
+            // Textarea com número de linhas
+            if (campo.type === 'textarea' && campo.rows) {
+              extraInfo = ` <span class="text-xs text-purple-400">→ ${campo.rows} linhas</span>`;
+              if (campo.fullWidth) {
+                extraInfo += ' <span class="text-xs text-pink-400">📄 Largura total</span>';
+              }
+            }
+
+            // Campos calculados
+            if (campo.type === 'calculated') {
+              extraInfo =
+                ' <span class="text-xs text-cyan-400">→ 🔢 Calculado automaticamente</span>';
+            }
+
+            // Atributos e Skills
+            if (campo.type === 'attribute') {
+              extraInfo =
+                ' <span class="text-xs text-green-400">→ ⚔️ Atributo D&D (valor, modificador, salvaguarda)</span>';
+            } else if (campo.type === 'skill') {
+              extraInfo = ` <span class="text-xs text-purple-400">→ 🎯 Perícia</span>`;
+            }
+
+            html += `<div class="text-sm border-l-2 border-primary-darkest/50 pl-3 py-1">
+              <span class="text-primary-lightest font-medium">${campo.label}${requiredBadge}</span>
+              <span class="text-gray-500 ml-2">(${campo.type})</span>
+              ${extraInfo}
+              ${conditionalInfo}
+              ${helpTextCampo}
+            </div>`;
           });
+
           html += `</div></div>`;
         });
-        html += "</div>";
+
+        html += '</div>';
         previewContainer.innerHTML = html;
       };
 
@@ -967,80 +1122,72 @@
       const validateAndPreview = () => {
         try {
           const jsonText = jsonEditor.value.trim();
-          if (!jsonText)
-            throw new Error("O editor está vazio. Cole um JSON válido.");
+          if (!jsonText) throw new Error('O editor está vazio. Cole um JSON válido.');
 
           const parsed = JSON.parse(jsonText);
 
           // Validações básicas
           if (!parsed.nome_template || !parsed.estrutura)
-            throw new Error(
-              'JSON inválido. Faltando "nome_template" ou "estrutura".'
-            );
+            throw new Error('JSON inválido. Faltando "nome_template" ou "estrutura".');
 
           validatedTemplateData = parsed;
           generatePreview(parsed);
           saveBtn.disabled = false;
-          saveHelper.textContent = "Template validado e pronto para salvar!";
-          showAlert("✓ Template validado com sucesso!", "success");
+          saveHelper.textContent = 'Template validado e pronto para salvar!';
+          showAlert('✓ Template validado com sucesso!', 'success');
         } catch (error) {
           validatedTemplateData = null;
           saveBtn.disabled = true;
-          saveHelper.textContent = "Valide o JSON antes de salvar";
+          saveHelper.textContent = 'Valide o JSON antes de salvar';
           previewContainer.innerHTML = `<div class="text-center py-8 text-red-400"><i class="bi bi-exclamation-triangle text-4xl mb-2"></i><br><strong>Erro de validação:</strong><br>${error.message}</div>`;
-          showAlert(error.message, "error");
+          showAlert(error.message, 'error');
         }
       };
 
       // Salvar no Firebase
       const saveTemplate = async () => {
         if (!validatedTemplateData || !auth.currentUser) {
-          showAlert(
-            "Valide o template ou aguarde a autenticação antes de salvar!",
-            "warning"
-          );
+          showAlert('Valide o template ou aguarde a autenticação antes de salvar!', 'warning');
           return;
         }
 
         saveBtn.disabled = true;
-        saveBtn.innerHTML =
-          '<i class="bi bi-hourglass-split animate-spin"></i> Salvando...';
+        saveBtn.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i> Salvando...';
 
         try {
           const docData = {
             nome: validatedTemplateData.nome_template,
-            descricao: validatedTemplateData.descricao || "",
+            descricao: validatedTemplateData.descricao || '',
             estrutura: validatedTemplateData.estrutura || [],
             createdAt: serverTimestamp(),
           };
-          const docRef = await addDoc(collection(db, "templates"), docData);
+          const docRef = await addDoc(collection(db, 'templates'), docData);
           showAlert(
             `✓ Template "${validatedTemplateData.nome_template}" salvo com sucesso!`,
-            "success"
+            'success'
           );
-          jsonEditor.value = "";
+          jsonEditor.value = '';
           validatedTemplateData = null;
           previewContainer.innerHTML = `<div class="text-gray-400 text-center py-8"><i class="bi bi-info-circle text-4xl mb-2"></i><br>Cole um JSON no editor e clique em "Validar" para ver o preview.</div>`;
         } catch (error) {
-          console.error("Erro ao salvar:", error);
+          console.error('Erro ao salvar:', error);
           const errorMessage =
-            error.code === "permission-denied"
-              ? "Erro de permissão! Verifique as regras do Firestore."
+            error.code === 'permission-denied'
+              ? 'Erro de permissão! Verifique as regras do Firestore.'
               : error.message;
-          showAlert(`Erro ao salvar no Firebase: ${errorMessage}`, "error");
+          showAlert(`Erro ao salvar no Firebase: ${errorMessage}`, 'error');
         } finally {
           saveBtn.disabled = true;
-          saveBtn.innerHTML =
-            '<i class="bi bi-cloud-upload"></i> Salvar no Firebase';
+          saveBtn.innerHTML = '<i class="bi bi-cloud-upload"></i> Salvar no Firebase';
         }
       };
 
       // Event Listeners
-      validateBtn.addEventListener("click", validateAndPreview);
-      saveBtn.addEventListener("click", saveTemplate);
-      clearBtn.addEventListener("click", () => {
-        if (confirm("Deseja limpar o editor?")) {
-          jsonEditor.value = "";
+      validateBtn.addEventListener('click', validateAndPreview);
+      saveBtn.addEventListener('click', saveTemplate);
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Deseja limpar o editor?')) {
+          jsonEditor.value = '';
           validatedTemplateData = null;
           saveBtn.disabled = true;
           previewContainer.innerHTML = `<div class="text-gray-400 text-center py-8"><i class="bi bi-info-circle text-4xl mb-2"></i><br>Cole um JSON no editor e clique em "Validar" para ver o preview.</div>`;
@@ -1049,44 +1196,38 @@
 
       const loadTemplateExample = (templateKey) => {
         jsonEditor.value = JSON.stringify(templates[templateKey], null, 2);
-        showAlert(
-          'Exemplo carregado! Clique em "Validar JSON" para visualizar.',
-          "info"
-        );
+        showAlert('Exemplo carregado! Clique em "Validar JSON" para visualizar.', 'info');
         validatedTemplateData = null;
         saveBtn.disabled = true;
       };
 
-      loadNarrativaBtn.addEventListener("click", () =>
-        loadTemplateExample("narrativa")
-      );
-      loadDndBtn.addEventListener("click", () => loadTemplateExample("dnd"));
-      loadSimplificadoBtn.addEventListener("click", () =>
-        loadTemplateExample("simplificado")
-      );
+      loadNarrativaBtn.addEventListener('click', () => loadTemplateExample('narrativa'));
+      loadDndBtn.addEventListener('click', () => loadTemplateExample('dnd'));
+      loadPersonalizadoBtn.addEventListener('click', () => loadTemplateExample('personalizado'));
+      loadSimplesBtn.addEventListener('click', () => loadTemplateExample('simples'));
 
       // Lógica de Autenticação
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          console.log("✓ Usuário anônimo autenticado:", user.uid);
+          console.log('✓ Usuário anônimo autenticado:', user.uid);
           firebaseStatus.className =
-            "inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-900/30 border border-green-600";
+            'inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-900/30 border border-green-600';
           firebaseStatus.innerHTML =
             '<i class="bi bi-check-circle-fill"></i><span class="text-sm">Conectado ao Firebase</span>';
-          showAlert("Firebase conectado com sucesso!", "success");
+          showAlert('Firebase conectado com sucesso!', 'success');
         } else {
-          console.log("Usuário não autenticado. Tentando login anônimo.");
+          console.log('Usuário não autenticado. Tentando login anônimo.');
           signInAnonymously(auth).catch((error) => {
-            console.error("Erro no login anônimo:", error);
+            console.error('Erro no login anônimo:', error);
             firebaseStatus.className =
-              "inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-900/30 border border-red-600";
+              'inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-900/30 border border-red-600';
             firebaseStatus.innerHTML =
               '<i class="bi bi-x-circle-fill"></i><span class="text-sm">Erro na conexão</span>';
-            reloadBtn.classList.remove("hidden");
-            authInstructions.classList.remove("hidden");
+            reloadBtn.classList.remove('hidden');
+            authInstructions.classList.remove('hidden');
             showAlert(
-              "É necessário habilitar a Autenticação Anônima no Firebase. Veja as instruções abaixo.",
-              "warning"
+              'É necessário habilitar a Autenticação Anônima no Firebase. Veja as instruções abaixo.',
+              'warning'
             );
           });
         }
