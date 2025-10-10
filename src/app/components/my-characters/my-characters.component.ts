@@ -158,4 +158,22 @@ export class MyCharactersComponent implements OnInit {
   goBack() {
     this.router.navigate(['/home']);
   }
+
+  /**
+   * Retorna as iniciais do nome para exibir quando não há imagem
+   */
+  getInitials(name: string): string {
+    if (!name) return '?';
+
+    const words = name
+      .trim()
+      .split(' ')
+      .filter((word) => word.length > 0);
+
+    if (words.length === 0) return '?';
+    if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
+
+    // Pega primeira letra do primeiro e último nome
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  }
 }

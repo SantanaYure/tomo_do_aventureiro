@@ -541,6 +541,118 @@
 }
 
 /* ========================================
+   CAMPO DE UPLOAD DE IMAGEM
+   ======================================== */
+
+.image-upload-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.upload-options {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-upload-file {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-upload-file:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(161, 141, 181, 0.3);
+}
+
+.btn-upload-file i {
+  font-size: 1.1rem;
+}
+
+.upload-or {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.url-input {
+  flex: 1;
+  min-width: 250px;
+}
+
+.image-preview {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--color-primary-light);
+  background: var(--color-bg-darker);
+  box-shadow: var(--shadow-md);
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  max-height: 300px;
+}
+
+.btn-remove-image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(220, 38, 38, 0.9);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.btn-remove-image:hover {
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.05);
+}
+
+.upload-hint {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-style: italic;
+}
+
+.upload-hint i {
+  font-size: 1rem;
+  color: var(--color-primary);
+}
+
+/* ========================================
    NAVEGAÇÃO ENTRE ABAS
    ======================================== */
 

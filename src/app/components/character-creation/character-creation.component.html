@@ -130,9 +130,56 @@
                   </option>
                 </datalist>
 
+                <!-- Campo de Imagem -->
+                <div *ngIf="campo.type === 'image'" class="image-upload-container">
+                  <div class="upload-options">
+                    <button type="button" class="btn-upload-file" (click)="fileInput.click()">
+                      <i class="bi bi-cloud-upload"></i>
+                      Escolher Arquivo
+                    </button>
+                    <input
+                      #fileInput
+                      type="file"
+                      [accept]="campo.accept || 'image/*'"
+                      (change)="handleImageUpload($event, campo.name)"
+                      style="display: none"
+                    />
+                    <span class="upload-or">ou</span>
+                    <input
+                      type="text"
+                      [(ngModel)]="formData[campo.name]"
+                      [name]="campo.name + '_url'"
+                      placeholder="Cole a URL de uma imagem"
+                      class="field-input url-input"
+                      (ngModelChange)="onImageUrlChange(campo.name)"
+                    />
+                  </div>
+
+                  <div *ngIf="formData[campo.name]" class="image-preview">
+                    <img [src]="formData[campo.name]" [alt]="campo.label" />
+                    <button
+                      type="button"
+                      class="btn-remove-image"
+                      (click)="removeImage(campo.name)"
+                    >
+                      <i class="bi bi-trash"></i>
+                      Remover
+                    </button>
+                  </div>
+
+                  <p class="upload-hint">
+                    <i class="bi bi-info-circle"></i>
+                    {{ campo.helpText || 'Formatos aceitos: JPG, PNG, GIF (máx. 5MB)' }}
+                  </p>
+                </div>
+
                 <!-- Campos normais (texto, número, etc.) -->
                 <input
-                  *ngIf="campo.type !== 'textarea' && campo.name !== 'papelNaTrama'"
+                  *ngIf="
+                    campo.type !== 'textarea' &&
+                    campo.type !== 'image' &&
+                    campo.name !== 'papelNaTrama'
+                  "
                   [id]="campo.name"
                   [name]="campo.name"
                   [type]="campo.type || 'text'"

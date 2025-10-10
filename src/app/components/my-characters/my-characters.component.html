@@ -49,7 +49,20 @@
     <div class="characters-grid" *ngIf="characters.length > 0">
       <div class="character-card" *ngFor="let character of characters">
         <!-- Card Image/Banner -->
-        <div class="card-banner">
+        <div class="card-banner" [class.has-image]="character['campos']?.['imagem_personagem']">
+          <!-- Imagem do Personagem (se houver) -->
+          <img
+            *ngIf="character['campos']?.['imagem_personagem']"
+            [src]="character['campos']['imagem_personagem']"
+            [alt]="character.nome"
+            class="character-image"
+          />
+
+          <!-- Fallback: Gradiente com Iniciais -->
+          <div *ngIf="!character['campos']?.['imagem_personagem']" class="character-initials">
+            {{ getInitials(character.nome) }}
+          </div>
+
           <div class="card-banner-gradient"></div>
           <div class="card-banner-content">
             <h3 class="character-name">{{ character.nome }}</h3>

@@ -248,6 +248,30 @@
   justify-content: center;
 }
 
+/* Imagem do personagem */
+.character-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Iniciais quando não há imagem */
+.character-initials {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 0;
+}
+
 .card-banner-gradient {
   position: absolute;
   top: 0;
@@ -260,11 +284,22 @@
     rgba(161, 141, 181, 0.8) 50%,
     rgba(197, 176, 217, 0.7) 100%
   );
+  z-index: 1;
+}
+
+/* Quando tem imagem, o gradiente fica mais transparente */
+.card-banner.has-image .card-banner-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(123, 80, 198, 0.6) 0%,
+    rgba(161, 141, 181, 0.5) 50%,
+    rgba(197, 176, 217, 0.4) 100%
+  );
 }
 
 .card-banner-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
   padding: 1rem;
   width: 100%;

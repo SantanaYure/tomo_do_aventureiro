@@ -11,6 +11,8 @@ interface Campo {
   label: string;
   type: string;
   placeholder: string;
+  accept?: string;
+  helpText?: string;
 }
 
 interface Bloco {
@@ -332,6 +334,69 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
         this.router.navigate(['/home']);
       }
     }
+  }
+
+  // ========================================
+  // GERENCIAMENTO DE IMAGENS
+  // ========================================
+
+  /**
+   * Processa o upload de arquivo de imagem
+   */
+  handleImageUpload(event: Event, fieldName: string): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+
+    // Validação de tipo
+    if (!file.type.startsWith('image/')) {
+      this.errorMessage = '❌ Por favor, selecione apenas arquivos de imagem (JPG, PNG, GIF)';
+      return;
+    }
+
+    // Validação de tamanho (5MB máximo)
+    const maxSizeInMB = 5;
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+    if (file.size > maxSizeInBytes) {
+      this.errorMessage = `❌ A imagem é muito grande. Tamanho máximo: ${maxSizeInMB}MB`;
+      return;
+    }
+
+    // Limpar mensagem de erro
+    this.errorMessage = '';
+
+    // Converter para Base64
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      if (e.target?.result) {
+        this.formData[fieldName] = e.target.result as string;
+      }
+    };
+    reader.onerror = () => {
+      this.errorMessage = '❌ Erro ao ler o arquivo. Tente novamente.';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /**
+   * Atualiza quando o usuário cola uma URL de imagem
+   */
+  onImageUrlChange(fieldName: string): void {
+    // Limpar mensagem de erro quando o usuário digita
+    if (this.errorMessage.includes('imagem')) {
+      this.errorMessage = '';
+    }
+  }
+
+  /**
+   * Remove a imagem do campo
+   */
+  removeImage(fieldName: string): void {
+    this.formData[fieldName] = '';
   }
 
   ngOnDestroy() {

@@ -340,6 +340,14 @@
               bloco: 'Identidade & Aparência',
               campos: [
                 {
+                  name: 'imagem_personagem',
+                  label: 'Imagem do Personagem',
+                  type: 'image',
+                  placeholder: 'URL da imagem ou upload de arquivo',
+                  helpText: 'Cole uma URL de imagem ou faça upload de um arquivo (JPG, PNG, GIF)',
+                  accept: 'image/*',
+                },
+                {
                   name: 'nomeCompleto',
                   label: 'Nome Completo',
                   type: 'text',
@@ -544,6 +552,14 @@
               bloco: 'Informações Principais',
               icone: 'bi-person-badge-fill',
               campos: [
+                {
+                  name: 'imagem_personagem',
+                  label: 'Imagem do Personagem',
+                  type: 'image',
+                  placeholder: 'URL da imagem ou upload de arquivo',
+                  helpText: 'Cole uma URL de imagem ou faça upload de um arquivo (JPG, PNG, GIF)',
+                  accept: 'image/*',
+                },
                 {
                   name: 'nomePersonagem',
                   label: 'Nome do Personagem',
@@ -776,6 +792,14 @@
               icone: 'bi-person-fill',
               campos: [
                 {
+                  name: 'imagem_personagem',
+                  label: 'Imagem do Personagem',
+                  type: 'image',
+                  placeholder: 'URL da imagem ou upload de arquivo',
+                  helpText: 'Cole uma URL de imagem ou faça upload de um arquivo (JPG, PNG, GIF)',
+                  accept: 'image/*',
+                },
+                {
                   name: 'nome',
                   label: 'Nome',
                   type: 'text',
@@ -963,6 +987,14 @@
               icone: 'bi-person-circle',
               campos: [
                 {
+                  name: 'imagem_personagem',
+                  label: 'Imagem do Personagem',
+                  type: 'image',
+                  placeholder: 'URL da imagem ou upload de arquivo',
+                  helpText: 'Cole uma URL de imagem ou faça upload de um arquivo (JPG, PNG, GIF)',
+                  accept: 'image/*',
+                },
+                {
                   name: 'nome',
                   label: 'Nome',
                   type: 'text',
@@ -1066,6 +1098,12 @@
             // Adiciona informações extras dependendo do tipo e propriedades
             let extraInfo = '';
             let conditionalInfo = '';
+
+            // Campo de imagem
+            if (campo.type === 'image') {
+              extraInfo =
+                ' <span class="text-xs text-pink-400">→ 🖼️ Upload de imagem (URL ou arquivo)</span>';
+            }
 
             // Campo condicional
             if (campo.conditional) {
