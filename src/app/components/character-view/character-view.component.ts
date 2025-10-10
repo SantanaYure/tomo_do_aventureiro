@@ -53,10 +53,6 @@ export class CharacterViewComponent implements OnInit {
   template: Template | null = null;
   characterId: string | null = null;
 
-  // Sistema de Abas
-  activeTabIndex = 0;
-
-  // Sidebar state
   isSidebarCollapsed = false;
 
   constructor(
@@ -183,22 +179,6 @@ export class CharacterViewComponent implements OnInit {
     }
 
     return '-';
-  }
-
-  selectTab(index: number) {
-    this.activeTabIndex = index;
-  }
-
-  nextTab() {
-    if (this.template && this.activeTabIndex < this.template.estrutura.length - 1) {
-      this.activeTabIndex++;
-    }
-  }
-
-  previousTab() {
-    if (this.activeTabIndex > 0) {
-      this.activeTabIndex--;
-    }
   }
 
   editCharacter() {
