@@ -1,0 +1,304 @@
+<div class="template-creator-container" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <!-- Shared Header (Sidebar) -->
+  <app-shared-header></app-shared-header>
+
+  <!-- Header Local -->
+  <header class="creator-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="bi bi-file-earmark-plus"></i>
+        Criador de Templates
+      </h1>
+
+      <div class="header-actions">
+        <!-- Botão Tutorial -->
+        <button class="btn-help" (click)="openTutorial()" title="Como criar um template?">
+          <i class="bi bi-question-circle"></i>
+          <span>Tutorial</span>
+        </button>
+
+        <!-- Status Firebase - Indicador com Tooltip -->
+        <div
+          class="firebase-status-indicator"
+          [class.connected]="isFirebaseConnected"
+          [class.disconnected]="!isFirebaseConnected"
+          [title]="
+            isFirebaseConnected
+              ? 'Conectado ao banco de dados'
+              : 'Falha ao conectar ao banco de dados'
+          "
+        >
+          <div class="status-circle"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Alert Messages -->
+  <div class="alert-container" *ngIf="alerts.length > 0">
+    <div
+      *ngFor="let alert of alerts"
+      class="alert"
+      [class.alert-success]="alert.type === 'success'"
+      [class.alert-error]="alert.type === 'error'"
+      [class.alert-warning]="alert.type === 'warning'"
+      [class.alert-info]="alert.type === 'info'"
+    >
+      <i
+        class="bi"
+        [class.bi-check-circle-fill]="alert.type === 'success'"
+        [class.bi-x-circle-fill]="alert.type === 'error'"
+        [class.bi-exclamation-triangle-fill]="alert.type === 'warning'"
+        [class.bi-info-circle-fill]="alert.type === 'info'"
+      ></i>
+      <span class="flex-1">{{ alert.message }}</span>
+      <button (click)="removeAlert(alert.id)" class="alert-close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="creator-main">
+    <div class="creator-grid">
+      <!-- Editor JSON -->
+      <div class="glass-card">
+        <h2 class="card-title">
+          <i class="bi bi-code-square"></i>
+          Editor de Template (JSON)
+        </h2>
+
+        <textarea
+          [(ngModel)]="jsonText"
+          class="json-editor"
+          placeholder="Cole o JSON do template aqui..."
+        ></textarea>
+
+        <div class="button-group">
+          <button (click)="validateJson()" class="btn btn-primary btn-flex-1">
+            <i class="bi bi-check-circle"></i>
+            Validar JSON
+          </button>
+          <button (click)="clearEditor()" class="btn btn-danger">
+            <i class="bi bi-trash"></i>
+            Limpar
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview e Actions -->
+      <div class="glass-card">
+        <h2 class="card-title">
+          <i class="bi bi-eye"></i>
+          Preview do Template
+        </h2>
+
+        <div class="preview-container" [innerHTML]="previewHtml"></div>
+
+        <div class="save-section">
+          <button
+            (click)="saveTemplate()"
+            [disabled]="isSaveDisabled || isSaving"
+            class="btn btn-success btn-full"
+          >
+            <i
+              class="bi"
+              [class.bi-cloud-upload]="!isSaving"
+              [class.bi-hourglass-split]="isSaving"
+              [class.spin]="isSaving"
+            ></i>
+            {{ isSaving ? 'Salvando...' : 'Salvar no Firebase' }}
+          </button>
+          <p class="save-helper">
+            {{
+              isSaveDisabled
+                ? 'Valide o JSON antes de salvar'
+                : 'Template validado e pronto para salvar!'
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Templates de Exemplo -->
+    <div class="glass-card examples-card">
+      <h2 class="card-title">
+        <i class="bi bi-lightbulb"></i>
+        Carregar Template de Exemplo
+      </h2>
+      <div class="examples-buttons">
+        <button (click)="loadExample('narrativa')" class="btn btn-primary">
+          <i class="bi bi-journal-text"></i>
+          Narrativa
+        </button>
+        <button (click)="loadExample('simples')" class="btn btn-primary">
+          <i class="bi bi-lightning-fill"></i>
+          Simples
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="creator-footer">
+    <p>&copy; 2025 Tomo do Aventureiro - Todos os direitos reservados</p>
+  </footer>
+
+  <!-- Modal Tutorial -->
+  <div class="tutorial-modal" *ngIf="isTutorialOpen" (click)="closeTutorial()">
+    <div class="tutorial-content" (click)="$event.stopPropagation()">
+      <div class="tutorial-header">
+        <h2>
+          <i class="bi bi-book"></i>
+          Como Criar um Template Personalizado
+        </h2>
+        <button class="btn-close-modal" (click)="closeTutorial()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="tutorial-body">
+        <!-- Introdução -->
+        <div class="tutorial-section">
+          <h3><i class="bi bi-info-circle"></i> O que é um Template?</h3>
+          <p>
+            Um template é como um <strong>formulário personalizado</strong> que você cria para seus
+            personagens. Ele define quais campos (nome, idade, história, etc.) você quer preencher
+            ao criar um personagem.
+          </p>
+        </div>
+
+        <!-- Passo 1 -->
+        <div class="tutorial-section">
+          <h3><i class="bi bi-1-circle"></i> Estrutura Básica</h3>
+          <p>Para criar um template, você precisa de três informações principais:</p>
+          <ul>
+            <li>
+              <strong>nome_template:</strong> O nome do seu template (ex: "Meu Personagem
+              Customizado")
+            </li>
+            <li><strong>descricao:</strong> Uma descrição breve do que é o template</li>
+            <li>
+              <strong>estrutura:</strong> Lista de blocos com os campos que você quer no formulário
+            </li>
+          </ul>
+        </div>
+
+        <!-- Passo 2 -->
+        <div class="tutorial-section">
+          <h3><i class="bi bi-2-circle"></i> Como Organizar em Blocos</h3>
+          <p>
+            Os blocos são como <strong>seções do formulário</strong>. Por exemplo, um bloco
+            "Informações Básicas" pode ter campos como nome e idade.
+          </p>
+          <div class="code-example">
+            <pre>"bloco": "Informações Básicas"</pre>
+          </div>
+        </div>
+
+        <!-- Passo 3 -->
+        <div class="tutorial-section">
+          <h3><i class="bi bi-3-circle"></i> Tipos de Campos Disponíveis</h3>
+          <div class="field-types">
+            <div class="field-type-item">
+              <strong>text</strong> - Campo de texto simples (uma linha)
+            </div>
+            <div class="field-type-item">
+              <strong>textarea</strong> - Campo de texto grande (várias linhas)
+            </div>
+            <div class="field-type-item"><strong>number</strong> - Campo para números</div>
+            <div class="field-type-item">
+              <strong>select</strong> - Lista de opções para escolher
+            </div>
+            <div class="field-type-item"><strong>image</strong> - Campo para upload de imagem</div>
+          </div>
+        </div>
+
+        <!-- Passo 4 -->
+        <div class="tutorial-section">
+          <h3><i class="bi bi-4-circle"></i> Exemplo Prático Comentado</h3>
+          <p>Veja um exemplo simples de template com explicações:</p>
+          <div class="code-example">
+            <pre
+              >{{ '{' }}
+  "nome_template": "Personagem Simples",
+  "descricao": "Template básico para personagens",
+  "estrutura": [
+    {{ '{' }}
+      "bloco": "Dados Principais",
+      "campos": [
+        {{ '{' }}
+          "name": "nome",
+          "label": "Nome do Personagem",
+          "type": "text",
+          "placeholder": "Digite o nome...",
+          "required": true
+        {{ '}' }},
+        {{ '{' }}
+          "name": "idade",
+          "label": "Idade",
+          "type": "number",
+          "placeholder": "Ex: 25"
+        {{ '}' }},
+        {{ '{' }}
+          "name": "historia",
+          "label": "História",
+          "type": "textarea",
+          "rows": 5,
+          "placeholder": "Conte a história do personagem..."
+        {{ '}' }}
+      ]
+    {{ '}' }}
+  ]
+{{ '}' }}</pre
+            >
+          </div>
+        </div>
+
+        <!-- Passo 5 -->
+        <div class="tutorial-section">
+          <h3><i class="bi bi-5-circle"></i> Como Usar no Sistema</h3>
+          <ol class="tutorial-steps">
+            <li>
+              <strong>Copie um exemplo</strong> usando os botões "Narrativa" ou "Simples" abaixo
+            </li>
+            <li><strong>Cole no editor</strong> à esquerda (o campo grande cinza escuro)</li>
+            <li><strong>Modifique o texto</strong> para personalizar conforme suas necessidades</li>
+            <li><strong>Clique em "Validar JSON"</strong> para verificar se está correto</li>
+            <li>
+              <strong>Veja o preview</strong> no lado direito para conferir como ficará o formulário
+            </li>
+            <li><strong>Clique em "Salvar no Firebase"</strong> quando estiver pronto</li>
+          </ol>
+        </div>
+
+        <!-- Dicas -->
+        <div class="tutorial-section tutorial-tips">
+          <h3><i class="bi bi-lightbulb"></i> Dicas Importantes</h3>
+          <ul>
+            <li>
+              Use <strong>vírgulas</strong> para separar itens (mas não coloque vírgula no último
+              item)
+            </li>
+            <li>Use <strong>aspas duplas</strong> (" ") ao redor de textos</li>
+            <li>
+              Mantenha os <strong>colchetes [ ]</strong> para listas e
+              <strong>chaves {{ '{' }} {{ '}' }}</strong> para objetos
+            </li>
+            <li>Se der erro ao validar, confira se não falta ou sobra vírgula, aspas ou chaves</li>
+            <li>
+              <strong>Comece com um exemplo</strong> e vá modificando aos poucos - é mais fácil!
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tutorial-footer">
+        <button class="btn btn-primary" (click)="closeTutorial()">
+          <i class="bi bi-check-circle"></i>
+          Entendi!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

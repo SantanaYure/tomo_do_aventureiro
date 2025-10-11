@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CharacterCreationComponent } from './components/character-creation/character-creation.component';
 import { CharacterViewComponent } from './components/character-view/character-view.component';
 import { MyCharactersComponent } from './components/my-characters/my-characters.component';
+import { TemplateCreatorComponent } from './components/template-creator/template-creator.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'create-character/:id', component: CharacterCreationComponent, canActivate: [AuthGuard] },
   { path: 'view-character/:id', component: CharacterViewComponent, canActivate: [AuthGuard] },
   { path: 'my-characters', component: MyCharactersComponent, canActivate: [AuthGuard] },
+  { path: 'template-creator', component: TemplateCreatorComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' }, // Wildcard route para páginas não encontradas
 ];

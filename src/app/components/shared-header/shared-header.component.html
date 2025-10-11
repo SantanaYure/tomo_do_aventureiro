@@ -56,6 +56,16 @@
         <i class="bi bi-people"></i>
         <span *ngIf="!isSidebarCollapsed">Visualizar Personagens</span>
       </a>
+      <a
+        routerLink="/template-creator"
+        routerLinkActive="active"
+        class="nav-link"
+        (click)="closeMobileMenu()"
+        [title]="isSidebarCollapsed ? 'Criador de Templates' : ''"
+      >
+        <i class="bi bi-file-earmark-plus"></i>
+        <span *ngIf="!isSidebarCollapsed">Criador de Templates</span>
+      </a>
     </nav>
 
     <!-- User Profile Section - BOTTOM -->
