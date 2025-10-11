@@ -430,8 +430,15 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       this.cropCanvas.width = 500;
       this.cropCanvas.height = 500;
 
-      // Resetar transformações
-      this.cropScale = 1;
+      // Calcular escala inicial ideal para a imagem caber no círculo de crop (300px de diâmetro)
+      const targetSize = 320; // Um pouco maior que o círculo (300px) para margem
+      const maxDimension = Math.max(this.cropImage.width, this.cropImage.height);
+      const initialScale = targetSize / maxDimension;
+
+      // Aplicar escala inicial (garantir que nunca seja maior que 1 para imagens grandes)
+      this.cropScale = Math.min(initialScale, 1);
+
+      // Centralizar imagem
       this.cropX = 0;
       this.cropY = 0;
 
@@ -474,18 +481,18 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Aumenta o zoom da imagem
+   * Aumenta o zoom da imagem (incremento de 2%)
    */
   zoomIn(): void {
-    this.cropScale = Math.min(this.cropScale + 0.1, 3);
+    this.cropScale = Math.min(this.cropScale + 0.02, 5);
     this.drawCropCanvas();
   }
 
   /**
-   * Diminui o zoom da imagem
+   * Diminui o zoom da imagem (decremento de 2%)
    */
   zoomOut(): void {
-    this.cropScale = Math.max(this.cropScale - 0.1, 0.5);
+    this.cropScale = Math.max(this.cropScale - 0.02, 0.1);
     this.drawCropCanvas();
   }
 
