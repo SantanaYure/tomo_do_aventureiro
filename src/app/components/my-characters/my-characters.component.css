@@ -597,20 +597,19 @@
 
   .header-content {
     padding: 0 20px 0 70px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 
   .page-title {
     font-size: 1.4rem;
-    width: 100%;
-    justify-content: center;
-    order: -1;
-    margin-left: 0;
   }
 
   .btn-create {
     font-size: 0.85rem;
     padding: 8px 16px;
+    align-self: flex-start;
   }
 
   .characters-main {
@@ -653,7 +652,7 @@
 @media (max-width: 480px) {
   .header-content {
     padding: 0 10px 0 60px;
-    gap: 8px;
+    gap: 10px;
   }
 
   .page-title {
@@ -664,13 +663,11 @@
     font-size: 1.4rem;
   }
 
-  .btn-back,
   .btn-create {
     font-size: 0.8rem;
     padding: 6px 12px;
   }
 
-  .btn-back i,
   .btn-create i {
     font-size: 1rem;
   }
