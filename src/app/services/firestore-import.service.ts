@@ -233,12 +233,9 @@ export class FirestoreImportService {
       // Adiciona/sobrescreve o documento com os dados
       await setDoc(docRef, characterTemplateData);
 
-      console.log('✅ Template de Personagem Narrativo importado com sucesso!');
-      console.log('📄 Documento ID: X9ncOgKwHyDCOZ0RsYOi');
-      console.log('📦 Coleção: templates');
+      // Template importado com sucesso
       return;
     } catch (error) {
-      console.error('❌ Erro ao importar template:', error);
       throw error;
     }
   }
@@ -464,10 +461,9 @@ export class FirestoreImportService {
       // Merge: mantém campos existentes e adiciona/atualiza novos
       await setDoc(docRef, characterTemplateData, { merge: true });
 
-      console.log('✅ Template mesclado com sucesso (campos existentes preservados)!');
+      // Template mesclado com sucesso
       return;
     } catch (error) {
-      console.error('❌ Erro ao mesclar template:', error);
       throw error;
     }
   }

@@ -207,10 +207,6 @@ export class CharacterViewComponent implements OnInit {
 
       const finalNome = nome.trim() || 'Personagem Sem Nome';
 
-      console.log('📦 Dados do Firebase:', characterData);
-      console.log('🗂️ Campos disponíveis:', characterData['campos']);
-      console.log('🎯 Nome extraído:', finalNome);
-
       this.character = {
         id: characterDoc.id,
         nome: finalNome, // Nome extraído corretamente
@@ -220,8 +216,6 @@ export class CharacterViewComponent implements OnInit {
         createdAt: createdAt,
         updatedAt: updatedAt,
       };
-
-      console.log('✅ Character objeto final:', this.character);
 
       if (this.character.templateId) {
         await this.loadTemplate(this.character.templateId);
@@ -256,28 +250,21 @@ export class CharacterViewComponent implements OnInit {
 
   getFieldValue(fieldName: string): string {
     if (!this.character || !this.character.campos) {
-      console.log('⚠️ Character ou campos não existe');
       return '-';
     }
-
-    console.log(`🔍 Buscando campo '${fieldName}'`);
-    console.log('📂 Campos disponíveis:', Object.keys(this.character.campos));
 
     if (this.character.campos['basicInfo']) {
       const value = this.character.campos['basicInfo'][fieldName];
       if (value !== undefined && value !== null && value !== '') {
-        console.log(`✅ Encontrado em basicInfo['${fieldName}']:`, value);
         return value;
       }
     }
 
     const value = this.character.campos[fieldName];
     if (value !== undefined && value !== null && value !== '') {
-      console.log(`✅ Encontrado em campos['${fieldName}']:`, value);
       return value;
     }
 
-    console.log(`❌ Campo '${fieldName}' não encontrado ou vazio`);
     return '-';
   }
 

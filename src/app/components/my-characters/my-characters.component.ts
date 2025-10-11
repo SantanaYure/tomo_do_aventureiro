@@ -184,7 +184,7 @@ export class MyCharactersComponent implements OnInit {
                 templateNome = templateDoc.data()['nome'] || 'Template Desconhecido';
               }
             } catch (e) {
-              console.error(`Erro ao buscar template ${data['templateId']}:`, e);
+              // Erro ao buscar template
             }
           }
 

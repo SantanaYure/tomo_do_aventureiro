@@ -622,13 +622,8 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     // Salvar imagem comprimida
     this.formData[fieldName] = compressedBase64;
 
-    // Mensagem de sucesso
+    // Mensagem de sucesso (imagem comprimida)
     const compressedSizeKB = Math.round((compressedBase64.length * 3) / 4 / 1024);
-    console.log(
-      `✅ Imagem recortada e comprimida: ${compressedSizeKB}KB (qualidade: ${Math.round(
-        quality * 100
-      )}%)`
-    );
   }
 
   /**

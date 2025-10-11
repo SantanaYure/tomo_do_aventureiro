@@ -325,7 +325,6 @@ export class TemplateCreatorComponent implements OnInit {
       );
       this.clearEditor();
     } catch (error: any) {
-      console.error('Erro ao salvar:', error);
       const errorMessage =
         error.code === 'permission-denied'
           ? 'Erro de permissão! Verifique as regras do Firestore.'
