@@ -243,11 +243,20 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const firstField = this.selectedTemplate.estrutura[0].campos[0];
-    const firstFieldValue = this.formData[firstField.name] || '';
+    // Buscar o primeiro campo que NÃO seja imagem
+    let firstNameField = this.selectedTemplate.estrutura[0].campos.find(
+      (campo) => campo.type !== 'image'
+    );
+
+    // Se não encontrou, usar o primeiro campo mesmo
+    if (!firstNameField) {
+      firstNameField = this.selectedTemplate.estrutura[0].campos[0];
+    }
+
+    const firstFieldValue = this.formData[firstNameField.name] || '';
 
     if (!firstFieldValue.trim()) {
-      this.errorMessage = `❌ Por favor, preencha o campo "${firstField.label}"`;
+      this.errorMessage = `❌ Por favor, preencha o campo "${firstNameField.label}"`;
       this.activeTabIndex = 0;
       return false;
     }

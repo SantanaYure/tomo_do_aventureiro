@@ -48,55 +48,58 @@
     <!-- Characters Grid -->
     <div class="characters-grid" *ngIf="characters.length > 0">
       <div class="character-card" *ngFor="let character of characters">
-        <!-- Card Image/Banner -->
-        <div class="card-banner" [class.has-image]="character['campos']?.['imagem_personagem']">
+        <!-- Card Header - Nome do Personagem (estilo Magic) -->
+        <div class="card-header">
+          <h3 class="character-name">{{ character.nome }}</h3>
+        </div>
+
+        <!-- Card Image - Imagem Principal -->
+        <div class="card-image-container">
           <!-- Imagem do Personagem (se houver) -->
           <img
             *ngIf="character['campos']?.['imagem_personagem']"
             [src]="character['campos']['imagem_personagem']"
             [alt]="character.nome"
             class="character-image"
+            (error)="onImageError($event)"
           />
 
-          <!-- Fallback: Gradiente com Iniciais -->
+          <!-- Fallback: Iniciais quando não há imagem -->
           <div *ngIf="!character['campos']?.['imagem_personagem']" class="character-initials">
             {{ getInitials(character.nome) }}
           </div>
-
-          <div class="card-banner-gradient"></div>
-          <div class="card-banner-content">
-            <h3 class="character-name">{{ character.nome }}</h3>
-            <div class="character-template" *ngIf="character.templateNome">
-              <i class="bi bi-grid-3x3-gap-fill template-icon"></i>
-              <span class="template-text">{{ character.templateNome }}</span>
-            </div>
-          </div>
         </div>
 
-        <!-- Card Content -->
-        <div class="card-content">
-          <!-- Card Actions -->
-          <div class="card-actions">
+        <!-- Card Footer - Template e Ações -->
+        <div class="card-footer">
+          <!-- Badge do Template -->
+          <div class="template-badge" *ngIf="character.templateNome">
+            <i class="bi bi-grid-3x3-gap-fill"></i>
+            <span>{{ character.templateNome }}</span>
+          </div>
+
+          <!-- Card Actions - Glassmorphism -->
+          <div class="card-actions-glass">
             <button
-              class="btn-action btn-view"
+              class="btn-action-glass btn-view"
               (click)="viewCharacter(character.id)"
               title="Visualizar"
             >
-              <i class="bi bi-eye"></i>
+              <i class="bi bi-eye-fill"></i>
             </button>
             <button
-              class="btn-action btn-edit"
+              class="btn-action-glass btn-edit"
               (click)="editCharacter(character.id)"
               title="Editar"
             >
-              <i class="bi bi-pencil"></i>
+              <i class="bi bi-pencil-fill"></i>
             </button>
             <button
-              class="btn-action btn-delete"
+              class="btn-action-glass btn-delete"
               (click)="deleteCharacter(character.id, character.nome)"
               title="Excluir"
             >
-              <i class="bi bi-trash"></i>
+              <i class="bi bi-trash-fill"></i>
             </button>
           </div>
         </div>

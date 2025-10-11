@@ -235,44 +235,23 @@
 }
 
 /* ========================================
-   CARD BANNER - Estilo Moderno
+   CHARACTER CARDS - Estilo Magic the Gathering + Glassmorphism
    ======================================== */
 
-.card-banner {
-  height: 180px;
-  background: var(--gradient-primary);
-  position: relative;
+.character-card {
+  background: rgba(42, 33, 53, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid rgba(161, 141, 181, 0.3);
+  border-radius: 18px;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
 }
 
-/* Imagem do personagem */
-.character-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
-/* Iniciais quando não há imagem */
-.character-initials {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  z-index: 0;
-}
-
-.card-banner-gradient {
+.character-card::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -280,36 +259,65 @@
   bottom: 0;
   background: linear-gradient(
     135deg,
-    rgba(123, 80, 198, 0.9) 0%,
-    rgba(161, 141, 181, 0.8) 50%,
-    rgba(197, 176, 217, 0.7) 100%
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.05) 100%
   );
-  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
-/* Quando tem imagem, o gradiente fica mais transparente */
-.card-banner.has-image .card-banner-gradient {
-  background: linear-gradient(
-    135deg,
-    rgba(123, 80, 198, 0.6) 0%,
-    rgba(161, 141, 181, 0.5) 50%,
-    rgba(197, 176, 217, 0.4) 100%
-  );
+.character-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  border-color: rgba(161, 141, 181, 0.6);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 24px rgba(161, 141, 181, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.card-banner-content {
+.character-card:hover::before {
+  opacity: 1;
+}
+
+/* ========================================
+   CARD HEADER - Nome do Personagem (estilo Magic)
+   ======================================== */
+
+.card-header {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  padding: 16px 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
   position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 1rem;
-  width: 100%;
+  overflow: hidden;
 }
 
-.card-banner-content .character-name {
-  font-size: 1.5rem;
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: skewX(-20deg);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    left: -50%;
+  }
+  50% {
+    left: 150%;
+  }
+}
+
+.card-header .character-name {
+  font-size: 1.4rem;
   font-weight: 700;
   color: white;
-  margin: 0 0 1rem 0;
+  margin: 0;
   line-height: 1.3;
   text-align: center;
   display: -webkit-box;
@@ -318,138 +326,259 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  letter-spacing: 0.3px;
-}
-
-.character-template {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: white;
-  margin: 0;
-  text-align: center;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 0.5rem 1.25rem;
-  border-radius: 50px;
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
   position: relative;
-  overflow: hidden;
+  z-index: 1;
 }
 
-.character-template::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
+/* ========================================
+   CARD IMAGE CONTAINER - Área da Imagem Principal
+   ======================================== */
+
+.card-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  background: linear-gradient(135deg, rgba(42, 33, 53, 0.8) 0%, rgba(28, 22, 36, 0.9) 100%);
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.character-image {
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.6s;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
 }
 
-.character-template:hover::before {
-  left: 100%;
+.character-card:hover .character-image {
+  transform: scale(1.05);
 }
 
-.template-icon {
-  font-size: 0.9rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-.template-text {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  font-weight: 700;
-}
-
-.character-template:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.25) 100%);
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  border-color: rgba(255, 255, 255, 0.6);
-}
-
-/* ========================================
-   CARD CONTENT
-   ======================================== */
-
-.card-content {
-  padding: 1.5rem;
-  background: white;
-}
-
-/* ========================================
-   CARD ACTIONS - Botões com Ícones
-   ======================================== */
-
-.card-actions {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: flex-start;
-}
-
-.btn-action {
-  flex: 1;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.character-initials {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-primary-lightest);
-  color: var(--color-primary);
-  border: 2px solid transparent;
-  min-height: 44px;
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.15);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 40px rgba(161, 141, 181, 0.3);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark) 0%,
+    var(--color-primary-darkest) 100%
+  );
+  position: relative;
 }
 
-.btn-action i {
-  font-size: 1.25rem;
-  line-height: 1;
+.character-initials::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(161, 141, 181, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(197, 176, 217, 0.15) 0%, transparent 50%);
+  pointer-events: none;
 }
 
-.btn-action:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* ========================================
+   CARD FOOTER - Template Badge e Ações
+   ======================================== */
+
+.card-footer {
+  padding: 16px 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(161, 141, 181, 0.5) 0%,
+    rgba(143, 124, 162, 0.6) 100%
+  ) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
 }
 
-.btn-view {
-  background: var(--gradient-primary);
+.card-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.template-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: white;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
-.btn-view:hover {
-  box-shadow: 0 4px 16px rgba(123, 80, 198, 0.4);
+.template-badge i {
+  font-size: 0.9rem;
 }
 
-.btn-edit {
-  background: rgba(123, 80, 198, 0.1);
+.character-card:hover .template-badge {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.02);
+}
+
+/* ========================================
+   CARD ACTIONS - Botões com Glassmorphism
+   ======================================== */
+
+.card-actions-glass {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-action-glass {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(161, 141, 181, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.btn-action-glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(161, 141, 181, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-action-glass:hover::before {
+  opacity: 1;
+}
+
+.btn-action-glass i {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* Botão Visualizar - Roxo primário */
+.btn-action-glass.btn-view {
   color: var(--color-primary);
 }
 
-.btn-edit:hover {
-  background: rgba(123, 80, 198, 0.2);
+.btn-action-glass.btn-view:hover {
+  background: rgba(161, 141, 181, 0.15);
   border-color: var(--color-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(161, 141, 181, 0.3);
 }
 
-.btn-delete {
-  background: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
+/* Botão Editar - Roxo claro */
+.btn-action-glass.btn-edit {
+  color: var(--color-primary-light);
 }
 
-.btn-delete:hover {
-  background: rgba(220, 53, 69, 0.2);
-  border-color: #dc3545;
+.btn-action-glass.btn-edit:hover {
+  background: rgba(179, 159, 199, 0.15);
+  border-color: var(--color-primary-light);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(179, 159, 199, 0.3);
+}
+
+/* Botão Excluir - Roxo escuro/vermelho discreto */
+.btn-action-glass.btn-delete {
+  color: #c084fc;
+}
+
+.btn-action-glass.btn-delete:hover {
+  background: rgba(192, 132, 252, 0.15);
+  border-color: #c084fc;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(192, 132, 252, 0.3);
+}
+
+/* ========================================
+   ESTILOS ANTIGOS REMOVIDOS - Substituídos pelo novo design Magic Card
+   ======================================== */
+
+/* ========================================
+   FOOTER
+   ======================================== */
+
+.characters-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-top: 2px solid var(--color-primary-lightest);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  box-shadow: 0 -2px 8px rgba(161, 141, 181, 0.1);
+  z-index: 999;
+}
+
+.characters-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-primary);
+  opacity: 0.3;
+}
+
+.characters-footer p {
+  margin: 0;
 }
 
 /* ========================================
@@ -467,7 +596,7 @@
   }
 
   .header-content {
-    padding: 0 20px 0 70px; /* Espaço à esquerda para o botão mobile */
+    padding: 0 20px 0 70px;
     flex-wrap: wrap;
   }
 
@@ -479,7 +608,6 @@
     margin-left: 0;
   }
 
-  .btn-back,
   .btn-create {
     font-size: 0.85rem;
     padding: 8px 16px;
@@ -491,21 +619,23 @@
 
   .characters-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
-  .card-banner-content .character-name {
-    font-size: 1.25rem;
+  .card-header .character-name {
+    font-size: 1.2rem;
   }
 
-  .character-template {
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-    padding: 0.4rem 1rem;
+  .template-badge {
+    font-size: 0.7rem;
+    padding: 6px 12px;
     gap: 0.35rem;
   }
 
-  .template-icon {
-    font-size: 0.75rem;
+  .btn-action-glass {
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
   }
 
   .empty-state {
@@ -514,15 +644,6 @@
 
   .empty-state h2 {
     font-size: 1.5rem;
-  }
-
-  .card-actions {
-    grid-template-columns: 1fr;
-  }
-
-  .btn-action:not(:last-child) {
-    border-right: none;
-    border-bottom: 1px solid var(--color-primary-lightest);
   }
 }
 

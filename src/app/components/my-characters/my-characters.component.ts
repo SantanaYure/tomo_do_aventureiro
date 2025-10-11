@@ -61,10 +61,107 @@ export class MyCharactersComponent implements OnInit {
         try {
           const data = doc.data();
 
-          const nome =
-            data['dados']?.['basicInfo']?.['nomeDoPersonagem'] ||
-            data['nome'] ||
-            'Personagem Sem Nome';
+          console.log('🔍 Carregando personagem:', doc.id);
+          console.log('📊 Dados brutos:', data);
+
+          // PRIMEIRO: Tentar pegar do campo 'nome' no nível raiz
+          let nome = data['nome'] || '';
+          console.log('1️⃣ Nome do campo raiz:', nome);
+
+          // VALIDAÇÃO: Se o nome for uma URL de imagem, descartar IMEDIATAMENTE
+          if (
+            typeof nome === 'string' &&
+            (nome.startsWith('http') || nome.startsWith('data:image') || nome.includes('base64'))
+          ) {
+            console.log('❌ Nome contém URL de imagem, descartando');
+            nome = '';
+          }
+
+          // SEGUNDO: Buscar nos campos específicos do formulário
+          if (!nome && data['campos']) {
+            console.log('2️⃣ Buscando em data.campos');
+
+            // Lista prioritária de campos que geralmente contêm o nome
+            const camposNome = [
+              'nome',
+              'nomeDoPersonagem',
+              'name',
+              'nome_personagem',
+              'personagem_nome',
+            ];
+
+            // Tentar cada campo prioritário
+            for (const campoKey of camposNome) {
+              if (data['campos'][campoKey]) {
+                const valor = String(data['campos'][campoKey]).trim();
+                console.log(`   Testando campo '${campoKey}':`, valor);
+
+                if (
+                  valor &&
+                  !valor.startsWith('http') &&
+                  !valor.startsWith('data:image') &&
+                  !valor.includes('base64')
+                ) {
+                  nome = valor;
+                  console.log('✅ Nome encontrado:', nome);
+                  break;
+                }
+              }
+            }
+
+            // TERCEIRO: Se ainda não encontrou, pegar primeiro campo texto válido
+            if (!nome) {
+              console.log('3️⃣ Buscando primeiro campo texto válido');
+              const campos = data['campos'];
+
+              for (const key in campos) {
+                const value = campos[key];
+
+                if (key === 'imagem_personagem') continue; // Pular campo de imagem
+
+                if (value && typeof value === 'string') {
+                  const valorLimpo = value.trim();
+
+                  if (
+                    valorLimpo &&
+                    !valorLimpo.startsWith('http') &&
+                    !valorLimpo.startsWith('data:image') &&
+                    !valorLimpo.includes('base64') &&
+                    valorLimpo.length < 500
+                  ) {
+                    // Ignorar textos muito longos
+                    nome = valorLimpo;
+                    console.log(`✅ Nome encontrado no campo '${key}':`, nome);
+                    break;
+                  }
+                }
+              }
+            }
+          }
+
+          // QUARTO: Fallback para estruturas antigas
+          if (!nome) {
+            console.log('4️⃣ Tentando estruturas antigas');
+            nome = data['dados']?.['basicInfo']?.['nomeDoPersonagem'] || '';
+          }
+
+          // GARANTIR que sempre tenha um nome válido
+          let finalNome = nome || 'Personagem Sem Nome';
+
+          // ÚLTIMA VERIFICAÇÃO DE SEGURANÇA
+          if (typeof finalNome === 'string') {
+            if (
+              finalNome.startsWith('http') ||
+              finalNome.startsWith('data:image') ||
+              finalNome.includes('base64')
+            ) {
+              console.log('⚠️ Ainda tinha URL no nome, usando fallback');
+              finalNome = 'Personagem Sem Nome';
+            }
+          }
+
+          console.log('🎯 Nome final selecionado:', finalNome);
+          console.log('---');
 
           let templateNome = data['templateNome'] || 'Template Desconhecido';
 
@@ -106,7 +203,7 @@ export class MyCharactersComponent implements OnInit {
 
           const character = {
             id: doc.id,
-            nome: nome,
+            nome: finalNome,
             templateNome: templateNome,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -175,5 +272,21 @@ export class MyCharactersComponent implements OnInit {
 
     // Pega primeira letra do primeiro e último nome
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  }
+
+  /**
+   * Tratamento de erro de carregamento de imagem
+   * Quando a imagem falha ao carregar, mostra as iniciais no lugar
+   */
+  onImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    if (imgElement) {
+      imgElement.style.display = 'none';
+      // Mostrar as iniciais no lugar
+      const initialsDiv = imgElement.nextElementSibling as HTMLElement;
+      if (initialsDiv) {
+        initialsDiv.style.display = 'flex';
+      }
+    }
   }
 }
