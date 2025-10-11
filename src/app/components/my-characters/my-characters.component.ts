@@ -225,7 +225,11 @@ export class MyCharactersComponent implements OnInit {
   }
 
   createNew() {
-    this.router.navigate(['/create-character']);
+    // Força recarga do componente de criação voltando para select-template
+    // Mesmo se já estiver na rota /create-character
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/create-character']);
+    });
   }
 
   viewCharacter(id: string) {

@@ -38,11 +38,10 @@
         <span *ngIf="!isSidebarCollapsed">Home</span>
       </a>
       <a
-        routerLink="/create-character"
-        routerLinkActive="active"
         class="nav-link"
-        (click)="closeMobileMenu()"
+        (click)="createNewCharacter()"
         [title]="isSidebarCollapsed ? 'Criar Personagem' : ''"
+        [class.active]="router.url.includes('/create-character')"
       >
         <i class="bi bi-person-plus"></i>
         <span *ngIf="!isSidebarCollapsed">Criar Personagem</span>

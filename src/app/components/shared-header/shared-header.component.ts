@@ -21,7 +21,7 @@ export class SharedHeaderComponent implements OnInit {
   isSidebarCollapsed: boolean = false;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private authService: AuthService,
     private sidebarService: SidebarService
   ) {
@@ -103,5 +103,14 @@ export class SharedHeaderComponent implements OnInit {
   navigateTo(route: string) {
     this.router.navigate([route]);
     this.closeMobileMenu();
+  }
+
+  createNewCharacter() {
+    // Força recarga do componente de criação voltando para select-template
+    // Mesmo se já estiver na rota /create-character
+    this.closeMobileMenu();
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/create-character']);
+    });
   }
 }
