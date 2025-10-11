@@ -327,6 +327,51 @@
 }
 
 /* ========================================
+   RETRATO DO PERSONAGEM - Circular
+   ======================================== */
+.character-portrait {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0 3rem 0;
+}
+
+.portrait-frame {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 4px solid var(--color-primary);
+  box-shadow: 0 8px 24px rgba(123, 80, 198, 0.3), 0 0 0 8px rgba(161, 141, 181, 0.1);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark) 0%,
+    var(--color-primary-darkest) 100%
+  );
+}
+
+.portrait-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.portrait-initials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.25);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background: radial-gradient(circle at 30% 40%, rgba(161, 141, 181, 0.2) 0%, transparent 50%);
+}
+
+/* ========================================
    BLOCOS DE SEÇÃO - Estilo Pergaminho
    ======================================== */
 .section-block {
@@ -697,6 +742,16 @@
   .scroll-header {
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
+  }
+
+  .portrait-frame {
+    width: 150px;
+    height: 150px;
+    border-width: 3px;
+  }
+
+  .portrait-initials {
+    font-size: 4rem;
   }
 
   .ornament-divider {

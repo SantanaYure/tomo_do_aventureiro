@@ -51,6 +51,22 @@
           </div>
         </div>
 
+        <!-- Imagem do Personagem (Circular) -->
+        <div class="character-portrait">
+          <div class="portrait-frame">
+            <img
+              *ngIf="character.campos?.['imagem_personagem']"
+              [src]="character.campos['imagem_personagem']"
+              [alt]="character.nome"
+              class="portrait-image"
+              (error)="onImageError($event)"
+            />
+            <div *ngIf="!character.campos?.['imagem_personagem']" class="portrait-initials">
+              {{ getInitials(character.nome) }}
+            </div>
+          </div>
+        </div>
+
         <!-- Conteúdo Completo (Todas as Seções) -->
         <div class="scroll-content">
           <div *ngFor="let bloco of template.estrutura; let i = index" class="section-block">
@@ -68,13 +84,16 @@
                 class="manuscript-entry"
                 [class.full-width]="campo.type === 'textarea'"
               >
-                <div class="entry-label">
-                  <i class="bi bi-feather"></i>
-                  {{ campo.label }}
-                </div>
-                <div class="entry-text" [class.long-text]="campo.type === 'textarea'">
-                  {{ getFieldValue(campo.name) || '—' }}
-                </div>
+                <!-- Não mostrar campos de imagem nem nome (já exibido no título) -->
+                <ng-container *ngIf="!isImageField(campo.name) && !isNameField(campo.name)">
+                  <div class="entry-label">
+                    <i class="bi bi-feather"></i>
+                    {{ campo.label }}
+                  </div>
+                  <div class="entry-text" [class.long-text]="campo.type === 'textarea'">
+                    {{ getFieldValue(campo.name) || '—' }}
+                  </div>
+                </ng-container>
               </div>
             </div>
           </div>

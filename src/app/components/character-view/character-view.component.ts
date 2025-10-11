@@ -268,6 +268,27 @@ export class CharacterViewComponent implements OnInit {
     return '-';
   }
 
+  isImageField(fieldName: string): boolean {
+    const imageFieldKeywords = ['imagem', 'foto', 'image', 'picture', 'avatar', 'logo', 'icon'];
+
+    const lowerFieldName = fieldName.toLowerCase();
+    return imageFieldKeywords.some((keyword) => lowerFieldName.includes(keyword));
+  }
+
+  isNameField(fieldName: string): boolean {
+    const nameFieldKeywords = [
+      'nome',
+      'name',
+      'nomedopersonagem',
+      'nomepersonagem',
+      'charactername',
+      'char_name',
+    ];
+
+    const lowerFieldName = fieldName.toLowerCase();
+    return nameFieldKeywords.some((keyword) => lowerFieldName === keyword);
+  }
+
   editCharacter() {
     if (this.characterId) {
       this.router.navigate(['/create-character', this.characterId]);
@@ -299,5 +320,24 @@ export class CharacterViewComponent implements OnInit {
 
   formatDate(date: Date | null): string {
     return DateUtils.formatToBrazilian(date);
+  }
+
+  getInitials(name: string): string {
+    if (!name) return '?';
+    const words = name.trim().split(' ').filter(Boolean);
+    if (words.length === 0) return '?';
+    if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  }
+
+  onImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    if (imgElement && imgElement.parentElement) {
+      imgElement.style.display = 'none';
+      const initialsDiv = imgElement.nextElementSibling as HTMLElement;
+      if (initialsDiv && initialsDiv.classList.contains('portrait-initials')) {
+        initialsDiv.style.display = 'flex';
+      }
+    }
   }
 }
