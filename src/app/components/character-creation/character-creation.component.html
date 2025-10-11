@@ -282,4 +282,62 @@
   <footer class="creation-footer">
     <p>&copy; 2025 Tomo do Aventureiro - Todos os direitos reservados</p>
   </footer>
+
+  <!-- ========================================
+       MODAL DE CROP DE IMAGEM
+       ======================================== -->
+  <div class="crop-modal-overlay" *ngIf="showImageCropModal" (click)="cancelCrop()">
+    <div class="crop-modal" (click)="$event.stopPropagation()">
+      <div class="crop-modal-header">
+        <h3>
+          <i class="bi bi-crop"></i>
+          Ajustar Imagem
+        </h3>
+        <button class="btn-close" (click)="cancelCrop()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="crop-modal-body">
+        <div class="crop-instructions">
+          <i class="bi bi-info-circle"></i>
+          Ajuste a posição e zoom da imagem. A área dentro do círculo será salva.
+        </div>
+
+        <div class="crop-canvas-container">
+          <canvas
+            id="cropCanvas"
+            (mousedown)="onCropMouseDown($event)"
+            (mousemove)="onCropMouseMove($event)"
+            (mouseup)="onCropMouseUp()"
+            (mouseleave)="onCropMouseUp()"
+          ></canvas>
+        </div>
+
+        <div class="crop-controls">
+          <button class="btn-zoom" (click)="zoomOut()" title="Diminuir Zoom">
+            <i class="bi bi-zoom-out"></i>
+          </button>
+          <div class="zoom-indicator">
+            <i class="bi bi-search"></i>
+            {{ (cropScale * 100).toFixed(0) }}%
+          </div>
+          <button class="btn-zoom" (click)="zoomIn()" title="Aumentar Zoom">
+            <i class="bi bi-zoom-in"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="crop-modal-footer">
+        <button class="btn-secondary" (click)="cancelCrop()">
+          <i class="bi bi-x-circle"></i>
+          Cancelar
+        </button>
+        <button class="btn-primary" (click)="confirmCrop()">
+          <i class="bi bi-check-circle"></i>
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -56,6 +56,20 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   originalCharacterData: any = null;
 
   isSidebarCollapsed = false;
+
+  // Image Crop Modal
+  showImageCropModal = false;
+  currentCropFieldName = '';
+  cropImageSrc = '';
+  cropCanvas: HTMLCanvasElement | null = null;
+  cropContext: CanvasRenderingContext2D | null = null;
+  cropImage: HTMLImageElement | null = null;
+  cropScale = 1;
+  cropX = 0;
+  cropY = 0;
+  isDragging = false;
+  dragStartX = 0;
+  dragStartY = 0;
   papelNaTramaOptions = [
     'Protagonista',
     'Antagonista',
@@ -350,7 +364,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   // ========================================
 
   /**
-   * Processa o upload de arquivo de imagem com compressão automática
+   * Processa o upload de arquivo de imagem abrindo modal de crop
    */
   handleImageUpload(event: Event, fieldName: string): void {
     const input = event.target as HTMLInputElement;
@@ -370,89 +384,24 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     // Limpar mensagem de erro
     this.errorMessage = '';
 
-    // Comprimir e converter para Base64
-    this.compressImage(file, fieldName);
+    // Abrir modal de crop
+    this.openImageCropModal(file, fieldName);
   }
 
   /**
-   * Comprime a imagem para caber no limite do Firestore (1MB por documento)
-   * Target: ~200KB em Base64 para segurança
+   * Abre modal de crop de imagem
    */
-  private compressImage(file: File, fieldName: string): void {
+  private openImageCropModal(file: File, fieldName: string): void {
     const reader = new FileReader();
 
     reader.onload = (e: ProgressEvent<FileReader>) => {
-      const img = new Image();
-
-      img.onload = () => {
-        // Calcular dimensões mantendo aspect ratio
-        let width = img.width;
-        let height = img.height;
-        const maxDimension = 800; // Máximo 800px no lado maior
-
-        if (width > maxDimension || height > maxDimension) {
-          if (width > height) {
-            height = (height / width) * maxDimension;
-            width = maxDimension;
-          } else {
-            width = (width / height) * maxDimension;
-            height = maxDimension;
-          }
-        }
-
-        // Criar canvas para redimensionar
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-
-        if (!ctx) {
-          this.errorMessage = '❌ Erro ao processar imagem. Tente novamente.';
-          return;
-        }
-
-        // Desenhar imagem redimensionada
-        ctx.drawImage(img, 0, 0, width, height);
-
-        // Converter para Base64 com qualidade ajustada
-        // Tentar qualidade 0.7 primeiro (bom equilíbrio qualidade/tamanho)
-        let quality = 0.7;
-        let compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-
-        // Se ainda muito grande (>300KB em Base64), reduzir qualidade
-        const maxBase64Size = 300 * 1024; // 300KB
-        while (compressedBase64.length > maxBase64Size && quality > 0.3) {
-          quality -= 0.1;
-          compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-        }
-
-        // Verificar se conseguiu comprimir o suficiente
-        if (compressedBase64.length > 500 * 1024) {
-          // 500KB limite absoluto
-          this.errorMessage =
-            '❌ Não foi possível comprimir a imagem o suficiente. Tente uma imagem menor ou mais simples.';
-          return;
-        }
-
-        // Salvar imagem comprimida
-        this.formData[fieldName] = compressedBase64;
-
-        // Mensagem de sucesso
-        const originalSizeKB = Math.round(file.size / 1024);
-        const compressedSizeKB = Math.round((compressedBase64.length * 3) / 4 / 1024);
-        console.log(
-          `✅ Imagem comprimida: ${originalSizeKB}KB → ${compressedSizeKB}KB (qualidade: ${Math.round(
-            quality * 100
-          )}%)`
-        );
-      };
-
-      img.onerror = () => {
-        this.errorMessage = '❌ Erro ao carregar imagem. Tente outro arquivo.';
-      };
-
       if (e.target?.result) {
-        img.src = e.target.result as string;
+        this.cropImageSrc = e.target.result as string;
+        this.currentCropFieldName = fieldName;
+        this.showImageCropModal = true;
+
+        // Aguardar DOM atualizar antes de inicializar canvas
+        setTimeout(() => this.initializeCropCanvas(), 100);
       }
     };
 
@@ -461,6 +410,218 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
     };
 
     reader.readAsDataURL(file);
+  }
+
+  /**
+   * Inicializa o canvas de crop
+   */
+  private initializeCropCanvas(): void {
+    this.cropCanvas = document.getElementById('cropCanvas') as HTMLCanvasElement;
+    if (!this.cropCanvas) return;
+
+    this.cropContext = this.cropCanvas.getContext('2d');
+    if (!this.cropContext) return;
+
+    this.cropImage = new Image();
+    this.cropImage.onload = () => {
+      if (!this.cropCanvas || !this.cropImage) return;
+
+      // Definir tamanho do canvas (área de preview)
+      this.cropCanvas.width = 500;
+      this.cropCanvas.height = 500;
+
+      // Resetar transformações
+      this.cropScale = 1;
+      this.cropX = 0;
+      this.cropY = 0;
+
+      // Desenhar imagem inicial
+      this.drawCropCanvas();
+    };
+    this.cropImage.src = this.cropImageSrc;
+  }
+
+  /**
+   * Desenha a imagem no canvas com transformações aplicadas
+   */
+  private drawCropCanvas(): void {
+    if (!this.cropCanvas || !this.cropContext || !this.cropImage) return;
+
+    const ctx = this.cropContext;
+    const canvas = this.cropCanvas;
+
+    // Limpar canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Aplicar transformações
+    ctx.save();
+    ctx.translate(this.cropX, this.cropY);
+    ctx.scale(this.cropScale, this.cropScale);
+
+    // Centralizar imagem
+    const x = (canvas.width / this.cropScale - this.cropImage.width) / 2;
+    const y = (canvas.height / this.cropScale - this.cropImage.height) / 2;
+
+    ctx.drawImage(this.cropImage, x, y);
+    ctx.restore();
+
+    // Desenhar área de recorte (círculo)
+    ctx.strokeStyle = '#a18db5';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, 150, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  /**
+   * Aumenta o zoom da imagem
+   */
+  zoomIn(): void {
+    this.cropScale = Math.min(this.cropScale + 0.1, 3);
+    this.drawCropCanvas();
+  }
+
+  /**
+   * Diminui o zoom da imagem
+   */
+  zoomOut(): void {
+    this.cropScale = Math.max(this.cropScale - 0.1, 0.5);
+    this.drawCropCanvas();
+  }
+
+  /**
+   * Inicia o arrasto da imagem
+   */
+  onCropMouseDown(event: MouseEvent): void {
+    this.isDragging = true;
+    this.dragStartX = event.clientX - this.cropX;
+    this.dragStartY = event.clientY - this.cropY;
+  }
+
+  /**
+   * Move a imagem durante o arrasto
+   */
+  onCropMouseMove(event: MouseEvent): void {
+    if (!this.isDragging) return;
+
+    this.cropX = event.clientX - this.dragStartX;
+    this.cropY = event.clientY - this.dragStartY;
+    this.drawCropCanvas();
+  }
+
+  /**
+   * Finaliza o arrasto da imagem
+   */
+  onCropMouseUp(): void {
+    this.isDragging = false;
+  }
+
+  /**
+   * Cancela o crop e fecha o modal
+   */
+  cancelCrop(): void {
+    this.showImageCropModal = false;
+    this.cropImageSrc = '';
+    this.currentCropFieldName = '';
+    this.cropCanvas = null;
+    this.cropContext = null;
+    this.cropImage = null;
+  }
+
+  /**
+   * Confirma o crop e salva a imagem
+   */
+  confirmCrop(): void {
+    if (!this.cropCanvas || !this.cropContext || !this.cropImage) return;
+
+    // Criar canvas temporário para desenhar imagem SEM o círculo guia
+    const tempSourceCanvas = document.createElement('canvas');
+    tempSourceCanvas.width = this.cropCanvas.width;
+    tempSourceCanvas.height = this.cropCanvas.height;
+    const tempSourceCtx = tempSourceCanvas.getContext('2d');
+
+    if (!tempSourceCtx) return;
+
+    // Desenhar APENAS a imagem com transformações (sem o círculo guia)
+    tempSourceCtx.save();
+    tempSourceCtx.translate(this.cropX, this.cropY);
+    tempSourceCtx.scale(this.cropScale, this.cropScale);
+
+    const x = (this.cropCanvas.width / this.cropScale - this.cropImage.width) / 2;
+    const y = (this.cropCanvas.height / this.cropScale - this.cropImage.height) / 2;
+
+    tempSourceCtx.drawImage(this.cropImage, x, y);
+    tempSourceCtx.restore();
+
+    // Criar canvas final para extrair área circular
+    const finalCanvas = document.createElement('canvas');
+    finalCanvas.width = 300;
+    finalCanvas.height = 300;
+    const finalCtx = finalCanvas.getContext('2d');
+
+    if (!finalCtx) return;
+
+    // Criar máscara circular no canvas final
+    finalCtx.beginPath();
+    finalCtx.arc(150, 150, 150, 0, Math.PI * 2);
+    finalCtx.closePath();
+    finalCtx.clip();
+
+    // Copiar área recortada do canvas limpo (sem círculo guia)
+    const centerX = tempSourceCanvas.width / 2;
+    const centerY = tempSourceCanvas.height / 2;
+    const radius = 150;
+
+    finalCtx.drawImage(
+      tempSourceCanvas,
+      centerX - radius,
+      centerY - radius,
+      radius * 2,
+      radius * 2,
+      0,
+      0,
+      300,
+      300
+    );
+
+    // Comprimir e salvar
+    this.compressAndSaveImage(finalCanvas, this.currentCropFieldName);
+
+    // Fechar modal
+    this.cancelCrop();
+  }
+
+  /**
+   * Comprime a imagem do canvas e salva no formData
+   */
+  private compressAndSaveImage(canvas: HTMLCanvasElement, fieldName: string): void {
+    let quality = 0.7;
+    let compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+
+    // Se ainda muito grande (>300KB em Base64), reduzir qualidade
+    const maxBase64Size = 300 * 1024;
+    while (compressedBase64.length > maxBase64Size && quality > 0.3) {
+      quality -= 0.1;
+      compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+    }
+
+    // Verificar se conseguiu comprimir o suficiente
+    if (compressedBase64.length > 500 * 1024) {
+      this.errorMessage =
+        '❌ Não foi possível comprimir a imagem o suficiente. Tente uma imagem menor ou mais simples.';
+      return;
+    }
+
+    // Salvar imagem comprimida
+    this.formData[fieldName] = compressedBase64;
+
+    // Mensagem de sucesso
+    const compressedSizeKB = Math.round((compressedBase64.length * 3) / 4 / 1024);
+    console.log(
+      `✅ Imagem recortada e comprimida: ${compressedSizeKB}KB (qualidade: ${Math.round(
+        quality * 100
+      )}%)`
+    );
   }
 
   /**
