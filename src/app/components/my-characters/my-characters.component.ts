@@ -80,13 +80,9 @@ export class MyCharactersComponent implements OnInit {
           const data = doc.data();
           let nome = '';
 
-          console.log('🔍 Processando personagem:', doc.id);
-          console.log('📦 Dados completos:', data);
-
           // 1. PRIORIDADE MÁXIMA: Buscar nos campos específicos do formulário PRIMEIRO
           if (data['campos']) {
             const campos = data['campos'];
-            console.log('📂 Campos disponíveis:', Object.keys(campos));
 
             const camposNomePrioritarios = [
               'nome',
@@ -98,7 +94,6 @@ export class MyCharactersComponent implements OnInit {
 
             for (const campoKey of camposNomePrioritarios) {
               if (campos[campoKey]) {
-                console.log(`🔑 Testando campo '${campoKey}':`, campos[campoKey]);
                 const valorCampo = campos[campoKey];
                 if (typeof valorCampo === 'string' && valorCampo.trim()) {
                   const valorLimpo = valorCampo.trim();
@@ -109,10 +104,7 @@ export class MyCharactersComponent implements OnInit {
                     !valorLimpo.includes('base64')
                   ) {
                     nome = valorLimpo;
-                    console.log('✅ Nome encontrado no campo prioritário:', nome);
                     break; // Encontrou um nome válido, para a busca
-                  } else {
-                    console.log('❌ Campo contém URL/imagem, ignorando');
                   }
                 }
               }
@@ -120,7 +112,6 @@ export class MyCharactersComponent implements OnInit {
 
             // 2. Se ainda não encontrou, pegar o primeiro campo de texto válido (fallback)
             if (!nome) {
-              console.log('⚠️ Nenhum campo prioritário válido, buscando outros campos...');
               // Lista de palavras-chave para ignorar campos de imagem
               const imageFieldKeywords = [
                 'imagem',
@@ -139,7 +130,6 @@ export class MyCharactersComponent implements OnInit {
 
                 // Pula o campo se a chave corresponder a palavras-chave de imagem
                 if (imageFieldKeywords.some((keyword) => lowerCaseKey.includes(keyword))) {
-                  console.log(`⏭️ Ignorando campo '${key}' (palavra-chave de imagem)`);
                   continue;
                 }
 
@@ -155,7 +145,6 @@ export class MyCharactersComponent implements OnInit {
                     !valorLimpo.includes('base64')
                   ) {
                     nome = valorLimpo;
-                    console.log(`✅ Nome encontrado em campo alternativo '${key}':`, nome);
                     break;
                   }
                 }
@@ -165,7 +154,6 @@ export class MyCharactersComponent implements OnInit {
 
           // 3. APENAS se não encontrou nos campos, tentar no nível raiz (com validação rigorosa)
           if (!nome && typeof data['nome'] === 'string') {
-            console.log('🔄 Tentando nome do nível raiz:', data['nome']);
             const nomeRaiz = data['nome'].trim();
             if (
               nomeRaiz &&
@@ -175,21 +163,15 @@ export class MyCharactersComponent implements OnInit {
               nomeRaiz.length < 100
             ) {
               nome = nomeRaiz;
-              console.log('✅ Nome encontrado no nível raiz:', nome);
-            } else {
-              console.log('❌ Nome do nível raiz inválido (URL/imagem)');
             }
           }
 
           // 4. Fallback final para estruturas antigas
           if (!nome) {
-            console.log('🔄 Tentando estruturas antigas...');
             nome = data['dados']?.['basicInfo']?.['nomeDoPersonagem'] || '';
           }
 
           const finalNome = nome.trim() || 'Personagem Sem Nome';
-          console.log('🎯 NOME FINAL ESCOLHIDO:', finalNome);
-          console.log('─────────────────────────────────────');
 
           let templateNome = data['templateNome'] || 'Template Desconhecido';
           if (!data['templateNome'] && data['templateId']) {

@@ -120,9 +120,96 @@ export class CharacterViewComponent implements OnInit {
         updatedAt = createdAt;
       }
 
+      // Extrair nome do personagem com a mesma lógica do my-characters
+      let nome = '';
+
+      // 1. PRIORIDADE: Buscar nos campos específicos do formulário
+      if (characterData['campos']) {
+        const campos = characterData['campos'];
+        const camposNomePrioritarios = [
+          'nome',
+          'nomeDoPersonagem',
+          'name',
+          'characterName',
+          'char_name',
+        ];
+
+        for (const campoKey of camposNomePrioritarios) {
+          const valorCampo = campos[campoKey];
+          if (typeof valorCampo === 'string' && valorCampo.trim()) {
+            const valorLimpo = valorCampo.trim();
+            if (
+              !valorLimpo.startsWith('http') &&
+              !valorLimpo.startsWith('data:image') &&
+              !valorLimpo.includes('base64')
+            ) {
+              nome = valorLimpo;
+              break;
+            }
+          }
+        }
+
+        // 2. Fallback: primeiro campo de texto válido
+        if (!nome) {
+          const imageFieldKeywords = [
+            'imagem',
+            'foto',
+            'image',
+            'picture',
+            'avatar',
+            'logo',
+            'icon',
+            'base64',
+          ];
+
+          for (const key in campos) {
+            const lowerCaseKey = key.toLowerCase();
+            if (imageFieldKeywords.some((keyword) => lowerCaseKey.includes(keyword))) {
+              continue;
+            }
+
+            const value = campos[key];
+            if (typeof value === 'string') {
+              const valorLimpo = value.trim();
+              if (
+                valorLimpo &&
+                valorLimpo.length < 100 &&
+                !valorLimpo.startsWith('http') &&
+                !valorLimpo.startsWith('data:image') &&
+                !valorLimpo.includes('base64')
+              ) {
+                nome = valorLimpo;
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      // 3. Tentar nível raiz apenas se não encontrou (com validação rigorosa)
+      if (!nome && typeof characterData['nome'] === 'string') {
+        const nomeRaiz = characterData['nome'].trim();
+        if (
+          nomeRaiz &&
+          !nomeRaiz.startsWith('http') &&
+          !nomeRaiz.startsWith('data:image') &&
+          !nomeRaiz.includes('base64') &&
+          nomeRaiz.length < 100
+        ) {
+          nome = nomeRaiz;
+        }
+      }
+
+      // 4. Fallback estruturas antigas
+      if (!nome) {
+        nome = characterData['dados']?.['basicInfo']?.['nomeDoPersonagem'] || '';
+      }
+
+      const finalNome = nome.trim() || 'Personagem Sem Nome';
+
       this.character = {
         id: characterDoc.id,
-        nome: characterData['nome'] || 'Personagem Sem Nome',
+        nome: finalNome, // Nome extraído corretamente
         templateId: characterData['templateId'],
         templateNome: characterData['templateNome'] || 'Template Desconhecido',
         campos: characterData['dados'] || characterData['campos'] || {},
