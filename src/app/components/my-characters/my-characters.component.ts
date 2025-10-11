@@ -2,17 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
-import { SharedHeaderComponent } from '../shared-header/shared-header.component';
 import { SidebarService } from '../../services/sidebar.service';
+import { SharedHeaderComponent } from '../shared-header/shared-header.component';
 
 // Interface atualizada para usar tipos mais estritos para datas.
-// Isso melhora a previsibilidade e ajuda a evitar erros no template.
 interface Character {
   id: string;
   nome: string;
   templateNome: string;
-  createdAt: Date | null; // Alterado de 'any' para 'Date | null'
-  updatedAt: Date | null; // Alterado de 'any' para 'Date | null'
+  createdAt: Date | null;
+  updatedAt: Date | null;
   [key: string]: any;
 }
 
@@ -37,11 +36,28 @@ export class MyCharactersComponent implements OnInit {
 
   ngOnInit() {
     this.loadCharacters();
-
-    // Subscrever ao estado da sidebar
     this.sidebarService.collapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
+  }
+
+  // Helper para converter Timestamps do Firestore ou strings para Date
+  private parseFirestoreDate(dateValue: any): Date | null {
+    if (!dateValue) return null;
+    if (typeof dateValue.toDate === 'function') {
+      // Timestamp do Firestore
+      return dateValue.toDate();
+    }
+    if (typeof dateValue === 'string') {
+      // String de data (ISO, etc.)
+      const date = new Date(dateValue);
+      return isNaN(date.getTime()) ? null : date;
+    }
+    if (dateValue instanceof Date) {
+      // Já é um objeto Date
+      return dateValue;
+    }
+    return null;
   }
 
   async loadCharacters() {
@@ -57,81 +73,89 @@ export class MyCharactersComponent implements OnInit {
         return;
       }
 
-      const charactersPromises = snapshot.docs.map(async (doc) => {
-        try {
+      // Usando Promise.allSettled para garantir que todos os personagens sejam processados,
+      // mesmo que um deles falhe.
+      const results = await Promise.allSettled(
+        snapshot.docs.map(async (doc) => {
           const data = doc.data();
+          let nome = '';
 
-          console.log('🔍 Carregando personagem:', doc.id);
-          console.log('📊 Dados brutos:', data);
+          console.log('🔍 Processando personagem:', doc.id);
+          console.log('📦 Dados completos:', data);
 
-          // PRIMEIRO: Tentar pegar do campo 'nome' no nível raiz
-          let nome = data['nome'] || '';
-          console.log('1️⃣ Nome do campo raiz:', nome);
+          // 1. PRIORIDADE MÁXIMA: Buscar nos campos específicos do formulário PRIMEIRO
+          if (data['campos']) {
+            const campos = data['campos'];
+            console.log('📂 Campos disponíveis:', Object.keys(campos));
 
-          // VALIDAÇÃO: Se o nome for uma URL de imagem, descartar IMEDIATAMENTE
-          if (
-            typeof nome === 'string' &&
-            (nome.startsWith('http') || nome.startsWith('data:image') || nome.includes('base64'))
-          ) {
-            console.log('❌ Nome contém URL de imagem, descartando');
-            nome = '';
-          }
-
-          // SEGUNDO: Buscar nos campos específicos do formulário
-          if (!nome && data['campos']) {
-            console.log('2️⃣ Buscando em data.campos');
-
-            // Lista prioritária de campos que geralmente contêm o nome
-            const camposNome = [
+            const camposNomePrioritarios = [
               'nome',
               'nomeDoPersonagem',
               'name',
-              'nome_personagem',
-              'personagem_nome',
+              'characterName',
+              'char_name',
             ];
 
-            // Tentar cada campo prioritário
-            for (const campoKey of camposNome) {
-              if (data['campos'][campoKey]) {
-                const valor = String(data['campos'][campoKey]).trim();
-                console.log(`   Testando campo '${campoKey}':`, valor);
-
-                if (
-                  valor &&
-                  !valor.startsWith('http') &&
-                  !valor.startsWith('data:image') &&
-                  !valor.includes('base64')
-                ) {
-                  nome = valor;
-                  console.log('✅ Nome encontrado:', nome);
-                  break;
+            for (const campoKey of camposNomePrioritarios) {
+              if (campos[campoKey]) {
+                console.log(`🔑 Testando campo '${campoKey}':`, campos[campoKey]);
+                const valorCampo = campos[campoKey];
+                if (typeof valorCampo === 'string' && valorCampo.trim()) {
+                  const valorLimpo = valorCampo.trim();
+                  // Validar que não é URL de imagem
+                  if (
+                    !valorLimpo.startsWith('http') &&
+                    !valorLimpo.startsWith('data:image') &&
+                    !valorLimpo.includes('base64')
+                  ) {
+                    nome = valorLimpo;
+                    console.log('✅ Nome encontrado no campo prioritário:', nome);
+                    break; // Encontrou um nome válido, para a busca
+                  } else {
+                    console.log('❌ Campo contém URL/imagem, ignorando');
+                  }
                 }
               }
             }
 
-            // TERCEIRO: Se ainda não encontrou, pegar primeiro campo texto válido
+            // 2. Se ainda não encontrou, pegar o primeiro campo de texto válido (fallback)
             if (!nome) {
-              console.log('3️⃣ Buscando primeiro campo texto válido');
-              const campos = data['campos'];
+              console.log('⚠️ Nenhum campo prioritário válido, buscando outros campos...');
+              // Lista de palavras-chave para ignorar campos de imagem
+              const imageFieldKeywords = [
+                'imagem',
+                'foto',
+                'image',
+                'picture',
+                'avatar',
+                'logo',
+                'icon',
+                'base64',
+              ];
 
               for (const key in campos) {
+                // Converte a chave para minúsculas para comparação
+                const lowerCaseKey = key.toLowerCase();
+
+                // Pula o campo se a chave corresponder a palavras-chave de imagem
+                if (imageFieldKeywords.some((keyword) => lowerCaseKey.includes(keyword))) {
+                  console.log(`⏭️ Ignorando campo '${key}' (palavra-chave de imagem)`);
+                  continue;
+                }
+
                 const value = campos[key];
-
-                if (key === 'imagem_personagem') continue; // Pular campo de imagem
-
-                if (value && typeof value === 'string') {
+                if (typeof value === 'string') {
                   const valorLimpo = value.trim();
-
+                  // Verifica se é um texto válido e não muito longo
                   if (
                     valorLimpo &&
+                    valorLimpo.length < 100 &&
                     !valorLimpo.startsWith('http') &&
                     !valorLimpo.startsWith('data:image') &&
-                    !valorLimpo.includes('base64') &&
-                    valorLimpo.length < 500
+                    !valorLimpo.includes('base64')
                   ) {
-                    // Ignorar textos muito longos
                     nome = valorLimpo;
-                    console.log(`✅ Nome encontrado no campo '${key}':`, nome);
+                    console.log(`✅ Nome encontrado em campo alternativo '${key}':`, nome);
                     break;
                   }
                 }
@@ -139,84 +163,74 @@ export class MyCharactersComponent implements OnInit {
             }
           }
 
-          // QUARTO: Fallback para estruturas antigas
-          if (!nome) {
-            console.log('4️⃣ Tentando estruturas antigas');
-            nome = data['dados']?.['basicInfo']?.['nomeDoPersonagem'] || '';
-          }
-
-          // GARANTIR que sempre tenha um nome válido
-          let finalNome = nome || 'Personagem Sem Nome';
-
-          // ÚLTIMA VERIFICAÇÃO DE SEGURANÇA
-          if (typeof finalNome === 'string') {
+          // 3. APENAS se não encontrou nos campos, tentar no nível raiz (com validação rigorosa)
+          if (!nome && typeof data['nome'] === 'string') {
+            console.log('🔄 Tentando nome do nível raiz:', data['nome']);
+            const nomeRaiz = data['nome'].trim();
             if (
-              finalNome.startsWith('http') ||
-              finalNome.startsWith('data:image') ||
-              finalNome.includes('base64')
+              nomeRaiz &&
+              !nomeRaiz.startsWith('http') &&
+              !nomeRaiz.startsWith('data:image') &&
+              !nomeRaiz.includes('base64') &&
+              nomeRaiz.length < 100
             ) {
-              console.log('⚠️ Ainda tinha URL no nome, usando fallback');
-              finalNome = 'Personagem Sem Nome';
+              nome = nomeRaiz;
+              console.log('✅ Nome encontrado no nível raiz:', nome);
+            } else {
+              console.log('❌ Nome do nível raiz inválido (URL/imagem)');
             }
           }
 
-          console.log('🎯 Nome final selecionado:', finalNome);
-          console.log('---');
+          // 4. Fallback final para estruturas antigas
+          if (!nome) {
+            console.log('🔄 Tentando estruturas antigas...');
+            nome = data['dados']?.['basicInfo']?.['nomeDoPersonagem'] || '';
+          }
+
+          const finalNome = nome.trim() || 'Personagem Sem Nome';
+          console.log('🎯 NOME FINAL ESCOLHIDO:', finalNome);
+          console.log('─────────────────────────────────────');
 
           let templateNome = data['templateNome'] || 'Template Desconhecido';
-
           if (!data['templateNome'] && data['templateId']) {
             try {
               const templateDoc = await this.firebaseService.getTemplateById(data['templateId']);
               if (templateDoc.exists()) {
                 templateNome = templateDoc.data()['nome'] || 'Template Desconhecido';
               }
-            } catch (e) {}
-          }
-
-          let createdAt: Date | null = null;
-          let updatedAt: Date | null = null;
-
-          if (data['createdAt']) {
-            if (typeof data['createdAt'].toDate === 'function') {
-              createdAt = data['createdAt'].toDate();
-            } else if (typeof data['createdAt'] === 'string') {
-              createdAt = new Date(data['createdAt']);
-            } else if (data['createdAt'] instanceof Date) {
-              createdAt = data['createdAt'];
+            } catch (e) {
+              console.error(`Erro ao buscar template ${data['templateId']}:`, e);
             }
           }
 
-          if (data['updatedAt']) {
-            if (typeof data['updatedAt'].toDate === 'function') {
-              updatedAt = data['updatedAt'].toDate();
-            } else if (typeof data['updatedAt'] === 'string') {
-              updatedAt = new Date(data['updatedAt']);
-            } else if (data['updatedAt'] instanceof Date) {
-              updatedAt = data['updatedAt'];
-            }
-          }
+          const createdAt = this.parseFirestoreDate(data['createdAt']);
+          let updatedAt = this.parseFirestoreDate(data['updatedAt']);
 
-          if (!updatedAt && createdAt) {
+          // Se 'updatedAt' não existir, assume a data de criação
+          if (!updatedAt) {
             updatedAt = createdAt;
           }
 
-          const character = {
+          // Criar objeto do personagem SEM espalhar ...data para não sobrescrever o nome
+          return {
             id: doc.id,
-            nome: finalNome,
-            templateNome: templateNome,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            ...data,
+            nome: finalNome, // Nome limpo que extraímos
+            templateNome,
+            createdAt,
+            updatedAt,
+            // Incluir campos e outras propriedades necessárias
+            campos: data['campos'],
+            templateId: data['templateId'],
+            ownerId: data['ownerId'],
+            dados: data['dados'],
           } as Character;
+        })
+      );
 
-          return character;
-        } catch (docError: any) {
-          throw docError;
-        }
-      });
-
-      this.characters = await Promise.all(charactersPromises);
+      // Filtra apenas os resultados que foram resolvidos com sucesso
+      this.characters = results
+        .filter((result) => result.status === 'fulfilled')
+        .map((result) => (result as PromiseFulfilledResult<Character>).value);
     } catch (error: any) {
       this.errorMessage =
         error.message || 'Ocorreu um erro ao carregar os personagens. Por favor, tente novamente.';
@@ -238,12 +252,14 @@ export class MyCharactersComponent implements OnInit {
   }
 
   async deleteCharacter(id: string, name: string) {
+    // AVISO: window.confirm() pode ser bloqueado e é uma má prática.
+    // O ideal é criar um componente de modal customizado para confirmações.
     if (window.confirm(`Deseja realmente excluir "${name}"? Esta ação não pode ser desfeita.`)) {
       this.isLoading = true;
       this.errorMessage = '';
       try {
         await this.firebaseService.deleteCharacterSheet(id);
-        await this.loadCharacters();
+        await this.loadCharacters(); // Recarrega a lista após a exclusão
       } catch (error: any) {
         this.errorMessage = 'Não foi possível excluir o personagem. Tente novamente.';
       } finally {
@@ -256,35 +272,21 @@ export class MyCharactersComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  /**
-   * Retorna as iniciais do nome para exibir quando não há imagem
-   */
   getInitials(name: string): string {
     if (!name) return '?';
-
-    const words = name
-      .trim()
-      .split(' ')
-      .filter((word) => word.length > 0);
-
+    const words = name.trim().split(' ').filter(Boolean);
     if (words.length === 0) return '?';
     if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
-
-    // Pega primeira letra do primeiro e último nome
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
   }
 
-  /**
-   * Tratamento de erro de carregamento de imagem
-   * Quando a imagem falha ao carregar, mostra as iniciais no lugar
-   */
   onImageError(event: Event): void {
     const imgElement = event.target as HTMLImageElement;
-    if (imgElement) {
+    if (imgElement && imgElement.parentElement) {
       imgElement.style.display = 'none';
-      // Mostrar as iniciais no lugar
+      // Procura pelo elemento de iniciais que é o próximo sibling
       const initialsDiv = imgElement.nextElementSibling as HTMLElement;
-      if (initialsDiv) {
+      if (initialsDiv && initialsDiv.classList.contains('character-initials')) {
         initialsDiv.style.display = 'flex';
       }
     }
