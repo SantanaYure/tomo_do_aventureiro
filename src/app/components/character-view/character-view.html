@@ -79,22 +79,24 @@
 
             <!-- Manuscrito -->
             <div class="manuscript">
-              <div
-                *ngFor="let campo of bloco.campos"
-                class="manuscript-entry"
-                [class.full-width]="campo.type === 'textarea'"
-              >
-                <!-- Não mostrar campos de imagem nem nome (já exibido no título) -->
-                <ng-container *ngIf="!isImageField(campo.name) && !isNameField(campo.name)">
+              <ng-container *ngFor="let campo of bloco.campos">
+                <!-- Não mostrar campos de imagem, nome ou vazios -->
+                <div
+                  *ngIf="
+                    !isImageField(campo.name) && !isNameField(campo.name) && hasValue(campo.name)
+                  "
+                  class="manuscript-entry"
+                  [class.full-width]="campo.type === 'textarea'"
+                >
                   <div class="entry-label">
                     <i class="bi bi-feather"></i>
                     {{ campo.label }}
                   </div>
                   <div class="entry-text" [class.long-text]="campo.type === 'textarea'">
-                    {{ getFieldValue(campo.name) || '—' }}
+                    {{ getFieldValue(campo.name) }}
                   </div>
-                </ng-container>
-              </div>
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>

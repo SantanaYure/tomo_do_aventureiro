@@ -289,6 +289,11 @@ export class CharacterViewComponent implements OnInit {
     return nameFieldKeywords.some((keyword) => lowerFieldName === keyword);
   }
 
+  hasValue(fieldName: string): boolean {
+    const value = this.getFieldValue(fieldName);
+    return value !== '-' && value !== '' && value !== null && value !== undefined;
+  }
+
   editCharacter() {
     if (this.characterId) {
       this.router.navigate(['/create-character', this.characterId]);
