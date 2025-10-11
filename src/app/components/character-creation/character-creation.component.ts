@@ -350,7 +350,7 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
   // ========================================
 
   /**
-   * Processa o upload de arquivo de imagem
+   * Processa o upload de arquivo de imagem com compressão automática
    */
   handleImageUpload(event: Event, fieldName: string): void {
     const input = event.target as HTMLInputElement;
@@ -367,27 +367,99 @@ export class CharacterCreationComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Validação de tamanho (5MB máximo)
-    const maxSizeInMB = 5;
-    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-    if (file.size > maxSizeInBytes) {
-      this.errorMessage = `❌ A imagem é muito grande. Tamanho máximo: ${maxSizeInMB}MB`;
-      return;
-    }
-
     // Limpar mensagem de erro
     this.errorMessage = '';
 
-    // Converter para Base64
+    // Comprimir e converter para Base64
+    this.compressImage(file, fieldName);
+  }
+
+  /**
+   * Comprime a imagem para caber no limite do Firestore (1MB por documento)
+   * Target: ~200KB em Base64 para segurança
+   */
+  private compressImage(file: File, fieldName: string): void {
     const reader = new FileReader();
+
     reader.onload = (e: ProgressEvent<FileReader>) => {
+      const img = new Image();
+
+      img.onload = () => {
+        // Calcular dimensões mantendo aspect ratio
+        let width = img.width;
+        let height = img.height;
+        const maxDimension = 800; // Máximo 800px no lado maior
+
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = (height / width) * maxDimension;
+            width = maxDimension;
+          } else {
+            width = (width / height) * maxDimension;
+            height = maxDimension;
+          }
+        }
+
+        // Criar canvas para redimensionar
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) {
+          this.errorMessage = '❌ Erro ao processar imagem. Tente novamente.';
+          return;
+        }
+
+        // Desenhar imagem redimensionada
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Converter para Base64 com qualidade ajustada
+        // Tentar qualidade 0.7 primeiro (bom equilíbrio qualidade/tamanho)
+        let quality = 0.7;
+        let compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+
+        // Se ainda muito grande (>300KB em Base64), reduzir qualidade
+        const maxBase64Size = 300 * 1024; // 300KB
+        while (compressedBase64.length > maxBase64Size && quality > 0.3) {
+          quality -= 0.1;
+          compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+        }
+
+        // Verificar se conseguiu comprimir o suficiente
+        if (compressedBase64.length > 500 * 1024) {
+          // 500KB limite absoluto
+          this.errorMessage =
+            '❌ Não foi possível comprimir a imagem o suficiente. Tente uma imagem menor ou mais simples.';
+          return;
+        }
+
+        // Salvar imagem comprimida
+        this.formData[fieldName] = compressedBase64;
+
+        // Mensagem de sucesso
+        const originalSizeKB = Math.round(file.size / 1024);
+        const compressedSizeKB = Math.round((compressedBase64.length * 3) / 4 / 1024);
+        console.log(
+          `✅ Imagem comprimida: ${originalSizeKB}KB → ${compressedSizeKB}KB (qualidade: ${Math.round(
+            quality * 100
+          )}%)`
+        );
+      };
+
+      img.onerror = () => {
+        this.errorMessage = '❌ Erro ao carregar imagem. Tente outro arquivo.';
+      };
+
       if (e.target?.result) {
-        this.formData[fieldName] = e.target.result as string;
+        img.src = e.target.result as string;
       }
     };
+
     reader.onerror = () => {
       this.errorMessage = '❌ Erro ao ler o arquivo. Tente novamente.';
     };
+
     reader.readAsDataURL(file);
   }
 

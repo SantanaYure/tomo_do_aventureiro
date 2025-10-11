@@ -12,7 +12,10 @@ interface Character {
   templateNome: string;
   createdAt: Date | null;
   updatedAt: Date | null;
-  [key: string]: any;
+  campos?: any;
+  templateId?: string;
+  ownerId?: string;
+  dados?: any;
 }
 
 @Component({
