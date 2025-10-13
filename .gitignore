@@ -37,6 +37,12 @@ yarn-error.log
 testem.log
 /typings
 
+# Firebase/Environment
+.env
+.env.local
+.env.*.local
+/api/firebase-service-account.json
+
 # System files
 .DS_Store
 Thumbs.db
