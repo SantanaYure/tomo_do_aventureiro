@@ -48,6 +48,7 @@
     <!-- Characters Grid -->
     <div class="characters-grid" *ngIf="characters.length > 0">
       <div class="character-card" *ngFor="let character of characters">
+        <div class="card-click-overlay" (click)="viewCharacter(character.id)"></div>
         <!-- Card Header - Nome do Personagem (estilo Magic) -->
         <div class="card-header">
           <h3 class="character-name">{{ character.nome }}</h3>
@@ -60,7 +61,7 @@
             *ngIf="character['campos']?.['imagem_personagem']"
             [src]="character['campos']['imagem_personagem']"
             [alt]="character.nome"
-            class="character-image"
+            class="character-cover-image"
             (error)="onImageError($event)"
           />
 
@@ -81,22 +82,15 @@
           <!-- Card Actions - Glassmorphism -->
           <div class="card-actions-glass">
             <button
-              class="btn-action-glass btn-view"
-              (click)="viewCharacter(character.id)"
-              title="Visualizar"
-            >
-              <i class="bi bi-eye-fill"></i>
-            </button>
-            <button
               class="btn-action-glass btn-edit"
-              (click)="editCharacter(character.id)"
+              (click)="editCharacter(character.id); $event.stopPropagation()"
               title="Editar"
             >
               <i class="bi bi-pencil-fill"></i>
             </button>
             <button
               class="btn-action-glass btn-delete"
-              (click)="deleteCharacter(character.id, character.nome)"
+              (click)="deleteCharacter(character.id, character.nome); $event.stopPropagation()"
               title="Excluir"
             >
               <i class="bi bi-trash-fill"></i>
