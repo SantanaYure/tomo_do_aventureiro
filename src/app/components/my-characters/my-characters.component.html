@@ -47,8 +47,11 @@
 
     <!-- Characters Grid -->
     <div class="characters-grid" *ngIf="characters.length > 0">
-      <div class="character-card" *ngFor="let character of characters">
-        <div class="card-click-overlay" (click)="viewCharacter(character.id)"></div>
+      <div
+        class="character-card"
+        *ngFor="let character of characters"
+        (click)="viewCharacter(character.id)"
+      >
         <!-- Card Header - Nome do Personagem (estilo Magic) -->
         <div class="card-header">
           <h3 class="character-name">{{ character.nome }}</h3>
@@ -81,6 +84,13 @@
 
           <!-- Card Actions - Glassmorphism -->
           <div class="card-actions-glass">
+            <button
+              class="btn-action-glass btn-view"
+              (click)="viewCharacter(character.id); $event.stopPropagation()"
+              title="Visualizar"
+            >
+              <i class="bi bi-eye-fill"></i>
+            </button>
             <button
               class="btn-action-glass btn-edit"
               (click)="editCharacter(character.id); $event.stopPropagation()"
