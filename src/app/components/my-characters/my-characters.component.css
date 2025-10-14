@@ -232,7 +232,7 @@
   /* Use o mesmo container do header (.header-content) para alinhar perfeitamente */
   max-width: 1400px;
   margin: 0 auto; /* centraliza o container como o header */
-  padding: 0 30px; /* mesmo padding do header-content */
+  padding: 1.5rem 30px 2.5rem 30px; /* adiciona espaçamento superior entre header e cards */
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
