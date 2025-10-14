@@ -38,7 +38,8 @@
 .header-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 30px;
+  /* space on the left so the page title lines up under the sidebar toggle/button */
+  padding: 0 30px 0 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -148,23 +149,18 @@
    MAIN
    ======================================== */
 
-/* Overlay para tornar o card clicável sem afetar o layout visual */
-.card-click-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+/* Indica que o card é clicável */
+.character-card {
   cursor: pointer;
-  border-radius: 16px;
-  background: transparent;
 }
 
-.character-card:hover .card-click-overlay {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
-  background: rgba(0, 0, 0, 0.02);
-  transition: box-shadow 0.2s, background 0.2s;
+/* Container principal do conteúdo (alinha com o header e outras páginas) */
+.characters-main {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 30px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .character-card {
@@ -188,6 +184,19 @@
   font-size: 5rem;
   color: var(--color-primary-light);
   margin-bottom: 30px;
+}
+
+/* Estado vazio base (desktop) - usa mesmo container/padding das outras páginas */
+.empty-state {
+  max-width: 1400px;
+  margin: 0 auto;
+  /* Espaçamento geral quando não há personagens */
+  padding: 60px 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
 }
 
 .empty-state h2 {
@@ -804,11 +813,43 @@
   }
 
   .empty-state {
+    /* use o mesmo container do header e da grid */
+    max-width: 1400px;
+    margin: 0 auto;
+    /* Espaçamento geral quando não há personagens */
     padding: 60px 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* alinha à esquerda como o título */
+    gap: 18px;
+  }
+
+  /* Espaçamento interno para cada elemento do estado vazio (ícone, título, parágrafo, botão) */
+  .empty-state > * {
+    padding: 8px 0;
   }
 
   .empty-state h2 {
     font-size: 1.5rem;
+    margin: 0;
+    color: var(--color-primary-dark);
+  }
+
+  .empty-state .empty-icon {
+    font-size: 3.5rem;
+    color: var(--color-primary);
+  }
+}
+
+@media (max-width: 992px) {
+  /* Em breakpoints médios, remover margem para a sidebar (comportamento consistente com outras páginas) */
+  .my-characters-container {
+    margin-left: 0;
+  }
+
+  .my-characters-container.sidebar-collapsed {
+    margin-left: 0;
   }
 }
 
