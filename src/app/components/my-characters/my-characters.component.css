@@ -229,14 +229,25 @@
    ======================================== */
 
 .characters-grid {
+  /* Use o mesmo container do header (.header-content) para alinhar perfeitamente */
+  max-width: 1400px;
+  margin: 0 auto; /* centraliza o container como o header */
+  padding: 0 30px; /* mesmo padding do header-content */
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
-  padding-right: 2.5rem;
-  box-sizing: border-box;
   margin-top: 0;
   align-items: start;
-  margin-left: 70px; /* Alinha com o ícone/título */
+}
+
+/* Se a sidebar estiver colapsada, mantém o mesmo alinhamento visual
+   ajustando o container no breakpoint maior se necessário. */
+@media (max-width: 1100px) {
+  .characters-grid {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 
 @media (min-width: 900px) {
